@@ -37,10 +37,10 @@ export const HumanVerificationModal: FC<HumanVerificationModalProps> = ({
 
         <div className="space-y-1.5">
           <h3 className="text-lg font-bold text-text-main">
-            Verificação de Integridade Pública
+            Verificação de Segurança
           </h3>
           <p className="text-xs text-text-muted leading-relaxed">
-            Para garantir a estabilidade do portal e proteger os servidores Supabase contra scraping abusivo e requisições automatizadas, confirme que você é humano.
+            Para garantir a estabilidade do portal e proteger os servidores contra scraping abusivo e requisições automatizadas, confirme que você é humano.
           </p>
         </div>
 
@@ -74,7 +74,7 @@ export const HumanVerificationModal: FC<HumanVerificationModalProps> = ({
         </div>
 
         <div className="text-[11px] text-text-muted">
-          Todos os dados desta plataforma são abertos e imparciais.
+          As análises desta plataforma prezam pela imparcialidade e neutralidade técnica.
         </div>
       </div>
     </div>

@@ -1,13 +1,13 @@
-# Argumeta — Portal Público de Auditoria e Inteligência de Debates
+# Argumeta — Plataforma de Inteligência e Análise de Debates
 
-Portal público e independente de auditoria algorítmica de debates audiovisuais, verificação factual, mapeamento de falácias e ranking técnico comparativo.
+Plataforma independente de análise algorítmica de debates audiovisuais, verificação factual, mapeamento de falácias e ranking técnico comparativo.
 
 ---
 
 ## 🎯 Princípios da Plataforma
 
-- **100% Algorítmico & Imparcial**: Todas as métricas, pontuações, detecções de falácias e checagens factuais são geradas pelo pipeline auditável Whisper + Gemini. Não há interferência ou alteração manual de dados por humanos.
-- **Acesso Público**: Não exige cadastro ou autenticação de usuários finais.
+- **100% Algorítmico & Imparcial**: Todas as métricas, pontuações, detecções de falácias e checagens factuais são geradas pelo pipeline Whisper + Gemini. Não há interferência ou alteração manual de dados por humanos.
+- **Acesso Livre**: Não exige cadastro ou autenticação de usuários para consulta.
 - **Segurança Reforçada**: Blindado por políticas de Row Level Security (RLS) no Supabase, modo somente-leitura restritivo, proteções anti-scraping/robôs e sanitização contra injeções.
 
 ---

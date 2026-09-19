@@ -24,7 +24,7 @@ export const DebatersListView: FC = () => {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-text-main flex items-center gap-2.5">
             <Users size={24} className="text-primary" />
-            <span>Debatedores & Histórico Auditado</span>
+            <span>Debatedores & Histórico de Debates</span>
           </h1>
           <p className="text-xs text-text-muted mt-1 max-w-2xl">
             Catálogo completo de debatedores registrados no Argumeta, agregando médias técnicas de oratória, precisão factual, compostura e falácias retóricas apuradas nos debates.

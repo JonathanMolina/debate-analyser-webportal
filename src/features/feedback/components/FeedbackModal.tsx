@@ -61,7 +61,7 @@ export const FeedbackModal: FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
             Feedback Enviado com Sucesso!
           </h3>
           <p className="text-xs text-text-muted max-w-sm mx-auto leading-relaxed">
-            Agradecemos imensamente pela sua contribuição. Nossa equipe avaliará sua mensagem para continuar aprimorando a plataforma pública.
+            Agradecemos imensamente pela sua contribuição. Nossa equipe avaliará sua mensagem para continuar aprimorando a plataforma.
           </p>
         </div>
       ) : (
@@ -116,7 +116,7 @@ export const FeedbackModal: FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
               required
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Descreva sua sugestão de debate, melhoria na auditoria ou problema encontrado..."
+              placeholder="Descreva sua sugestão de debate, melhoria nas análises ou problema encontrado..."
               className="w-full p-3 bg-canvas border border-border rounded-xl text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
             />
           </div>

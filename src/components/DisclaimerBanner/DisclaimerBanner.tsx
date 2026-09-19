@@ -18,7 +18,7 @@ export const DisclaimerBanner: FC = () => {
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-bold text-text-main flex items-center gap-1.5">
-                Auditoria Algorítmica & Imparcialidade Irrestrita
+                Análise Algorítmica & Imparcialidade Irrestrita
               </span>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 100% Algorítmico
@@ -29,7 +29,7 @@ export const DisclaimerBanner: FC = () => {
             </div>
 
             <p className="text-xs text-text-muted leading-relaxed max-w-4xl">
-              O <strong>Argumeta</strong> opera com independência e neutralidade técnica. Todos os dados, pontuações, detecções de falácias e checagens factuais são gerados por modelos de inteligência artificial de código auditável. 
+              O <strong>Argumeta</strong> opera com independência e neutralidade técnica. Todos os dados, pontuações, detecções de falácias e checagens factuais são gerados por modelos avançados de inteligência artificial. 
               <strong> Não há interferência ou alteração manual de dados e estatísticas por humanos.</strong>
             </p>
           </div>
@@ -70,10 +70,10 @@ export const DisclaimerBanner: FC = () => {
           <div className="bg-canvas/60 p-3 rounded-xl border border-border/60 space-y-1">
             <div className="font-semibold text-text-main flex items-center gap-1.5 text-[11px]">
               <ShieldCheck size={13} className="text-primary" />
-              <span>Dados Abertos & Imutáveis</span>
+              <span>Integridade dos Registros</span>
             </div>
             <p className="text-[11px] leading-relaxed">
-              O banco de dados é protegido por políticas RLS estritas de somente leitura pública, impossibilitando adulteração externa ou favorecimento de qualquer debatedor.
+              O banco de dados é protegido por políticas RLS estritas de integridade, impossibilitando adulteração externa ou favorecimento de qualquer debatedor.
             </p>
           </div>
         </div>

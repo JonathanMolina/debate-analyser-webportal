@@ -30,12 +30,9 @@ export const Header: FC<HeaderProps> = ({ onOpenFeedback }) => {
             <div className="flex flex-col">
               <span className="font-extrabold text-lg tracking-tight text-text-main flex items-center gap-1.5 leading-none">
                 Argumeta
-                <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-primary/15 text-primary border border-primary/30">
-                  PÚBLICO
-                </span>
               </span>
               <span className="text-[10px] text-text-muted mt-0.5 tracking-wide hidden sm:inline">
-                Auditoria e Inteligência de Debates
+                Inteligência e Análise de Debates
               </span>
             </div>
           </Link>

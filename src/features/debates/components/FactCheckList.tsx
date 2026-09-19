@@ -92,7 +92,7 @@ export const FactCheckList: FC<FactCheckListProps> = ({
           {/* Evidence Analysis */}
           <div className="space-y-1 text-xs">
             <span className="text-[10px] text-text-muted uppercase font-mono tracking-wider">
-              Evidência & Contexto Auditado:
+              Evidência & Contexto Analisado:
             </span>
             <p className="text-xs text-text-muted leading-relaxed">
               {item.evidence}
@@ -102,10 +102,10 @@ export const FactCheckList: FC<FactCheckListProps> = ({
           {/* Sources */}
           {item.sources && item.sources.length > 0 && (
             <div className="pt-2 border-t border-border/40 flex flex-wrap items-center gap-2 text-[11px] font-mono text-text-muted">
-              <span>Fontes auditadas:</span>
+              <span>Fontes consultadas:</span>
               {item.sources.map((src, i) => (
                 <span
-                  key={i}
+                  key={`${src}-${i}`}
                   className="px-2 py-0.5 rounded bg-surface-elevated text-text-main border border-border"
                 >
                   {src}

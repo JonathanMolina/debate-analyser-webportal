@@ -51,7 +51,7 @@ export const DebateDetailView: FC = () => {
           Debate não localizado
         </h2>
         <p className="text-xs text-text-muted max-w-sm mx-auto">
-          O debate solicitado não foi encontrado em nosso registro público de auditoria.
+          O debate solicitado não foi encontrado em nosso registro de análises.
         </p>
         <Link to="/">
           <Button variant="primary" size="sm">

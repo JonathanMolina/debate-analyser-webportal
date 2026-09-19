@@ -16,11 +16,11 @@ export const Footer: FC<FooterProps> = ({ onOpenFeedback }) => {
               Δ
             </div>
             <span className="font-bold text-text-main text-sm">
-              Argumeta — Portal Público Aberto
+              Argumeta — Inteligência e Análise de Debates
             </span>
           </div>
           <p className="text-xs text-text-muted max-w-md leading-relaxed">
-            Plataforma pública e independente de auditoria algorítmica de debates audiovisuais.
+            Plataforma independente de análise retórica e inteligência algorítmica de debates audiovisuais.
             Métricas de precisão factual, compostura retórica e densidade de dados computadas via inteligência artificial sem curadoria manual.
           </p>
         </div>
@@ -44,12 +44,12 @@ export const Footer: FC<FooterProps> = ({ onOpenFeedback }) => {
 
       <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-text-muted">
         <div>
-          © {new Date().getFullYear()} Argumeta. Dados públicos abertos sob licença de auditoria cívica.
+          © {new Date().getFullYear()} Argumeta. Todos os direitos reservados.
         </div>
         <div className="flex flex-wrap items-center gap-4">
-          <span className="hover:text-text-main transition-colors">Transparência Algorítmica</span>
+          <span className="hover:text-text-main transition-colors">Imparcialidade Algorítmica</span>
           <span>•</span>
-          <span className="hover:text-text-main transition-colors">Sem Autenticação Obrigatória</span>
+          <span className="hover:text-text-main transition-colors">Acesso Livre</span>
           <span>•</span>
           {onOpenFeedback && (
             <>

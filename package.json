@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Argumeta — Portal Público de Auditoria e Inteligência de Debates",
+  "description": "Argumeta — Plataforma de Inteligência e Análise de Debates",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

@@ -28,7 +28,7 @@ export const DashboardView: FC = () => {
 
   return (
     <div className="space-y-6 pb-8">
-      {/* 1. Banner de Imparcialidade e Auditoria de IA */}
+      {/* 1. Banner de Imparcialidade e Análise Algorítmica */}
       <DisclaimerBanner />
 
       {/* 2. Barra de Busca e Filtros */}

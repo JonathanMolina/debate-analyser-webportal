@@ -5,7 +5,7 @@ import { DisclaimerBanner } from '../DisclaimerBanner';
 describe('DisclaimerBanner Component', () => {
   it('deve renderizar o aviso explícito de imparcialidade e limitações da IA', () => {
     render(<DisclaimerBanner />);
-    expect(screen.getByText(/Auditoria Algorítmica & Imparcialidade Irrestrita/i)).toBeInTheDocument();
+    expect(screen.getByText(/Análise Algorítmica & Imparcialidade Irrestrita/i)).toBeInTheDocument();
     expect(screen.getByText(/Não há interferência ou alteração manual de dados e estatísticas por humanos/i)).toBeInTheDocument();
   });
 
@@ -17,6 +17,6 @@ describe('DisclaimerBanner Component', () => {
     fireEvent.click(toggleButton);
     expect(screen.getByText(/Limitações dos Modelos de IA/i)).toBeInTheDocument();
     expect(screen.getByText(/Neutralidade de Critérios/i)).toBeInTheDocument();
-    expect(screen.getByText(/Dados Abertos & Imutáveis/i)).toBeInTheDocument();
+    expect(screen.getByText(/Integridade dos Registros/i)).toBeInTheDocument();
   });
 });

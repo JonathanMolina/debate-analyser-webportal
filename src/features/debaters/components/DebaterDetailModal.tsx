@@ -58,7 +58,7 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
           </div>
         </div>
       }
-      subtitle="Dossiê Técnico & Histórico de Debates Auditados"
+      subtitle="Dossiê Técnico & Histórico de Debates Analisados"
       maxWidth="4xl"
     >
       <div className="space-y-6">
@@ -249,7 +249,7 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
                     onClick={onClose}
                     className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary-hover transition-colors shrink-0"
                   >
-                    <span>Auditar debate</span>
+                    <span>Ver análise</span>
                     <ExternalLink size={12} />
                   </Link>
                 </div>

@@ -7,7 +7,7 @@ describe('SupportFloatingPanel Component', () => {
     localStorage.clear();
   });
 
-  it('deve renderizar a mensagem de plataforma pública e ausência de planos pagos', () => {
+  it('deve renderizar a mensagem de apoio à plataforma e ausência de planos pagos', () => {
     render(<SupportFloatingPanel />);
     expect(screen.getByText(/Apoie a Plataforma Argumeta/i)).toBeInTheDocument();
     expect(screen.getByText(/Não possuímos assinaturas pagas nem paywalls/i)).toBeInTheDocument();

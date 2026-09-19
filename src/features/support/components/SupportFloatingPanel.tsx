@@ -56,7 +56,7 @@ export const SupportFloatingPanel: FC = () => {
                   Apoie a Plataforma Argumeta
                 </h3>
                 <span className="text-[10px] text-text-muted font-mono">
-                  100% Pública • Sem Recursos Pagos
+                  Acesso Livre • Sem Recursos Pagos
                 </span>
               </div>
             </div>
@@ -74,10 +74,10 @@ export const SupportFloatingPanel: FC = () => {
           {/* Mensagem Institucional */}
           <div className="space-y-2 text-xs text-text-muted leading-relaxed">
             <p>
-              Todos os relatórios, checagens e rankings do <strong>Argumeta</strong> são <strong className="text-text-main">totalmente públicos e abertos</strong>. Não possuímos assinaturas pagas nem paywalls.
+              Todas as consultas, métricas e rankings do <strong>Argumeta</strong> possuem <strong className="text-text-main">acesso livre e irrestrito</strong>. Não possuímos assinaturas pagas nem paywalls.
             </p>
             <p>
-              O processamento de vídeos longos, diarização de áudio e inteligência artificial demanda servidores e GPUs dedicadas de alto custo. Se este projeto agrega valor ao seu dia a dia, <strong className="text-text-main">agradecemos de coração qualquer quantia doada</strong> para manter a plataforma no ar e viabilizar a auditoria de cada vez mais debates.
+              O processamento de vídeos longos, diarização de áudio e inteligência artificial demanda servidores e GPUs dedicadas de alto custo. Se este projeto agrega valor ao seu dia a dia, <strong className="text-text-main">agradecemos de coração qualquer quantia doada</strong> para manter a plataforma no ar e viabilizar a análise de cada vez mais debates.
             </p>
           </div>
 
@@ -125,7 +125,7 @@ export const SupportFloatingPanel: FC = () => {
           <div className="flex items-center justify-between pt-1 text-[11px] text-emerald-400 font-mono">
             <span className="flex items-center gap-1">
               <Sparkles size={13} className="text-primary" />
-              Muito obrigado pelo apoio cívico!
+              Muito obrigado pelo seu apoio!
             </span>
             <button
               type="button"

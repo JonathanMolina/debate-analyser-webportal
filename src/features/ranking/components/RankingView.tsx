@@ -49,7 +49,7 @@ export const RankingView: FC = () => {
             </span>
           </div>
           <p className="text-xs text-text-muted mt-1 max-w-2xl">
-            Classificação técnica consolidada a partir dos debates auditados. O score geral pondera alegações embasadas, ausência de falácias, controle tonal e taxa de resposta direta.
+            Classificação técnica consolidada a partir dos debates analisados. O score geral pondera alegações embasadas, ausência de falácias, controle tonal e taxa de resposta direta.
           </p>
         </div>
 
