@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown, User } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, User, Users } from 'lucide-react';
 import type { DebaterAggregateStats } from '@/features/debaters/types/debater.types';
 import type { RankingSortField } from '../types/ranking.types';
 
@@ -28,6 +28,22 @@ export const RankingTable: FC<RankingTableProps> = ({
       <ArrowUp size={12} className="text-primary font-bold" />
     );
   };
+
+  if (rankingList.length === 0) {
+    return (
+      <div className="p-12 text-center bg-surface border border-border rounded-2xl space-y-3">
+        <div className="w-12 h-12 rounded-full bg-surface-elevated flex items-center justify-center mx-auto text-text-muted">
+          <Users size={22} className="text-primary" />
+        </div>
+        <h3 className="font-bold text-base text-text-main">
+          Nenhum debatedor no ranking
+        </h3>
+        <p className="text-xs text-text-muted max-w-sm mx-auto">
+          Não há debatedores registrados no banco de dados do Supabase.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
@@ -105,7 +121,7 @@ export const RankingTable: FC<RankingTableProps> = ({
 
           <tbody className="divide-y divide-border/60">
             {rankingList.map((item, index) => {
-              const isTop3 = index < 3;
+              const hasDebates = item.debatesCount > 0;
               return (
                 <tr
                   key={item.debaterId}
@@ -116,11 +132,11 @@ export const RankingTable: FC<RankingTableProps> = ({
                   <td className="p-4 text-center font-mono font-bold">
                     <span
                       className={`inline-flex items-center justify-center w-6 h-6 rounded-lg text-xs ${
-                        index === 0
+                        index === 0 && hasDebates
                           ? 'bg-amber-400/20 text-amber-400 border border-amber-400/40'
-                          : index === 1
+                          : index === 1 && hasDebates
                           ? 'bg-slate-300/20 text-slate-300 border border-slate-300/40'
-                          : index === 2
+                          : index === 2 && hasDebates
                           ? 'bg-amber-700/20 text-amber-500 border border-amber-700/40'
                           : 'text-text-muted'
                       }`}
@@ -149,9 +165,13 @@ export const RankingTable: FC<RankingTableProps> = ({
                         <div className="font-bold text-text-main group-hover:text-primary transition-colors">
                           {item.debaterName}
                         </div>
-                        {item.role && (
+                        {item.role ? (
                           <div className="text-[11px] text-text-muted">
                             {item.role}
+                          </div>
+                        ) : (
+                          <div className="text-[10px] text-text-muted font-mono">
+                            {item.debatesCount} debates processados
                           </div>
                         )}
                       </div>
@@ -161,56 +181,62 @@ export const RankingTable: FC<RankingTableProps> = ({
                   {/* Overall Score */}
                   <td className="p-4 text-right font-mono">
                     <span className="font-black text-sm text-primary">
-                      {item.avgScore}
+                      {hasDebates ? item.avgScore : '-'}
                     </span>
-                    <span className="text-[10px] text-text-muted block">pts</span>
+                    <span className="text-[10px] text-text-muted block">
+                      {hasDebates ? 'pts' : 'pendente'}
+                    </span>
                   </td>
 
                   {/* Win Rate */}
                   <td className="p-4 text-right font-mono hidden sm:table-cell">
                     <span className="font-semibold text-text-main">
-                      {item.winRate}%
+                      {hasDebates ? `${item.winRate}%` : '-'}
                     </span>
-                    <span className="text-[10px] text-text-muted block">
-                      {item.wins}V - {item.losses}D
-                    </span>
+                    {hasDebates && (
+                      <span className="text-[10px] text-text-muted block">
+                        {item.wins}V - {item.losses}D
+                      </span>
+                    )}
                   </td>
 
                   {/* Data Density */}
                   <td className="p-4 text-right font-mono hidden md:table-cell">
                     <span className="font-semibold text-text-main">
-                      {item.avgDataDensity}/100
+                      {hasDebates ? `${item.avgDataDensity}/100` : '-'}
                     </span>
                   </td>
 
                   {/* Direct Answer Rate */}
                   <td className="p-4 text-right font-mono hidden lg:table-cell">
                     <span className="font-semibold text-text-main">
-                      {item.avgDirectAnswerRate}%
+                      {hasDebates ? `${item.avgDirectAnswerRate}%` : '-'}
                     </span>
                   </td>
 
                   {/* Emotional Control */}
                   <td className="p-4 text-right font-mono hidden lg:table-cell">
                     <span className="font-semibold text-text-main">
-                      {item.avgEmotionalControl}/100
+                      {hasDebates ? `${item.avgEmotionalControl}/100` : '-'}
                     </span>
                   </td>
 
                   {/* Fallacies per debate */}
                   <td className="p-4 text-right font-mono">
                     <span className="font-bold text-rose-400">
-                      {item.avgFallaciesPerDebate}
+                      {hasDebates ? item.avgFallaciesPerDebate : '-'}
                     </span>
-                    <span className="text-[10px] text-text-muted block">
-                      {item.totalFallacies} tot
-                    </span>
+                    {hasDebates && (
+                      <span className="text-[10px] text-text-muted block">
+                        {item.totalFallacies} tot
+                      </span>
+                    )}
                   </td>
 
                   {/* Fact Check Accuracy */}
                   <td className="p-4 text-right font-mono hidden md:table-cell">
                     <span className="font-bold text-emerald-400">
-                      {item.factCheckAccuracy}%
+                      {hasDebates ? `${item.factCheckAccuracy}%` : '-'}
                     </span>
                   </td>
                 </tr>

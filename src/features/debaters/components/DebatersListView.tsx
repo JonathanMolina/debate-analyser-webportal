@@ -80,13 +80,15 @@ export const DebatersListView: FC = () => {
       ) : (
         <div className="p-12 text-center bg-surface border border-border rounded-2xl space-y-3">
           <div className="w-12 h-12 rounded-full bg-surface-elevated flex items-center justify-center mx-auto text-text-muted">
-            <FilterX size={22} />
+            {searchQuery ? <FilterX size={22} /> : <Users size={22} className="text-primary" />}
           </div>
           <h3 className="font-bold text-base text-text-main">
-            Nenhum debatedor localizado
+            {searchQuery ? 'Nenhum debatedor localizado' : 'Nenhum debatedor cadastrado no Supabase'}
           </h3>
           <p className="text-xs text-text-muted max-w-sm mx-auto">
-            Não encontramos nenhum debatedor correspondente ao termo "{searchQuery}".
+            {searchQuery
+              ? `Não encontramos nenhum debatedor correspondente ao termo "${searchQuery}".`
+              : 'Cadastre debatedores através do pipeline ETL local para que sejam exibidos nesta lista.'}
           </p>
         </div>
       )}

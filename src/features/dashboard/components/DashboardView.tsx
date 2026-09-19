@@ -6,7 +6,7 @@ import { CategoryFilterBar } from './CategoryFilterBar';
 import { DebateCard } from './DebateCard';
 import { TopDebatersPanel } from './TopDebatersPanel';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
-import { Film, FilterX, UserCheck } from 'lucide-react';
+import { Film, FilterX, Database, UserCheck } from 'lucide-react';
 import { Button } from '@/components/Button/Button';
 
 export const DashboardView: FC = () => {
@@ -23,6 +23,8 @@ export const DashboardView: FC = () => {
     handleDebaterFilter,
     handleClearFilters
   } = useDashboardFeed();
+
+  const isFiltered = Boolean(searchQuery.trim() || selectedCategory !== 'Todos' || selectedDebater);
 
   return (
     <div className="space-y-6 pb-8">
@@ -95,21 +97,27 @@ export const DashboardView: FC = () => {
           ) : (
             <div className="p-12 text-center bg-surface border border-border rounded-2xl space-y-3">
               <div className="w-12 h-12 rounded-full bg-surface-elevated flex items-center justify-center mx-auto text-text-muted">
-                <FilterX size={22} />
+                {isFiltered ? <FilterX size={22} /> : <Database size={22} className="text-primary" />}
               </div>
               <h3 className="font-bold text-base text-text-main">
-                Nenhum debate encontrado
+                {isFiltered
+                  ? 'Nenhum debate encontrado para esta busca'
+                  : 'Nenhum debate processado ainda no Supabase'}
               </h3>
-              <p className="text-xs text-text-muted max-w-sm mx-auto">
-                Não encontramos debates que coincidam com seus filtros de busca atuais.
+              <p className="text-xs text-text-muted max-w-md mx-auto leading-relaxed">
+                {isFiltered
+                  ? 'Tente ajustar ou limpar os filtros de busca para visualizar os registros.'
+                  : 'Ainda não há debates concluídos armazenados no banco de dados. Assim que novos debates forem processados e sincronizados pelo pipeline ETL, eles aparecerão aqui automaticamente.'}
               </p>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleClearFilters}
-              >
-                Limpar filtros
-              </Button>
+              {isFiltered && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleClearFilters}
+                >
+                  Limpar filtros
+                </Button>
+              )}
             </div>
           )}
         </div>

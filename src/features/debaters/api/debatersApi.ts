@@ -1,49 +1,41 @@
 import { supabase, isSupabaseConfigured } from '@/app/supabase/client';
 import type { Debater, DebaterAggregateStats, DebaterDebateHistoryItem } from '../types/debater.types';
-import { MOCK_DEBATERS, MOCK_AGGREGATE_STATS } from '@/features/mock/mockPortalData';
 import { fetchDebatesList } from '@/features/debates/api/debatesApi';
 
 export const fetchDebatersList = async (): Promise<Debater[]> => {
-  let dbDebaters: Debater[] = [];
+  if (!isSupabaseConfigured) {
+    return [];
+  }
 
-  if (isSupabaseConfigured) {
-    try {
-      const { data, error } = await supabase
-        .from('debaters')
-        .select('*')
-        .order('name', { ascending: true });
+  try {
+    const { data, error } = await supabase
+      .from('debaters')
+      .select('*')
+      .order('name', { ascending: true });
 
-      if (!error && data && data.length > 0) {
-        dbDebaters = data.map((d: {
-          id: string;
-          name: string;
-          photo_url?: string;
-          photo_storage_path?: string;
-          created_at: string;
-          updated_at: string;
-        }) => ({
-          id: d.id,
-          name: d.name,
-          photoUrl: d.photo_url,
-          photoStoragePath: d.photo_storage_path,
-          createdAt: new Date(d.created_at).getTime(),
-          updatedAt: new Date(d.updated_at).getTime()
-        }));
-      }
-    } catch {
-      // Degradação silenciosa
+    if (error || !data) {
+      return [];
     }
-  }
 
-  const map = new Map<string, Debater>();
-  for (const m of MOCK_DEBATERS) {
-    map.set(m.id, m);
+    return data.map((d: {
+      id: string;
+      name: string;
+      photo_url?: string;
+      photo_storage_path?: string;
+      reference_audio?: unknown;
+      created_at: string;
+      updated_at: string;
+    }) => ({
+      id: d.id,
+      name: d.name,
+      photoUrl: d.photo_url,
+      photoStoragePath: d.photo_storage_path,
+      createdAt: new Date(d.created_at).getTime(),
+      updatedAt: new Date(d.updated_at).getTime()
+    }));
+  } catch {
+    return [];
   }
-  for (const d of dbDebaters) {
-    map.set(d.id, { ...map.get(d.id), ...d });
-  }
-
-  return Array.from(map.values());
 };
 
 export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
@@ -52,7 +44,11 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
     fetchDebatesList()
   ]);
 
-  // Map of debater statistics
+  if (debaters.length === 0 && debates.length === 0) {
+    return [];
+  }
+
+  // Mapa de estatísticas reais
   const statsMap = new Map<string, {
     debaterId: string;
     debaterName: string;
@@ -79,14 +75,12 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
     recentDebates: DebaterDebateHistoryItem[];
   }>();
 
-  // Initialize with known debaters
+  // Inicializar com debatedores registrados no Supabase
   for (const deb of debaters) {
     statsMap.set(deb.name.toLowerCase(), {
       debaterId: deb.id,
       debaterName: deb.name,
       photoUrl: deb.photoUrl,
-      role: deb.role,
-      party: deb.party,
       debatesCount: 0,
       wins: 0,
       draws: 0,
@@ -108,7 +102,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
     });
   }
 
-  // Iterate over completed debates to aggregate real metrics
+  // Iterar pelos debates reais do Supabase
   for (const debate of debates) {
     const scores = debate.metrics?.debateScore?.scores || {};
     const winner = debate.metrics?.debateScore?.winner;
@@ -214,46 +208,35 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
   const average = (arr: number[], def = 0): number =>
     arr.length > 0 ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : def;
 
-  // Convert to output list
   const results: DebaterAggregateStats[] = [];
 
   for (const [, item] of statsMap.entries()) {
-    // If not in debate jobs, check if we have predefined mock stats
-    const fallbackMock = MOCK_AGGREGATE_STATS.find(
-      (m) => m.debaterName.toLowerCase() === item.debaterName.toLowerCase()
-    );
-
-    if (item.debatesCount === 0 && fallbackMock) {
-      results.push(fallbackMock);
-      continue;
-    }
-
-    const winRate = item.debatesCount > 0 ? Math.round((item.wins / item.debatesCount) * 100) : (fallbackMock?.winRate ?? 50);
-    const factCheckAccuracy = item.totalFactChecks > 0 ? Math.round((item.trueFactChecks / item.totalFactChecks) * 100) : (fallbackMock?.factCheckAccuracy ?? 85);
+    const winRate = item.debatesCount > 0 ? Math.round((item.wins / item.debatesCount) * 100) : 0;
+    const factCheckAccuracy = item.totalFactChecks > 0 ? Math.round((item.trueFactChecks / item.totalFactChecks) * 100) : 0;
 
     results.push({
       debaterId: item.debaterId,
       debaterName: item.debaterName,
-      photoUrl: item.photoUrl || fallbackMock?.photoUrl,
-      role: item.role || fallbackMock?.role,
-      party: item.party || fallbackMock?.party,
-      debatesCount: item.debatesCount || (fallbackMock?.debatesCount ?? 1),
+      photoUrl: item.photoUrl,
+      role: item.role,
+      party: item.party,
+      debatesCount: item.debatesCount,
       wins: item.wins,
       draws: item.draws,
       losses: item.losses,
       winRate,
-      avgScore: average(item.scores, fallbackMock?.avgScore ?? 100),
-      avgSpeakingTimeSeconds: average(item.speakingTimes, fallbackMock?.avgSpeakingTimeSeconds ?? 600),
-      avgWordsPerMinute: average(item.wpms, fallbackMock?.avgWordsPerMinute ?? 140),
-      avgVocabularyRichness: average(item.vocabularies, fallbackMock?.avgVocabularyRichness ?? 75),
-      avgDataDensity: average(item.dataDensities, fallbackMock?.avgDataDensity ?? 65),
-      avgEmotionalControl: average(item.emotionalControls, fallbackMock?.avgEmotionalControl ?? 75),
-      avgAssertiveness: average(item.assertivenessList, fallbackMock?.avgAssertiveness ?? 75),
-      avgVocalStability: average(item.vocalStabilities, fallbackMock?.avgVocalStability ?? 75),
-      avgDirectAnswerRate: average(item.directAnswerRates, fallbackMock?.avgDirectAnswerRate ?? 80),
-      avgRebuttalScore: average(item.rebuttalScores, fallbackMock?.avgRebuttalScore ?? 75),
+      avgScore: average(item.scores, 0),
+      avgSpeakingTimeSeconds: average(item.speakingTimes, 0),
+      avgWordsPerMinute: average(item.wpms, 0),
+      avgVocabularyRichness: average(item.vocabularies, 0),
+      avgDataDensity: average(item.dataDensities, 0),
+      avgEmotionalControl: average(item.emotionalControls, 0),
+      avgAssertiveness: average(item.assertivenessList, 0),
+      avgVocalStability: average(item.vocalStabilities, 0),
+      avgDirectAnswerRate: average(item.directAnswerRates, 0),
+      avgRebuttalScore: average(item.rebuttalScores, 0),
       totalFallacies: item.totalFallacies,
-      avgFallaciesPerDebate: item.debatesCount > 0 ? parseFloat((item.totalFallacies / item.debatesCount).toFixed(2)) : (fallbackMock?.avgFallaciesPerDebate ?? 0.5),
+      avgFallaciesPerDebate: item.debatesCount > 0 ? parseFloat((item.totalFallacies / item.debatesCount).toFixed(2)) : 0,
       totalFactChecks: item.totalFactChecks,
       factCheckAccuracy,
       recentDebates: item.recentDebates.sort((a, b) => b.date - a.date)

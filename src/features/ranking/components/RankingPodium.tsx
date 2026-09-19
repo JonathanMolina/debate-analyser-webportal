@@ -11,7 +11,28 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
   podium,
   onSelectDebater
 }) => {
-  if (podium.length < 2) return null;
+  // Se não houver debatedores ou nenhum deles tiver debates concluídos ainda
+  const hasDebatesInPodium = podium.some((d) => d.debatesCount > 0);
+
+  if (!hasDebatesInPodium || podium.length < 2) {
+    return (
+      <div className="p-6 bg-surface border border-border rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+            <Trophy size={22} />
+          </div>
+          <div>
+            <h3 className="font-bold text-sm text-text-main">
+              Pódio Técnico em Espera
+            </h3>
+            <p className="text-xs text-text-muted mt-0.5 max-w-xl leading-relaxed">
+              O pódio oficial com medalhas de ouro, prata e bronze será formado automaticamente assim que os primeiros debates forem concluídos e auditados pelo pipeline no Supabase.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const first = podium[0];
   const second = podium[1];
@@ -72,7 +93,6 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
           onClick={() => onSelectDebater(first)}
           className="bg-primary/10 border-2 border-primary/60 hover:border-primary rounded-2xl p-6 flex flex-col items-center text-center gap-3 cursor-pointer transition-all hover:scale-[1.02] shadow-xl order-1 md:order-2 relative"
         >
-          {/* Crown badge */}
           <div className="absolute -top-3.5 px-3 py-0.5 rounded-full bg-amber-400 text-black font-black text-[10px] uppercase tracking-wider flex items-center gap-1 shadow-md">
             <Trophy size={11} className="fill-black" /> Líder do Ranking
           </div>

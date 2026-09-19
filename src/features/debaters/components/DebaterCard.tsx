@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { User, Trophy, Activity, AlertTriangle, ArrowRight, Video } from 'lucide-react';
+import { User, Video, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/Button/Button';
 import type { DebaterAggregateStats } from '../types/debater.types';
 
@@ -12,6 +12,8 @@ export const DebaterCard: FC<DebaterCardProps> = ({
   debater,
   onViewDetails
 }) => {
+  const hasDebates = debater.debatesCount > 0;
+
   return (
     <div className="bg-surface border border-border rounded-2xl p-5 flex flex-col justify-between gap-5 hover:border-border/90 hover:bg-surface-hover/50 transition-all shadow-sm">
       {/* Top Header */}
@@ -43,8 +45,12 @@ export const DebaterCard: FC<DebaterCardProps> = ({
             )}
             <div className="flex items-center gap-2 mt-1 font-mono text-[11px] text-text-muted">
               <span>{debater.debatesCount} debates</span>
-              <span>•</span>
-              <span className="text-emerald-400 font-semibold">{debater.winRate}% vitórias</span>
+              {hasDebates && (
+                <>
+                  <span>•</span>
+                  <span className="text-emerald-400 font-semibold">{debater.winRate}% vitórias</span>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -53,30 +59,38 @@ export const DebaterCard: FC<DebaterCardProps> = ({
         <div className="text-right font-mono shrink-0">
           <span className="text-[10px] text-text-muted uppercase block">Média Técnica</span>
           <span className="text-xl font-black text-primary block leading-none mt-0.5">
-            {debater.avgScore}
+            {hasDebates ? debater.avgScore : '-'}
           </span>
-          <span className="text-[9px] text-text-muted block">pontos</span>
+          <span className="text-[9px] text-text-muted block">
+            {hasDebates ? 'pontos' : 'sem debates'}
+          </span>
         </div>
       </div>
 
       {/* Metrics Row (4 indicators) */}
-      <div className="grid grid-cols-3 gap-2 bg-canvas/60 p-3 rounded-xl border border-border/60 text-center font-mono">
-        <div>
-          <span className="text-[10px] text-text-muted block">Dados/Fontes</span>
-          <span className="text-xs font-bold text-text-main">{debater.avgDataDensity}/100</span>
+      {hasDebates ? (
+        <div className="grid grid-cols-3 gap-2 bg-canvas/60 p-3 rounded-xl border border-border/60 text-center font-mono">
+          <div>
+            <span className="text-[10px] text-text-muted block">Dados/Fontes</span>
+            <span className="text-xs font-bold text-text-main">{debater.avgDataDensity}/100</span>
+          </div>
+          <div>
+            <span className="text-[10px] text-text-muted block">Compostura</span>
+            <span className="text-xs font-bold text-text-main">{debater.avgEmotionalControl}/100</span>
+          </div>
+          <div>
+            <span className="text-[10px] text-text-muted block">Falácias/Deb</span>
+            <span className="text-xs font-bold text-rose-400">{debater.avgFallaciesPerDebate}</span>
+          </div>
         </div>
-        <div>
-          <span className="text-[10px] text-text-muted block">Compostura</span>
-          <span className="text-xs font-bold text-text-main">{debater.avgEmotionalControl}/100</span>
+      ) : (
+        <div className="bg-canvas/60 p-3 rounded-xl border border-border/60 text-center text-xs text-text-muted">
+          Aguardando análise de debates deste participante no Supabase.
         </div>
-        <div>
-          <span className="text-[10px] text-text-muted block">Falácias/Deb</span>
-          <span className="text-xs font-bold text-rose-400">{debater.avgFallaciesPerDebate}</span>
-        </div>
-      </div>
+      )}
 
       {/* Latest Debate Pill */}
-      {debater.recentDebates[0] && (
+      {hasDebates && debater.recentDebates[0] ? (
         <div className="text-xs space-y-1 bg-surface-elevated/40 p-2.5 rounded-xl border border-border/60">
           <div className="flex items-center justify-between text-[11px] text-text-muted">
             <span className="flex items-center gap-1 font-mono">
@@ -104,7 +118,7 @@ export const DebaterCard: FC<DebaterCardProps> = ({
               `Vs ${debater.recentDebates[0].opponentNames.join(', ')}`}
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Action */}
       <Button
@@ -113,7 +127,7 @@ export const DebaterCard: FC<DebaterCardProps> = ({
         className="w-full justify-between group-hover:border-primary/40"
         onClick={() => onViewDetails(debater)}
       >
-        <span>Ver métricas e histórico</span>
+        <span>Ver histórico e perfil</span>
         <ArrowRight size={14} className="text-primary" />
       </Button>
     </div>
