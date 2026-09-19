@@ -19,7 +19,7 @@ describe('Feedback API', () => {
       name: '<b>Usuario</b>'
     });
 
-    // Como o cliente Supabase mockado ou real processa a inserção
+    // Como o cliente mockado ou real processa a inserção
     expect(typeof result.success).toBe('boolean');
   });
 });

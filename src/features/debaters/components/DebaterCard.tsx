@@ -85,7 +85,7 @@ export const DebaterCard: FC<DebaterCardProps> = ({
         </div>
       ) : (
         <div className="bg-canvas/60 p-3 rounded-xl border border-border/60 text-center text-xs text-text-muted">
-          Aguardando análise de debates deste participante no Supabase.
+          Aguardando análise de debates deste participante na plataforma.
         </div>
       )}
 

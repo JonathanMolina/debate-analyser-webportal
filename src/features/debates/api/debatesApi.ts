@@ -89,7 +89,7 @@ export const fetchDebatesList = async (
       };
     });
 
-    // Filtro por termo de busca nos dados recebidos do Supabase
+    // Filtro por termo de busca nos dados recebidos
     if (filters?.searchQuery) {
       const q = filters.searchQuery.toLowerCase().trim();
       list = list.filter(

@@ -26,7 +26,7 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
               Pódio Técnico em Espera
             </h3>
             <p className="text-xs text-text-muted mt-0.5 max-w-xl leading-relaxed">
-              O pódio oficial com medalhas de ouro, prata e bronze será formado automaticamente assim que os primeiros debates forem concluídos e processados pelo pipeline no Supabase.
+              O pódio oficial com medalhas de ouro, prata e bronze será formado automaticamente assim que os primeiros debates forem concluídos e processados pela plataforma.
             </p>
           </div>
         </div>

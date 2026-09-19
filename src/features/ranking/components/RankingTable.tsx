@@ -39,7 +39,7 @@ export const RankingTable: FC<RankingTableProps> = ({
           Nenhum debatedor no ranking
         </h3>
         <p className="text-xs text-text-muted max-w-sm mx-auto">
-          Não há debatedores registrados no banco de dados do Supabase.
+          Não há debatedores registrados no momento.
         </p>
       </div>
     );

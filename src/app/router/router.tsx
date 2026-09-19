@@ -27,6 +27,12 @@ const LazyDebateDetailView = lazy(() =>
   }))
 );
 
+const LazySuggestionsView = lazy(() =>
+  import('@/features/suggestions/components/SuggestionsView').then((m) => ({
+    default: m.SuggestionsView
+  }))
+);
+
 const RouteLoadingFallback = () => (
   <div className="space-y-6 p-4">
     <Skeleton className="h-24 w-full rounded-2xl" />
@@ -74,6 +80,18 @@ export const router = createBrowserRouter([
             <LazyDebateDetailView />
           </Suspense>
         )
+      },
+      {
+        path: 'sugestoes',
+        element: (
+          <Suspense fallback={<RouteLoadingFallback />}>
+            <LazySuggestionsView />
+          </Suspense>
+        )
+      },
+      {
+        path: 'suggestions',
+        element: <Navigate to="/sugestoes" replace />
       },
       {
         path: '*',

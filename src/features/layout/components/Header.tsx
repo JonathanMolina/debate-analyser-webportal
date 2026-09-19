@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { NavLink, Link } from 'react-router';
-import { Trophy, Users, LayoutDashboard } from 'lucide-react';
+import { Trophy, Users, LayoutDashboard, Lightbulb } from 'lucide-react';
 import { SecurityBadge } from '@/features/security/components/SecurityBadge';
 import { FeedbackButton } from '@/features/feedback/components/FeedbackButton';
 
@@ -12,7 +12,8 @@ export const Header: FC<HeaderProps> = ({ onOpenFeedback }) => {
   const navItems = [
     { to: '/', label: 'Início', icon: LayoutDashboard },
     { to: '/debaters', label: 'Debatedores', icon: Users },
-    { to: '/ranking', label: 'Ranking', icon: Trophy }
+    { to: '/ranking', label: 'Ranking', icon: Trophy },
+    { to: '/sugestoes', label: 'Sugestões', icon: Lightbulb }
   ];
 
   return (

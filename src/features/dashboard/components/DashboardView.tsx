@@ -102,12 +102,12 @@ export const DashboardView: FC = () => {
               <h3 className="font-bold text-base text-text-main">
                 {isFiltered
                   ? 'Nenhum debate encontrado para esta busca'
-                  : 'Nenhum debate processado ainda no Supabase'}
+                  : 'Nenhum debate processado ainda'}
               </h3>
               <p className="text-xs text-text-muted max-w-md mx-auto leading-relaxed">
                 {isFiltered
                   ? 'Tente ajustar ou limpar os filtros de busca para visualizar os registros.'
-                  : 'Ainda não há debates concluídos armazenados no banco de dados. Assim que novos debates forem processados e sincronizados pelo pipeline ETL, eles aparecerão aqui automaticamente.'}
+                  : 'Ainda não há debates concluídos disponíveis. Assim que novos debates forem analisados e sincronizados, eles aparecerão aqui automaticamente.'}
               </p>
               {isFiltered && (
                 <Button

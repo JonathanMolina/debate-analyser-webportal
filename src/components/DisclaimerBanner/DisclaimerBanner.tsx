@@ -73,7 +73,7 @@ export const DisclaimerBanner: FC = () => {
               <span>Integridade dos Registros</span>
             </div>
             <p className="text-[11px] leading-relaxed">
-              O banco de dados é protegido por políticas RLS estritas de integridade, impossibilitando adulteração externa ou favorecimento de qualquer debatedor.
+              A plataforma adota políticas rigorosas de integridade e imutabilidade dos dados, impossibilitando qualquer adulteração externa ou favorecimento de debatedores.
             </p>
           </div>
         </div>

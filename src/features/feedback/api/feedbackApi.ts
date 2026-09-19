@@ -39,11 +39,11 @@ export const submitFeedback = async (
     });
 
     if (error) {
-      return { success: false, error: 'Falha ao salvar feedback no Supabase.' };
+      return { success: false, error: 'Falha ao salvar feedback. Tente novamente mais tarde.' };
     }
 
     return { success: true };
   } catch {
-    return { success: false, error: 'Erro inesperado ao conectar ao banco de dados.' };
+    return { success: false, error: 'Erro inesperado ao enviar seu feedback. Tente novamente mais tarde.' };
   }
 };

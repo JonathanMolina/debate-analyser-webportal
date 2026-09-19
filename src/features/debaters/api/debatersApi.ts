@@ -75,7 +75,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
     recentDebates: DebaterDebateHistoryItem[];
   }>();
 
-  // Inicializar com debatedores registrados no Supabase
+  // Inicializar com debatedores registrados
   for (const deb of debaters) {
     statsMap.set(deb.name.toLowerCase(), {
       debaterId: deb.id,
@@ -102,7 +102,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
     });
   }
 
-  // Iterar pelos debates reais do Supabase
+  // Iterar pelos debates reais
   for (const debate of debates) {
     const scores = debate.metrics?.debateScore?.scores || {};
     const winner = debate.metrics?.debateScore?.winner;

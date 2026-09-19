@@ -6,7 +6,7 @@ Plataforma independente de análise algorítmica de debates audiovisuais, verifi
 
 ## 🎯 Princípios da Plataforma
 
-- **100% Algorítmico & Imparcial**: Todas as métricas, pontuações, detecções de falácias e checagens factuais são geradas pelo pipeline Whisper + Gemini. Não há interferência ou alteração manual de dados por humanos.
+- **100% Algorítmico & Imparcial**: Todas as métricas, pontuações, detecções de falácias e checagens factuais são geradas de forma estritamente automatizada por inteligência artificial auditável. Não há interferência ou alteração manual de dados por humanos.
 - **Acesso Livre**: Não exige cadastro ou autenticação de usuários para consulta.
 - **Segurança Reforçada**: Blindado por políticas de Row Level Security (RLS) no Supabase, modo somente-leitura restritivo, proteções anti-scraping/robôs e sanitização contra injeções.
 

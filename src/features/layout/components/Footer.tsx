@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Scale, Database, Cpu, MessageSquare } from 'lucide-react';
+import { Scale, ShieldCheck, Cpu, MessageSquare } from 'lucide-react';
 
 export interface FooterProps {
   onOpenFeedback?: () => void;
@@ -32,12 +32,12 @@ export const Footer: FC<FooterProps> = ({ onOpenFeedback }) => {
             <span>100% Imparcial</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-canvas border border-border">
-            <Database size={13} className="text-emerald-400" />
-            <span>Supabase RLS Protegido</span>
+            <ShieldCheck size={13} className="text-emerald-400" />
+            <span>Ambiente Seguro</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-canvas border border-border">
             <Cpu size={13} className="text-yellow-400" />
-            <span>Pipeline Whisper + Gemini</span>
+            <span>Inteligência Artificial Imparcial</span>
           </div>
         </div>
       </div>

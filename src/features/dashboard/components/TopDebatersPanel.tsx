@@ -52,9 +52,9 @@ export const TopDebatersPanel: FC<TopDebatersPanelProps> = ({
           <div className="w-8 h-8 rounded-full bg-surface-elevated flex items-center justify-center mx-auto text-text-muted">
             <Users size={16} />
           </div>
-          <p className="font-semibold text-text-main">Nenhum debatedor no Supabase</p>
+          <p className="font-semibold text-text-main">Nenhum debatedor registrado</p>
           <p className="text-[11px] leading-relaxed">
-            Cadastre debatedores na base de dados para que apareçam aqui.
+            Novos debatedores avaliados aparecerão aqui automaticamente.
           </p>
         </div>
       ) : (

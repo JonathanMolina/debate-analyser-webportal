@@ -1,7 +1,18 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { calculateCrc16, formatTlv, generatePixPayload, getPixConfig } from '../pix';
 
 describe('Pix Utility', () => {
+  beforeEach(() => {
+    vi.stubEnv('VITE_PIX_KEY', '');
+    vi.stubEnv('VITE_PIX_PAYLOAD', '');
+    vi.stubEnv('VITE_PIX_NAME', '');
+    vi.stubEnv('VITE_PIX_CITY', '');
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it('deve calcular corretamente o CRC16-CCITT', () => {
     const raw = '00020126410014br.gov.bcb.pix0119pix@argumeta.com.br5204000053039865802BR5908Argumeta6009SAO PAULO62070503***6304';
     const crc = calculateCrc16(raw);
