@@ -20,6 +20,7 @@ export const fetchDebatesList = async (
       .from('debate_jobs')
       .select('*')
       .eq('status', 'completed')
+      .eq('is_active', true)
       .order('created_at', { ascending: false });
 
     if (filters?.searchQuery) {
@@ -56,6 +57,7 @@ export const fetchDebatesList = async (
       speakers: unknown;
       status: string;
       progress: number;
+      is_active?: boolean;
       created_at: string;
       completed_at: string;
     }) => {
@@ -77,6 +79,7 @@ export const fetchDebatesList = async (
         speakers: speakersList,
         status: j.status as DebateJob['status'],
         progress: Number(j.progress) || 100,
+        isActive: Boolean(j.is_active),
         metrics: res?.metrics as DebateJob['metrics'],
         timeline: res?.timeline as DebateJob['timeline'],
         factChecks: res?.fact_checks as DebateJob['factChecks'],
@@ -125,6 +128,7 @@ export const fetchDebateById = async (
       .from('debate_jobs')
       .select('*')
       .eq('id', sanitizedId)
+      .eq('is_active', true)
       .maybeSingle();
 
     if (error || !data) return null;
@@ -145,6 +149,7 @@ export const fetchDebateById = async (
       speakers: speakersList,
       status: data.status as DebateJob['status'],
       progress: Number(data.progress) || 100,
+      isActive: Boolean(data.is_active),
       metrics: resData?.metrics as DebateJob['metrics'],
       timeline: resData?.timeline as DebateJob['timeline'],
       factChecks: resData?.fact_checks as DebateJob['factChecks'],

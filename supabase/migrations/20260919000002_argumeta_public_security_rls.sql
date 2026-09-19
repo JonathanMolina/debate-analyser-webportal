@@ -26,23 +26,33 @@ USING (true);
 -- será aceito para a role 'anon'.
 
 -- 3. TABELA: public.debate_jobs
--- Permitir LEITURA PÚBLICA apenas de debates CONCLUÍDOS (status = 'completed')
--- Isso protege logs intermediários de jobs em processamento ou com falhas de infraestrutura.
+-- Garantir coluna is_active com valor default false
+ALTER TABLE public.debate_jobs ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT false;
+CREATE INDEX IF NOT EXISTS idx_debate_jobs_is_active ON public.debate_jobs(is_active);
+
+-- Permitir LEITURA PÚBLICA apenas de debates CONCLUÍDOS e ATIVOS/VALIDADOS (status = 'completed' AND is_active = true)
+-- Isso protege debates em processamento ou não validados pelo operador desktop.
 DROP POLICY IF EXISTS "anon_read_completed_jobs" ON public.debate_jobs;
 CREATE POLICY "anon_read_completed_jobs"
 ON public.debate_jobs
 FOR SELECT
 TO anon, authenticated
-USING (status = 'completed');
+USING (status = 'completed' AND is_active = true);
 
 -- 4. TABELA: public.debate_results
--- Permitir LEITURA PÚBLICA (SELECT) de todos os resultados consolidados
+-- Permitir LEITURA PÚBLICA apenas dos resultados de debates ativos
 DROP POLICY IF EXISTS "anon_read_debate_results" ON public.debate_results;
 CREATE POLICY "anon_read_debate_results"
 ON public.debate_results
 FOR SELECT
 TO anon, authenticated
-USING (true);
+USING (
+    EXISTS (
+        SELECT 1 FROM public.debate_jobs
+        WHERE debate_jobs.id = debate_results.job_id
+        AND debate_jobs.is_active = true
+    )
+);
 
 -- 5. STORAGE BUCKETS: Proteção contra uploads não autorizados
 -- Leitura pública já habilitada para 'debater-assets' e 'debate-results'.

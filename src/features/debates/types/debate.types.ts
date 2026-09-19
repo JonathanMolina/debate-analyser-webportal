@@ -112,6 +112,7 @@ export interface DebateJob {
   speakers: SpeakerInput[];
   status: 'idle' | 'downloading' | 'recognizing_faces' | 'transcribing' | 'analyzing' | 'completed' | 'failed';
   progress: number;
+  isActive?: boolean;
   logs?: string[];
   metrics?: DebateMetrics;
   timeline?: TurnItem[];
