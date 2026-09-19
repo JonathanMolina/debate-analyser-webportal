@@ -1,9 +1,14 @@
 import { FC } from 'react';
 import { NavLink, Link } from 'react-router';
-import { Trophy, Users, LayoutDashboard, ShieldCheck, Scale } from 'lucide-react';
+import { Trophy, Users, LayoutDashboard } from 'lucide-react';
 import { SecurityBadge } from '@/features/security/components/SecurityBadge';
+import { FeedbackButton } from '@/features/feedback/components/FeedbackButton';
 
-export const Header: FC = () => {
+export interface HeaderProps {
+  onOpenFeedback: () => void;
+}
+
+export const Header: FC<HeaderProps> = ({ onOpenFeedback }) => {
   const navItems = [
     { to: '/', label: 'Início', icon: LayoutDashboard },
     { to: '/debaters', label: 'Debatedores', icon: Users },
@@ -60,9 +65,12 @@ export const Header: FC = () => {
           })}
         </nav>
 
-        {/* Security & Neutrality Tag */}
-        <div className="hidden lg:flex items-center gap-3">
-          <SecurityBadge />
+        {/* Feedback Action & Security Tag */}
+        <div className="flex items-center gap-3">
+          <FeedbackButton onClick={onOpenFeedback} />
+          <div className="hidden lg:flex items-center">
+            <SecurityBadge />
+          </div>
         </div>
       </div>
     </header>

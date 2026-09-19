@@ -1,7 +1,11 @@
 import { FC } from 'react';
-import { ShieldCheck, Scale, Database, Cpu } from 'lucide-react';
+import { Scale, Database, Cpu, MessageSquare } from 'lucide-react';
 
-export const Footer: FC = () => {
+export interface FooterProps {
+  onOpenFeedback?: () => void;
+}
+
+export const Footer: FC<FooterProps> = ({ onOpenFeedback }) => {
   return (
     <footer className="w-full bg-surface border-t border-border mt-16 py-10 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
@@ -42,11 +46,24 @@ export const Footer: FC = () => {
         <div>
           © {new Date().getFullYear()} Argumeta. Dados públicos abertos sob licença de auditoria cívica.
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <span className="hover:text-text-main transition-colors">Transparência Algorítmica</span>
           <span>•</span>
           <span className="hover:text-text-main transition-colors">Sem Autenticação Obrigatória</span>
           <span>•</span>
+          {onOpenFeedback && (
+            <>
+              <button
+                type="button"
+                onClick={onOpenFeedback}
+                className="text-primary hover:text-primary-hover transition-colors flex items-center gap-1 cursor-pointer font-medium"
+              >
+                <MessageSquare size={11} />
+                <span>Enviar Feedback</span>
+              </button>
+              <span>•</span>
+            </>
+          )}
           <span className="hover:text-text-main transition-colors">Proteção Anti-Scraping</span>
         </div>
       </div>
