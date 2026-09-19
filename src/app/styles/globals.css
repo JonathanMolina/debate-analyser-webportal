@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #090C0E;
+  --color-surface: #12171A;
+  --color-surface-hover: #182024;
+  --color-surface-elevated: #1C2429;
+  --color-border: #1D262B;
+  --color-border-subtle: #161D22;
+  --color-primary: #34D399;
+  --color-primary-hover: #2BB882;
+  --color-primary-dark: #059669;
+  --color-text-main: #ECFDF5;
+  --color-text-muted: #849699;
+  --color-text-dim: #506163;
+  --color-status-true: #059669;
+  --color-status-disputed: #EAB308;
+  --color-status-false: #F43F5E;
+  --color-status-neutral: #6B7280;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-canvas);
+  color: var(--color-text-main);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar matching dark cyber intelligence aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090C0E;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1D262B;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #34D399;
+}

@@ -1,0 +1,122 @@
+export type FactCheckVerdict = 'Verdadeiro' | 'Falso' | 'Impreciso' | 'Disputado';
+
+export interface FactCheckItem {
+  id: string;
+  timestamp: number;
+  speaker: string;
+  claim: string;
+  verdict: FactCheckVerdict;
+  evidence: string;
+  sources: string[];
+}
+
+export interface FallacyItem {
+  id: string;
+  timestamp: number;
+  speaker: string;
+  type: string;
+  quote: string;
+}
+
+export interface TurnItem {
+  speaker: string;
+  start: number;
+  end: number;
+  text: string;
+  temperature: number;
+  overlap?: boolean;
+  confidence?: number;
+}
+
+export interface LinguisticMetrics {
+  wordsPerMinute: number;
+  vocabularyRichness: number; // 0 a 100
+  formality: number; // 0 a 100
+  dataDensity: number; // 0 a 100
+  totalWords: number;
+}
+
+export interface ToneMetrics {
+  averageTemperature: number;
+  emotionalControl: number; // 0 a 100
+  assertiveness: number; // 0 a 100
+  vocalStability: number; // 0 a 100
+}
+
+export interface QAMetrics {
+  questionsAsked: number;
+  questionsAnswered: number;
+  evasiveAnswers?: number;
+  directAnswerRate: number; // 0 a 100
+}
+
+export interface ContentMetrics {
+  rebuttalScore: number; // 0 a 100
+  argumentStructureDensity: number; // 0 a 100
+  topicAdherence: number; // 0 a 100
+  framingIndex: number; // 0 a 100
+  netFactuality: number; // 0 a 100
+  fallacyDensity: number;
+}
+
+export interface ScoreCategoryBreakdown {
+  evidencePoints: number;
+  fallacyPenalties: number;
+  qaPoints: number;
+  rebuttalPoints?: number;
+  structurePoints?: number;
+  factualityRate?: number;
+  contentPoints?: number;
+  tonePoints: number;
+  speakingEfficiency: number;
+  totalPoints: number;
+}
+
+export interface DebateScore {
+  scores: Record<string, number>;
+  winner: string;
+  difference: number;
+  isDraw: boolean;
+  breakdown: Record<string, ScoreCategoryBreakdown>;
+}
+
+export interface DebateMetrics {
+  speakingTime: Record<string, number>;
+  interruptions: Record<string, number>;
+  fallaciesCount: Record<string, number>;
+  averageTemperature: number;
+  linguisticMetrics?: Record<string, LinguisticMetrics>;
+  toneMetrics?: Record<string, ToneMetrics>;
+  qaMetrics?: Record<string, QAMetrics>;
+  contentMetrics?: Record<string, ContentMetrics>;
+  debateScore?: DebateScore;
+}
+
+export interface SpeakerInput {
+  name: string;
+  imagePath?: string;
+  previewUrl?: string;
+  debaterId?: string;
+  party?: string;
+}
+
+export interface DebateJob {
+  id: string;
+  title?: string;
+  description?: string;
+  youtubeUrl: string;
+  youtubeId: string;
+  thumbnailUrl?: string;
+  durationSeconds?: number;
+  category?: string;
+  speakers: SpeakerInput[];
+  status: 'idle' | 'downloading' | 'recognizing_faces' | 'transcribing' | 'analyzing' | 'completed' | 'failed';
+  progress: number;
+  logs?: string[];
+  metrics?: DebateMetrics;
+  timeline?: TurnItem[];
+  factChecks?: FactCheckItem[];
+  fallacies?: FallacyItem[];
+  createdAt: number;
+  completedAt?: number;
+}
