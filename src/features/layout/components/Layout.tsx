@@ -7,6 +7,7 @@ import { HumanVerificationModal } from '@/features/security/components/HumanVeri
 import { useSecurityShield } from '@/features/security/hooks/useSecurityShield';
 import { FeedbackModal } from '@/features/feedback/components/FeedbackModal';
 import { SupportFloatingPanel } from '@/features/support/components/SupportFloatingPanel';
+import { Analytics } from '@vercel/analytics/react';
 
 export const Layout: FC = () => {
   const {
@@ -45,6 +46,9 @@ export const Layout: FC = () => {
 
       {/* Painel Flutuante de Apoio Comunitário / Pix (expansível / colapsável) */}
       <SupportFloatingPanel />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 };
