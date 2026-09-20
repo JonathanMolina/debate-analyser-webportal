@@ -2,9 +2,11 @@ import { supabase, isSupabaseConfigured } from '@/app/supabase/client';
 import type { Debater, DebaterAggregateStats, DebaterDebateHistoryItem } from '../types/debater.types';
 import { fetchDebatesList } from '@/features/debates/api/debatesApi';
 import { MOCK_DEBATERS } from '@/features/mock/mockPortalData';
+import { resolveDebaterPhotoUrl, registerDebatersBatch } from '@/components/DebaterAvatar';
 
 export const fetchDebatersList = async (): Promise<Debater[]> => {
   if (!isSupabaseConfigured) {
+    registerDebatersBatch(MOCK_DEBATERS);
     return MOCK_DEBATERS;
   }
 
@@ -18,7 +20,7 @@ export const fetchDebatersList = async (): Promise<Debater[]> => {
       return [];
     }
 
-    return data.map((d: {
+    const mapped = data.map((d: {
       id: string;
       name: string;
       photo_url?: string;
@@ -29,11 +31,14 @@ export const fetchDebatersList = async (): Promise<Debater[]> => {
     }) => ({
       id: d.id,
       name: d.name,
-      photoUrl: d.photo_url,
+      photoUrl: resolveDebaterPhotoUrl(d.photo_url || d.photo_storage_path, d.name, d.id),
       photoStoragePath: d.photo_storage_path,
       createdAt: new Date(d.created_at).getTime(),
       updatedAt: new Date(d.updated_at).getTime()
     }));
+
+    registerDebatersBatch(mapped);
+    return mapped;
   } catch {
     return [];
   }
@@ -81,7 +86,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
     statsMap.set(deb.name.toLowerCase(), {
       debaterId: deb.id,
       debaterName: deb.name,
-      photoUrl: deb.photoUrl,
+      photoUrl: resolveDebaterPhotoUrl(deb.photoUrl, deb.name, deb.id),
       debatesCount: 0,
       wins: 0,
       draws: 0,
@@ -117,7 +122,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
         current = {
           debaterId: spk.debaterId || `deb_${key.replace(/\s+/g, '_')}`,
           debaterName: spk.name,
-          photoUrl: spk.previewUrl,
+          photoUrl: resolveDebaterPhotoUrl(spk.previewUrl, spk.name, spk.debaterId),
           debatesCount: 0,
           wins: 0,
           draws: 0,
@@ -138,6 +143,8 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
           recentDebates: []
         };
         statsMap.set(key, current);
+      } else if (!current.photoUrl && spk.previewUrl) {
+        current.photoUrl = resolveDebaterPhotoUrl(spk.previewUrl, spk.name, spk.debaterId);
       }
 
       current.debatesCount += 1;

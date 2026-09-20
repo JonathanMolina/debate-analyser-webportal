@@ -11,6 +11,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import type { AudienceMetrics, SpeakerInput } from '../types/debate.types';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
 
 export interface AudienceSentimentPanelProps {
   audienceMetrics?: AudienceMetrics;
@@ -203,17 +204,13 @@ export const AudienceSentimentPanel: FC<AudienceSentimentPanelProps> = ({
               >
                 <div className="flex items-center justify-between gap-3 mb-4">
                   <div className="flex items-center gap-2.5">
-                    {speakerInfo?.previewUrl ? (
-                      <img
-                        src={speakerInfo.previewUrl}
-                        alt={fb.speakerName}
-                        className="w-8 h-8 rounded-full object-cover border border-border"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-xs text-primary font-mono">
-                        {fb.speakerName.charAt(0)}
-                      </div>
-                    )}
+                    <DebaterAvatar
+                      name={fb.speakerName}
+                      photoUrl={speakerInfo?.previewUrl}
+                      debaterId={speakerInfo?.debaterId}
+                      size="sm"
+                      className="w-8 h-8"
+                    />
                     <div>
                       <h5 className="text-sm font-bold text-text-main leading-none">
                         {fb.speakerName}

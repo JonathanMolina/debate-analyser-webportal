@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { Link } from 'react-router';
-import { Trophy, ChevronRight, User, Users } from 'lucide-react';
+import { Trophy, ChevronRight, Users } from 'lucide-react';
 import type { DebaterAggregateStats } from '@/features/debaters/types/debater.types';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
 
 export interface TopDebatersPanelProps {
   topDebaters: DebaterAggregateStats[];
@@ -88,19 +89,13 @@ export const TopDebatersPanel: FC<TopDebatersPanelProps> = ({
                   </div>
 
                   {/* Avatar */}
-                  <div className="w-8 h-8 rounded-full bg-surface-elevated border border-border overflow-hidden shrink-0">
-                    {debater.photoUrl ? (
-                      <img
-                        src={debater.photoUrl}
-                        alt={debater.debaterName}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-text-muted">
-                        <User size={14} />
-                      </div>
-                    )}
-                  </div>
+                  <DebaterAvatar
+                    name={debater.debaterName}
+                    photoUrl={debater.photoUrl}
+                    debaterId={debater.debaterId}
+                    size="sm"
+                    className="w-8 h-8"
+                  />
 
                   {/* Info */}
                   <div className="truncate">

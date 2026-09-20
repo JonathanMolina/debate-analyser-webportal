@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Modal } from '@/components/Modal/Modal';
 import { Badge } from '@/components/Badge/Badge';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
 import type { DebaterAggregateStats } from '../types/debater.types';
 
 export interface DebaterDetailModalProps {
@@ -33,19 +34,13 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
       onClose={onClose}
       title={
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-surface-elevated border border-border overflow-hidden shrink-0">
-            {debater.photoUrl ? (
-              <img
-                src={debater.photoUrl}
-                alt={debater.debaterName}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-text-muted">
-                <User size={18} />
-              </div>
-            )}
-          </div>
+          <DebaterAvatar
+            name={debater.debaterName}
+            photoUrl={debater.photoUrl}
+            debaterId={debater.debaterId}
+            size="md"
+            className="w-10 h-10"
+          />
           <div>
             <span className="font-bold text-base text-text-main">
               {debater.debaterName}

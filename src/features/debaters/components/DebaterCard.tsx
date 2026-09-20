@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { User, Video, ArrowRight } from 'lucide-react';
+import { Video, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/Button/Button';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
 import type { DebaterAggregateStats } from '../types/debater.types';
 
 export interface DebaterCardProps {
@@ -20,20 +21,14 @@ export const DebaterCard: FC<DebaterCardProps> = ({
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3.5">
           {/* Avatar */}
-          <div className="w-14 h-14 rounded-2xl bg-surface-elevated border-2 border-border overflow-hidden shrink-0 shadow-md">
-            {debater.photoUrl ? (
-              <img
-                src={debater.photoUrl}
-                alt={debater.debaterName}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-text-muted">
-                <User size={24} />
-              </div>
-            )}
-          </div>
+          <DebaterAvatar
+            name={debater.debaterName}
+            photoUrl={debater.photoUrl}
+            debaterId={debater.debaterId}
+            size="lg"
+            shape="2xl"
+            className="w-14 h-14 border-2 border-border shadow-md"
+          />
 
           {/* Identity Info */}
           <div>

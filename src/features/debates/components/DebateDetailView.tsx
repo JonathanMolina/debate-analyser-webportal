@@ -23,6 +23,8 @@ import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { Button } from '@/components/Button/Button';
 import { SeoHead, ShareButtons, generateDebateFullJsonLd } from '@/features/seo';
 import { NewsletterBanner } from '@/features/newsletter/components/NewsletterBanner';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
+import { formatVideoHumanDuration } from '../utils/duration';
 import { useLayoutContext } from '@/features/layout/components/Layout';
 
 export const DebateDetailView: FC = () => {
@@ -220,24 +222,28 @@ export const DebateDetailView: FC = () => {
                       key={spk.name}
                       className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-surface-elevated border border-border text-xs text-text-main font-semibold"
                     >
-                      {spk.previewUrl && (
-                        <img
-                          src={spk.previewUrl}
-                          alt={spk.name}
-                          className="w-4 h-4 rounded-full object-cover"
-                        />
-                      )}
+                      <DebaterAvatar
+                        name={spk.name}
+                        photoUrl={spk.previewUrl}
+                        debaterId={spk.debaterId}
+                        size="xs"
+                        border={false}
+                      />
                       <span>{spk.name}</span>
                     </div>
                   ))}
                 </div>
 
                 <div className="flex items-center gap-3 text-[11px] font-mono text-text-muted">
-                  <span className="flex items-center gap-1">
-                    <Clock size={12} />
-                    {Math.floor((debate.durationSeconds || 1200) / 60)} min de áudio
-                  </span>
-                  <span>•</span>
+                  {formatVideoHumanDuration(debate.durationSeconds) && (
+                    <>
+                      <span className="flex items-center gap-1" title="Duração do vídeo no YouTube">
+                        <Clock size={12} />
+                        {formatVideoHumanDuration(debate.durationSeconds)}
+                      </span>
+                      <span>•</span>
+                    </>
+                  )}
                   <span className="flex items-center gap-1">
                     <Calendar size={12} />
                     {new Date(debate.createdAt).toLocaleDateString('pt-BR')}

@@ -66,7 +66,7 @@ export const MOCK_DEBATES: DebateJob[] = [
     youtubeUrl: 'https://www.youtube.com/watch?v=zIwRCVd6-v8',
     youtubeId: 'zIwRCVd6-v8',
     thumbnailUrl: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop&q=80',
-    durationSeconds: 1240,
+    durationSeconds: 8167,
     category: 'Negócios & Gestão',
     speakers: [
       {
@@ -84,8 +84,8 @@ export const MOCK_DEBATES: DebateJob[] = [
     progress: 100,
     metrics: {
       speakingTime: {
-        'Tallis Gomes': 580,
-        'Paulo Brigadeiro': 620
+        'Tallis Gomes': 3516,
+        'Paulo Brigadeiro': 3072
       },
       interruptions: {
         'Tallis Gomes': 3,

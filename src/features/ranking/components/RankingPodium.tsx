@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { Trophy, User, Award } from 'lucide-react';
+import { Trophy, Award } from 'lucide-react';
 import type { DebaterAggregateStats } from '@/features/debaters/types/debater.types';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
 
 export interface RankingPodiumProps {
   podium: DebaterAggregateStats[];
@@ -47,19 +48,13 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
           className="bg-surface border border-border hover:border-slate-400/50 rounded-2xl p-5 flex flex-col items-center text-center gap-3 cursor-pointer transition-all hover:scale-[1.01] shadow-sm order-2 md:order-1"
         >
           <div className="relative">
-            <div className="w-16 h-16 rounded-full bg-surface-elevated border-2 border-slate-300 shadow-md overflow-hidden">
-              {second.photoUrl ? (
-                <img
-                  src={second.photoUrl}
-                  alt={second.debaterName}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-text-muted">
-                  <User size={26} />
-                </div>
-              )}
-            </div>
+            <DebaterAvatar
+              name={second.debaterName}
+              photoUrl={second.photoUrl}
+              debaterId={second.debaterId}
+              size="lg"
+              className="w-16 h-16 border-2 border-slate-300 shadow-md"
+            />
             <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-slate-300 text-slate-950 flex items-center justify-center font-bold text-xs shadow-md border-2 border-surface font-mono">
               2º
             </div>
@@ -98,19 +93,13 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
           </div>
 
           <div className="relative mt-2">
-            <div className="w-20 h-20 rounded-full bg-surface-elevated border-3 border-amber-400 shadow-xl overflow-hidden ring-4 ring-primary/20">
-              {first.photoUrl ? (
-                <img
-                  src={first.photoUrl}
-                  alt={first.debaterName}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-text-muted">
-                  <User size={32} />
-                </div>
-              )}
-            </div>
+            <DebaterAvatar
+              name={first.debaterName}
+              photoUrl={first.photoUrl}
+              debaterId={first.debaterId}
+              size="xl"
+              className="w-20 h-20 border-3 border-amber-400 shadow-xl ring-4 ring-primary/20"
+            />
             <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-amber-400 text-black flex items-center justify-center font-black text-sm shadow-md border-2 border-surface font-mono">
               1º
             </div>
@@ -145,19 +134,13 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
           className="bg-surface border border-border hover:border-amber-700/50 rounded-2xl p-5 flex flex-col items-center text-center gap-3 cursor-pointer transition-all hover:scale-[1.01] shadow-sm order-3"
         >
           <div className="relative">
-            <div className="w-16 h-16 rounded-full bg-surface-elevated border-2 border-amber-700 shadow-md overflow-hidden">
-              {third.photoUrl ? (
-                <img
-                  src={third.photoUrl}
-                  alt={third.debaterName}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-text-muted">
-                  <User size={26} />
-                </div>
-              )}
-            </div>
+            <DebaterAvatar
+              name={third.debaterName}
+              photoUrl={third.photoUrl}
+              debaterId={third.debaterId}
+              size="lg"
+              className="w-16 h-16 border-2 border-amber-700 shadow-md"
+            />
             <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-amber-700 text-amber-100 flex items-center justify-center font-bold text-xs shadow-md border-2 border-surface font-mono">
               3º
             </div>

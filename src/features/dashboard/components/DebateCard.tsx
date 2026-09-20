@@ -2,6 +2,9 @@ import { FC } from 'react';
 import { Link } from 'react-router';
 import { Play, CheckCircle, AlertTriangle, Trophy, Clock, Calendar } from 'lucide-react';
 import type { DebateJob } from '@/features/debates/types/debate.types';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
+
+import { formatVideoBadgeDuration } from '@/features/debates/utils/duration';
 
 export interface DebateCardProps {
   debate: DebateJob;
@@ -12,13 +15,7 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
   const isDraw = Boolean(debate.metrics?.debateScore?.isDraw);
   const factChecksCount = debate.factChecks?.length ?? 0;
   const fallaciesCount = debate.fallacies?.length ?? 0;
-
-  const formatDuration = (seconds?: number) => {
-    if (!seconds) return '20:40';
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  };
+  const durationBadge = formatVideoBadgeDuration(debate.durationSeconds);
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString('pt-BR', {
@@ -49,10 +46,12 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
         />
 
         {/* Video Duration Badge */}
-        <div className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-black/85 text-[11px] font-mono text-white flex items-center gap-1 font-semibold tracking-wide">
-          <Clock size={11} />
-          {formatDuration(debate.durationSeconds)}
-        </div>
+        {durationBadge && (
+          <div className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-black/85 text-[11px] font-mono text-white flex items-center gap-1 font-semibold tracking-wide">
+            <Clock size={11} />
+            {durationBadge}
+          </div>
+        )}
 
         {/* Category Pill */}
         {debate.category && (
@@ -84,13 +83,13 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
                 key={speaker.name}
                 className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-surface-elevated text-[11px] text-text-muted border border-border/80"
               >
-                {speaker.previewUrl && (
-                  <img
-                    src={speaker.previewUrl}
-                    alt={speaker.name}
-                    className="w-4 h-4 rounded-full object-cover"
-                  />
-                )}
+                <DebaterAvatar
+                  name={speaker.name}
+                  photoUrl={speaker.previewUrl}
+                  debaterId={speaker.debaterId}
+                  size="xs"
+                  border={false}
+                />
                 <span className="font-medium text-text-main">{speaker.name}</span>
               </div>
             ))}

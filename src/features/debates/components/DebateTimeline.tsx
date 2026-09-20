@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { Play, User } from 'lucide-react';
+import { Play } from 'lucide-react';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
 import type { TurnItem, SpeakerInput } from '../types/debate.types';
 
 export interface DebateTimelineProps {
@@ -63,19 +64,7 @@ export const DebateTimeline: FC<DebateTimelineProps> = ({
             {/* Speaker & Timestamp Info */}
             <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-start gap-2 sm:w-40 shrink-0">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="w-7 h-7 rounded-full bg-surface-elevated border border-border overflow-hidden shrink-0">
-                  {photo ? (
-                    <img
-                      src={photo}
-                      alt={turn.speaker}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-text-muted">
-                      <User size={14} />
-                    </div>
-                  )}
-                </div>
+                <DebaterAvatar name={turn.speaker} photoUrl={photo} size="sm" />
                 <span className="text-xs font-bold text-text-main truncate">
                   {turn.speaker}
                 </span>

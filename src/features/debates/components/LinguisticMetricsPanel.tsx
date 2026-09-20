@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Brain, Mic, MessageSquare, Activity } from 'lucide-react';
 import type { DebateMetrics, SpeakerInput } from '../types/debate.types';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
 
 export interface LinguisticMetricsPanelProps {
   metrics?: DebateMetrics;
@@ -37,13 +38,13 @@ export const LinguisticMetricsPanel: FC<LinguisticMetricsPanelProps> = ({
           >
             {/* Header */}
             <div className="flex items-center gap-3 border-b border-border pb-3">
-              {spkData?.previewUrl && (
-                <img
-                  src={spkData.previewUrl}
-                  alt={spk}
-                  className="w-10 h-10 rounded-full object-cover border border-border"
-                />
-              )}
+              <DebaterAvatar
+                name={spk}
+                photoUrl={spkData?.previewUrl}
+                debaterId={spkData?.debaterId}
+                size="md"
+                className="w-10 h-10"
+              />
               <div>
                 <h4 className="font-bold text-base text-text-main">{spk}</h4>
                 <span className="text-[11px] text-text-muted font-mono">

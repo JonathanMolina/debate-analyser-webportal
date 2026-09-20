@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown, User, Users } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Users } from 'lucide-react';
 import type { DebaterAggregateStats } from '@/features/debaters/types/debater.types';
+import { DebaterAvatar } from '@/components/DebaterAvatar';
 import type { RankingSortField } from '../types/ranking.types';
 
 export interface RankingTableProps {
@@ -148,19 +149,13 @@ export const RankingTable: FC<RankingTableProps> = ({
                   {/* Debater Name & Photo */}
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-surface-elevated border border-border overflow-hidden shrink-0">
-                        {item.photoUrl ? (
-                          <img
-                            src={item.photoUrl}
-                            alt={item.debaterName}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-text-muted">
-                            <User size={16} />
-                          </div>
-                        )}
-                      </div>
+                      <DebaterAvatar
+                        name={item.debaterName}
+                        photoUrl={item.photoUrl}
+                        debaterId={item.debaterId}
+                        size="md"
+                        className="w-9 h-9"
+                      />
                       <div>
                         <div className="font-bold text-text-main group-hover:text-primary transition-colors">
                           {item.debaterName}
