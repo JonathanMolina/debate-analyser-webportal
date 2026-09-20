@@ -25,8 +25,13 @@ import { DisclaimerBanner } from '@/components/DisclaimerBanner/DisclaimerBanner
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { Button } from '@/components/Button/Button';
 import { SeoHead, ShareButtons, generateDebateFullJsonLd } from '@/features/seo';
+import { NewsletterBanner } from '@/features/newsletter/components/NewsletterBanner';
+import { useLayoutContext } from '@/features/layout/components/Layout';
 
 export const DebateDetailView: FC = () => {
+  const layoutContext = useLayoutContext();
+  const onOpenNewsletter = layoutContext?.onOpenNewsletter;
+
   const {
     debate,
     isLoading,
@@ -295,6 +300,11 @@ export const DebateDetailView: FC = () => {
           />
         )}
       </div>
+
+      {/* Newsletter Callout */}
+      {onOpenNewsletter && (
+        <NewsletterBanner onOpenNewsletter={onOpenNewsletter} />
+      )}
 
       {/* Impartiality Disclaimer */}
       <DisclaimerBanner />

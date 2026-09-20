@@ -7,7 +7,8 @@ import {
   CheckCircle2,
   Filter,
   MessageCircle,
-  Share2
+  Share2,
+  HelpCircle
 } from 'lucide-react';
 import type { AudienceMetrics, SpeakerInput } from '../types/debate.types';
 
@@ -58,6 +59,8 @@ export const AudienceSentimentPanel: FC<AudienceSentimentPanelProps> = ({
   } = audienceMetrics;
 
   const speakerFeedbackList = Object.values(speakersFeedback || {});
+  const totalDebaters = Math.max(1, speakers.length || speakerFeedbackList.length || 2);
+  const maxAudiencePoints = totalDebaters * 50;
 
   const formatLikes = (count: number): string => {
     if (count >= 1000000) {
@@ -110,17 +113,35 @@ export const AudienceSentimentPanel: FC<AudienceSentimentPanelProps> = ({
           </div>
 
           {/* Weight Callout Badge */}
-          <div className="p-3 px-4 rounded-xl bg-surface-elevated border border-border flex items-center gap-3">
+          <div
+            className="p-3 px-4 rounded-xl bg-surface-elevated border border-border flex items-center gap-3 relative group"
+            title={`Distribuição de até 50 pontos por quantidade de debatedores: até ${maxAudiencePoints} pontos totais distribuídos (${totalDebaters} debatedores).`}
+          >
             <div className="text-right">
-              <span className="text-[10px] uppercase font-mono text-text-muted block">
-                Impacto no Score Final
+              <span className="text-[10px] uppercase font-mono text-text-muted flex items-center justify-end gap-1">
+                <span>Impacto no Score Final</span>
+                <HelpCircle size={11} className="text-amber-400" />
               </span>
-              <span className="text-xs font-bold text-primary font-mono">
-                Até +30 pts no Scorecard
+              <span className="text-xs font-bold text-primary font-mono block">
+                Até +{maxAudiencePoints} pts no Scorecard
+              </span>
+              <span className="text-[9px] text-text-muted font-mono block">
+                (50 pts máx por debatedor)
               </span>
             </div>
             <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
               <ThumbsUp size={16} />
+            </div>
+
+            {/* Hover Tooltip */}
+            <div className="absolute top-full right-0 mt-2 hidden group-hover:block w-72 p-3 bg-surface-elevated text-xs font-sans text-text-main rounded-xl shadow-xl border border-border z-50 pointer-events-none leading-snug">
+              <div className="font-semibold text-amber-400 mb-1 flex items-center gap-1.5">
+                <ThumbsUp size={12} />
+                <span>Opinião do Público (Comentários YouTube)</span>
+              </div>
+              <p className="text-[11px] text-text-muted">
+                Avaliação semântica via IA baseada nos comentários mais curtidos do vídeo, desmascarando ironias. A pontuação é distribuída proporcionalmente em até 50 pontos por debatedor (ex: até 100 pts distribuídos em 2 debatedores, até 250 pts em 5 debatedores).
+              </p>
             </div>
           </div>
         </div>

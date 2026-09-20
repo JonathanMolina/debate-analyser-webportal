@@ -96,7 +96,7 @@ export interface ScoreCategoryBreakdown {
   contentPoints?: number;
   tonePoints: number;
   speakingEfficiency: number;
-  audiencePoints?: number; // Pontos conferidos pela avaliação popular (peso calibrado até 30 pts)
+  audiencePoints?: number; // Pontos conferidos pela avaliação popular (peso calibrado: até 50 pts por debatedor, ex: 100 pts distribuídos para 2 debatedores, 250 pts para 5)
   totalPoints: number;
 }
 

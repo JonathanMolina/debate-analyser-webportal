@@ -127,4 +127,34 @@ describe('AudienceSentimentPanel Component', () => {
     expect(screen.queryByText('@usuario_um')).not.toBeInTheDocument();
     expect(screen.getByText('@usuario_dois')).toBeInTheDocument();
   });
+
+  it('deve exibir impacto no score proporcional à quantidade de debatedores (50 pts por debatedor)', () => {
+    // 2 debatedores = 100 pts
+    const { rerender } = render(
+      <AudienceSentimentPanel
+        audienceMetrics={mockAudienceMetrics}
+        speakers={mockSpeakers}
+        technicalWinner="Debatedor Alfa"
+      />
+    );
+    expect(screen.getByText('Até +100 pts no Scorecard')).toBeInTheDocument();
+    expect(screen.getByText('(50 pts máx por debatedor)')).toBeInTheDocument();
+
+    // 5 debatedores = 250 pts
+    const fiveSpeakers: SpeakerInput[] = [
+      { name: 'Debatedor 1' },
+      { name: 'Debatedor 2' },
+      { name: 'Debatedor 3' },
+      { name: 'Debatedor 4' },
+      { name: 'Debatedor 5' }
+    ];
+    rerender(
+      <AudienceSentimentPanel
+        audienceMetrics={mockAudienceMetrics}
+        speakers={fiveSpeakers}
+        technicalWinner="Debatedor 1"
+      />
+    );
+    expect(screen.getByText('Até +250 pts no Scorecard')).toBeInTheDocument();
+  });
 });

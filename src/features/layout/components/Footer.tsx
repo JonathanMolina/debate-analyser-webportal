@@ -1,11 +1,12 @@
 import { FC } from 'react';
-import { Scale, ShieldCheck, Cpu, MessageSquare } from 'lucide-react';
+import { Scale, Cpu, MessageSquare, Mail } from 'lucide-react';
 
 export interface FooterProps {
   onOpenFeedback?: () => void;
+  onOpenNewsletter?: () => void;
 }
 
-export const Footer: FC<FooterProps> = ({ onOpenFeedback }) => {
+export const Footer: FC<FooterProps> = ({ onOpenFeedback, onOpenNewsletter }) => {
   return (
     <footer className="w-full bg-surface border-t border-border mt-16 py-10 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
@@ -32,10 +33,6 @@ export const Footer: FC<FooterProps> = ({ onOpenFeedback }) => {
             <span>100% Imparcial</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-canvas border border-border">
-            <ShieldCheck size={13} className="text-emerald-400" />
-            <span>Ambiente Seguro</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-canvas border border-border">
             <Cpu size={13} className="text-yellow-400" />
             <span>Inteligência Artificial Imparcial</span>
           </div>
@@ -51,12 +48,25 @@ export const Footer: FC<FooterProps> = ({ onOpenFeedback }) => {
           <span>•</span>
           <span className="hover:text-text-main transition-colors">Acesso Livre</span>
           <span>•</span>
+          {onOpenNewsletter && (
+            <>
+              <button
+                type="button"
+                onClick={onOpenNewsletter}
+                className="text-primary hover:text-primary-hover transition-colors flex items-center gap-1 cursor-pointer font-medium"
+              >
+                <Mail size={11} />
+                <span>Assinar Newsletter</span>
+              </button>
+              <span>•</span>
+            </>
+          )}
           {onOpenFeedback && (
             <>
               <button
                 type="button"
                 onClick={onOpenFeedback}
-                className="text-primary hover:text-primary-hover transition-colors flex items-center gap-1 cursor-pointer font-medium"
+                className="text-text-muted hover:text-text-main transition-colors flex items-center gap-1 cursor-pointer font-medium"
               >
                 <MessageSquare size={11} />
                 <span>Enviar Feedback</span>

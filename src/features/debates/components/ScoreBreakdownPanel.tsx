@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Trophy, Scale, ShieldCheck } from 'lucide-react';
+import { Trophy, Scale, HelpCircle } from 'lucide-react';
 import type { DebateScore, SpeakerInput } from '../types/debate.types';
 
 export interface ScoreBreakdownPanelProps {
@@ -20,6 +20,7 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
   }
 
   const speakerNames = Object.keys(score.breakdown);
+  const maxAudiencePoints = speakerNames.length * 50;
 
   return (
     <div className="space-y-6">
@@ -135,9 +136,28 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
               </tr>
               {speakerNames.some((spk) => score.breakdown[spk].audiencePoints !== undefined) && (
                 <tr className="bg-amber-500/5">
-                  <td className="p-3.5 text-text-main font-semibold flex items-center gap-1.5">
-                    <span className="text-amber-400 font-bold">★</span>
-                    <span>Avaliação Popular (Comentários YouTube - até +30 pts)</span>
+                  <td className="p-3.5 text-text-main font-semibold">
+                    <div className="flex items-center gap-2">
+                      <span className="text-amber-400 font-bold">★</span>
+                      <span>Opinião do Público (Comentários YouTube)</span>
+                      <span className="text-[10px] text-text-muted font-normal font-mono">
+                        (até +{maxAudiencePoints} pts distrib.)
+                      </span>
+                      <div
+                        className="relative group cursor-help inline-flex items-center"
+                        title={`Avaliação semântica via IA com auditoria de ironias nos comentários do YouTube. Distribui até 50 pontos por debatedor (${maxAudiencePoints} pontos totais para ${speakerNames.length} debatedores).`}
+                      >
+                        <HelpCircle size={13} className="text-amber-400/80" />
+                        <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex flex-col w-72 p-3 bg-surface-elevated text-xs font-sans text-text-main rounded-xl shadow-xl border border-border z-50 pointer-events-none leading-snug">
+                          <strong className="text-amber-400 font-semibold mb-1 flex items-center gap-1">
+                            <span>Veredito Popular & IA</span>
+                          </strong>
+                          <span className="text-[11px] text-text-muted font-normal">
+                            Baseada nos comentários mais curtidos do YouTube com detecção de ironias e citações cruzadas na transcrição. São até 50 pontos máximos distribuídos por debatedor (ex: 100 pts em debates de 2 debatedores, 250 pts em debates de 5 debatedores).
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </td>
                   {speakerNames.map((spk) => (
                     <td key={spk} className="p-3.5 text-right font-bold text-amber-400">

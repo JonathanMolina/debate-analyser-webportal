@@ -1,14 +1,15 @@
 import { FC } from 'react';
 import { NavLink, Link } from 'react-router';
 import { Trophy, Users, LayoutDashboard, Lightbulb } from 'lucide-react';
-import { SecurityBadge } from '@/features/security/components/SecurityBadge';
 import { FeedbackButton } from '@/features/feedback/components/FeedbackButton';
+import { NewsletterButton } from '@/features/newsletter/components/NewsletterButton';
 
 export interface HeaderProps {
   onOpenFeedback: () => void;
+  onOpenNewsletter?: () => void;
 }
 
-export const Header: FC<HeaderProps> = ({ onOpenFeedback }) => {
+export const Header: FC<HeaderProps> = ({ onOpenFeedback, onOpenNewsletter }) => {
   const navItems = [
     { to: '/', label: 'Início', icon: LayoutDashboard },
     { to: '/debaters', label: 'Debatedores', icon: Users },
@@ -63,12 +64,12 @@ export const Header: FC<HeaderProps> = ({ onOpenFeedback }) => {
           })}
         </nav>
 
-        {/* Feedback Action & Security Tag */}
-        <div className="flex items-center gap-3">
+        {/* Action Buttons: Newsletter & Feedback */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {onOpenNewsletter && (
+            <NewsletterButton onClick={onOpenNewsletter} />
+          )}
           <FeedbackButton onClick={onOpenFeedback} />
-          <div className="hidden lg:flex items-center">
-            <SecurityBadge />
-          </div>
         </div>
       </div>
     </header>

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDebateById } from '../api/debatesApi';
+import { recordDebateView } from '@/features/newsletter/utils/debateViewTracker';
 
 export const useDebateDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +19,15 @@ export const useDebateDetail = () => {
     queryFn: () => (id ? fetchDebateById(id) : null),
     enabled: Boolean(id)
   });
+
+  useEffect(() => {
+    if (debate?.id) {
+      recordDebateView({
+        id: debate.id,
+        title: debate.title || `Debate ${debate.speakers?.map((s) => s.name).join(' vs ') || ''}`
+      });
+    }
+  }, [debate?.id, debate?.title, debate?.speakers]);
 
   const handleSeek = (seconds: number) => {
     setCurrentTimestamp(seconds);
