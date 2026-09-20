@@ -1,0 +1,13 @@
+# ==============================================================================
+# PROJETO ARGUMETA: DIRETIVAS PARA MOTORES DE BUSCA (ROBOTS.TXT)
+# Permitir indexação completa do conteúdo público, debates e análises
+# ==============================================================================
+
+User-agent: *
+Allow: /
+
+# Descoberta imediata de debates e páginas indexáveis
+Sitemap: https://argumeta.com.br/sitemap.xml
+
+# Feed RSS em tempo real para indexação rápida pelo Googlebot e agregadores
+Sitemap: https://argumeta.com.br/feed.xml

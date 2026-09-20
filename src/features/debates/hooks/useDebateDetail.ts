@@ -5,7 +5,7 @@ import { fetchDebateById } from '../api/debatesApi';
 
 export const useDebateDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [activeTab, setActiveTab] = useState<'timeline' | 'facts' | 'fallacies' | 'metrics'>('timeline');
+  const [activeTab, setActiveTab] = useState<'timeline' | 'facts' | 'fallacies' | 'metrics' | 'audience'>('timeline');
   const [currentTimestamp, setCurrentTimestamp] = useState<number>(0);
 
   const {

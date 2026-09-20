@@ -11,7 +11,8 @@ import {
   Brain,
   MessageSquare,
   FileText,
-  Play
+  Play,
+  Users
 } from 'lucide-react';
 import { useDebateDetail } from '../hooks/useDebateDetail';
 import { DebateTimeline } from './DebateTimeline';
@@ -19,9 +20,11 @@ import { FactCheckList } from './FactCheckList';
 import { FallaciesList } from './FallaciesList';
 import { ScoreBreakdownPanel } from './ScoreBreakdownPanel';
 import { LinguisticMetricsPanel } from './LinguisticMetricsPanel';
+import { AudienceSentimentPanel } from './AudienceSentimentPanel';
 import { DisclaimerBanner } from '@/components/DisclaimerBanner/DisclaimerBanner';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { Button } from '@/components/Button/Button';
+import { SeoHead, ShareButtons, generateDebateFullJsonLd } from '@/features/seo';
 
 export const DebateDetailView: FC = () => {
   const {
@@ -63,7 +66,7 @@ export const DebateDetailView: FC = () => {
   }
 
   interface DebateTabItem {
-    id: 'timeline' | 'facts' | 'fallacies' | 'metrics';
+    id: 'timeline' | 'facts' | 'fallacies' | 'metrics' | 'audience';
     label: string;
     icon: typeof MessageSquare;
     count?: number;
@@ -73,11 +76,49 @@ export const DebateDetailView: FC = () => {
     { id: 'timeline', label: 'Timeline Retórica', icon: MessageSquare, count: debate.timeline?.length },
     { id: 'facts', label: 'Checagem de Fatos', icon: CheckCircle, count: debate.factChecks?.length },
     { id: 'fallacies', label: 'Falácias Retóricas', icon: AlertTriangle, count: debate.fallacies?.length },
-    { id: 'metrics', label: 'Pontuação & Indicadores', icon: Scale }
+    { id: 'metrics', label: 'Pontuação & Indicadores', icon: Scale },
+    {
+      id: 'audience',
+      label: 'Opinião do Público',
+      icon: Users,
+      count: debate.metrics?.audienceMetrics?.topComments?.length
+    }
   ];
+
+  const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://argumeta.com.br';
+  const speakersText = debate.speakers.map((s) => s.name).join(' vs ');
+  const debateSeoTitle = `${debate.title || `Debate ${speakersText}`} — Análise e Fact-Checking`;
+  const debateSeoDescription =
+    debate.description ||
+    `Análise retórica e checagem de fatos do debate entre ${speakersText || 'participantes'}. ${debate.factChecks?.length || 0} checagens e ${debate.fallacies?.length || 0} falácias mapeadas.`;
+  const debateThumbnail =
+    debate.thumbnailUrl ||
+    (debate.youtubeId ? `https://img.youtube.com/vi/${debate.youtubeId}/hqdefault.jpg` : `${siteUrl}/logo-512.png`);
+  const debateKeywords = [
+    'debate',
+    ...debate.speakers.map((s) => s.name),
+    'fact-checking',
+    'checagem de fatos',
+    'análise retórica',
+    'falácias',
+    debate.category || 'política'
+  ];
+  const debateJsonLd = generateDebateFullJsonLd(debate, siteUrl);
 
   return (
     <div className="space-y-6 pb-12">
+      <SeoHead
+        title={debateSeoTitle}
+        description={debateSeoDescription}
+        keywords={debateKeywords}
+        canonicalUrl={`${siteUrl}/debates/${debate.id}`}
+        ogType="video.other"
+        ogImage={debateThumbnail}
+        ogImageAlt={`Capa do debate ${debate.title}`}
+        publishedTime={debate.completedAt ? new Date(debate.completedAt).toISOString() : new Date(debate.createdAt).toISOString()}
+        jsonLd={debateJsonLd}
+      />
+
       {/* Back button & Breadcrumb */}
       <div className="flex items-center justify-between">
         <Link
@@ -164,6 +205,14 @@ export const DebateDetailView: FC = () => {
               </span>
             </div>
           </div>
+
+          {/* Social Share Bar para viralização e links orgânicos */}
+          <div className="pt-3 border-t border-border/60">
+            <ShareButtons
+              title={debate.title || `Debate ${speakersText}`}
+              summary={debate.description}
+            />
+          </div>
         </div>
       </div>
 
@@ -236,6 +285,14 @@ export const DebateDetailView: FC = () => {
               speakers={debate.speakers}
             />
           </div>
+        )}
+
+        {activeTab === 'audience' && (
+          <AudienceSentimentPanel
+            audienceMetrics={debate.metrics?.audienceMetrics}
+            speakers={debate.speakers}
+            technicalWinner={debate.metrics?.debateScore?.winner}
+          />
         )}
       </div>
 

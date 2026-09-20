@@ -59,6 +59,33 @@ export interface ContentMetrics {
   fallacyDensity: number;
 }
 
+export interface TopCommentItem {
+  id: string;
+  author: string;
+  authorAvatarUrl?: string;
+  text: string;
+  likes: number;
+  publishedAt?: string;
+  favoredSpeaker?: string; // Debatedor favorecido ou 'Neutro'
+  sentiment?: 'positive' | 'neutral' | 'negative';
+}
+
+export interface AudienceSpeakerFeedback {
+  speakerName: string;
+  approvalPercentage: number; // Ex: 68%
+  supportCount: number;
+  keyReasons: string[]; // Motivos apontados pelas pessoas
+}
+
+export interface AudienceMetrics {
+  totalCommentsAnalyzed: number;
+  favoredWinner: string; // Quem a comunidade considerou vencedor
+  winnerAgreementWithAlgorithm: boolean; // Se concorda com a análise técnica
+  publicVerdictSummary: string; // Síntese do sentimento geral da comunidade
+  speakersFeedback: Record<string, AudienceSpeakerFeedback>;
+  topComments: TopCommentItem[]; // Top comentários mais curtidos (até 15)
+}
+
 export interface ScoreCategoryBreakdown {
   evidencePoints: number;
   fallacyPenalties: number;
@@ -69,6 +96,7 @@ export interface ScoreCategoryBreakdown {
   contentPoints?: number;
   tonePoints: number;
   speakingEfficiency: number;
+  audiencePoints?: number; // Pontos conferidos pela avaliação popular (peso calibrado até 30 pts)
   totalPoints: number;
 }
 
@@ -89,6 +117,7 @@ export interface DebateMetrics {
   toneMetrics?: Record<string, ToneMetrics>;
   qaMetrics?: Record<string, QAMetrics>;
   contentMetrics?: Record<string, ContentMetrics>;
+  audienceMetrics?: AudienceMetrics;
   debateScore?: DebateScore;
 }
 

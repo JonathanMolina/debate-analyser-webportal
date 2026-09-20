@@ -24,6 +24,15 @@ export const sanitizeSearchQuery = (query: string): string => {
 };
 
 /**
+ * Sanitiza identificadores alfanuméricos seguros (IDs de jobs, debates, debatedores)
+ * Permite apenas a-z, A-Z, 0-9, hífen e underscore sem remover underscores necessários.
+ */
+export const sanitizeId = (id: string | null | undefined): string => {
+  if (!id) return '';
+  return id.replace(/[^a-zA-Z0-9_-]/g, '').trim().slice(0, 128);
+};
+
+/**
  * Valida se uma URL é segura para navegação externa ou imagens
  * Bloqueia protocolos perigosos como javascript:, data:, vbscript:
  */

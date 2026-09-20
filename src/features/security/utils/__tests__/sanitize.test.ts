@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeText, sanitizeSearchQuery, isSafeUrl } from '../sanitize';
+import { sanitizeText, sanitizeSearchQuery, sanitizeId, isSafeUrl } from '../sanitize';
 
 describe('Security Sanitization Utils', () => {
   it('deve limpar tags maliciosas <script> e eventos onerror', () => {
@@ -16,6 +16,14 @@ describe('Security Sanitization Utils', () => {
     expect(sanitized).not.toContain("'");
     expect(sanitized).not.toContain(";");
     expect(sanitized).toBe('OR 1=1 DROP TABLE debaters--');
+  });
+
+  it('deve preservar identificadores com underscore e hífen em sanitizeId', () => {
+    const validJobId = 'job_1789841795615_mbuvp';
+    expect(sanitizeId(validJobId)).toBe('job_1789841795615_mbuvp');
+
+    const maliciousId = 'job_12345\'; DROP TABLE debate_jobs;--';
+    expect(sanitizeId(maliciousId)).toBe('job_12345DROPTABLEdebate_jobs--');
   });
 
   it('deve validar URLs seguras e rejeitar protocolos perigosos como javascript:', () => {

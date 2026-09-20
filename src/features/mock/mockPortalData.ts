@@ -158,13 +158,179 @@ export const MOCK_DEBATES: DebateJob[] = [
           fallacyDensity: 0.96
         }
       },
+      audienceMetrics: {
+        totalCommentsAnalyzed: 1420,
+        favoredWinner: 'Paulo Brigadeiro',
+        winnerAgreementWithAlgorithm: true,
+        publicVerdictSummary: 'A comunidade de espectadores expressou preferência contundente por abordagens amparadas em matemática financeira e demonstrativos auditáveis. Paulo Brigadeiro foi aclamado pela calma analítica e por desconstruir teses de crescimento desmedido, enquanto Tallis Gomes recebeu elogios pela energia e experiência prática de tração, mas perdeu apoio ao recorrer a argumentos de autoridade e menosprezar fundamentos contábeis em um cenário macroeconômico de juros elevados.',
+        speakersFeedback: {
+          'Paulo Brigadeiro': {
+            speakerName: 'Paulo Brigadeiro',
+            approvalPercentage: 67,
+            supportCount: 951,
+            keyReasons: [
+              'Desmistificou o jargão de startups com matemática financeira básica e demonstrativos da CVM.',
+              'Manteve a compostura serena perante provocações e interrupções frequentes.',
+              'Argumentou com precisão sobre o risco de queima descontrolada de caixa com Selic a dois dígitos.',
+              'Refutou com clareza a confusão entre valuation inflado em rodada privada e lucro líquido operacional real.'
+            ]
+          },
+          'Tallis Gomes': {
+            speakerName: 'Tallis Gomes',
+            approvalPercentage: 33,
+            supportCount: 469,
+            keyReasons: [
+              'Autoridade e vivência genuína de quem fundou e escalou negócios no Brasil a partir do zero.',
+              'Forte ênfase na coragem operacional, velocidade de execução e mentalidade comercial de guerra.',
+              'Defesa legítima da necessidade de correr riscos calculados para competir internacionalmente.'
+            ]
+          }
+        },
+        topComments: [
+          {
+            id: 'ytc_1',
+            author: '@marcos.financas.reais',
+            text: 'O Brigadeiro não debateu, ele deu uma consultoria gratuita de finanças corporativas ao vivo. A cara do Tallis quando ouviu falar de margem de contribuição real e queima de caixa foi impagável.',
+            likes: 4820,
+            publishedAt: 'há 2 dias',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_2',
+            author: '@lucas_investimentos',
+            text: 'Tallis tem o mérito incontestável de ter construído a Easy Taxi, mas debate técnico não se ganha no grito de "eu fiz e você não". Faltaram dados contábeis sólidos para sustentar a tese dele.',
+            likes: 3650,
+            publishedAt: 'há 2 dias',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_3',
+            author: '@rodrigo_startups_br',
+            text: 'O Tallis trouxe a perspectiva da trincheira, de quem vive o risco na pele todos os dias. É muito fácil quem nunca assinou uma folha de pagamento com 500 funcionários vir dar aula de teoria e livro acadêmico.',
+            likes: 2910,
+            publishedAt: 'há 2 dias',
+            favoredSpeaker: 'Tallis Gomes',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_4',
+            author: '@analise_macro_cvm',
+            text: 'Brigadeiro foi cirúrgico: mostrou que valuation em rodada privada não é lucro líquido no bolso. Essa cultura de queimar caixa no Brasil sem unit economics sustentável quebrou centenas de empresas.',
+            likes: 2430,
+            publishedAt: 'há 2 dias',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_5',
+            author: '@fernanda_venturecapital',
+            text: 'O que mais me impressionou foi a serenidade do Brigadeiro. Quanto mais o Tallis subia a temperatura e tentava interromper, mais o Paulo respondia com frieza analítica e números frios.',
+            likes: 1980,
+            publishedAt: 'há 1 dia',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_6',
+            author: '@carlos_gestao_pro',
+            text: 'Debate de altíssimo nível! Tallis defende a mentalidade do operador e a velocidade de tração inicial, enquanto o Brigadeiro defende a governança do capital e o retorno do investidor. Aula dos dois.',
+            likes: 1540,
+            publishedAt: 'há 1 dia',
+            favoredSpeaker: 'Neutro',
+            sentiment: 'neutral'
+          },
+          {
+            id: 'ytc_7',
+            author: '@juliana_cfo',
+            text: 'Tallis é um monstro nas vendas e execução, ninguém tira o pioneirismo dele. Mas quando o papo foi alocação de capital e disciplina orçamentária, o Brigadeiro dominou a mesa.',
+            likes: 1220,
+            publishedAt: 'há 1 dia',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_8',
+            author: '@gabriel_growth',
+            text: 'Sensacional o ponto do Tallis sobre timing de mercado. Se uma startup esperar atingir lucro líquido logo no ano um em um setor concorrido, ela é atropelada pela concorrência global e desaparece.',
+            likes: 980,
+            publishedAt: 'há 1 dia',
+            favoredSpeaker: 'Tallis Gomes',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_9',
+            author: '@diego_mercado',
+            text: 'Brigadeiro colocou o dedo na ferida da Faria Lima: muitas empresas são apenas esquemas de transferência de riqueza para fundos de venture capital antes do colapso no mercado público.',
+            likes: 850,
+            publishedAt: 'há 1 dia',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_10',
+            author: '@renato_tech_founder',
+            text: 'Acho que faltou ao Brigadeiro entender as dores práticas de quem monta um negócio no Brasil. O Tallis pode ter exagerado na postura agressiva, mas a energia dele reflete a realidade da sobrevivência de qualquer empresa.',
+            likes: 730,
+            publishedAt: 'há 20 horas',
+            favoredSpeaker: 'Tallis Gomes',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_11',
+            author: '@felipe_auditoria',
+            text: 'O melhor momento do debate foi aos 24:10 quando o Brigadeiro cobrou o retorno sobre patrimônio líquido (ROE) das principais scale-ups brasileiras e só recebeu silêncio em resposta.',
+            likes: 620,
+            publishedAt: 'há 18 horas',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_12',
+            author: '@beatriz_economia',
+            text: 'A prepotência custou caro para o Tallis aqui. Ter humildade para reconhecer que o cenário macroeconômico mudou e juros a 13% matam empresas sem caixa teria preservado a autoridade dele.',
+            likes: 540,
+            publishedAt: 'há 15 horas',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_13',
+            author: '@andre_brasil_negocios',
+            text: 'Tallis Gomes falou a linguagem do empresário brasileiro sufocado pela burocracia estatal. O Brigadeiro falou a linguagem limpinha do acadêmico que nunca lidou com fiscal da Receita.',
+            likes: 480,
+            publishedAt: 'há 12 horas',
+            favoredSpeaker: 'Tallis Gomes',
+            sentiment: 'positive'
+          },
+          {
+            id: 'ytc_14',
+            author: '@tiago_consultor',
+            text: 'O Paulo Brigadeiro venceu com folga pela consistência técnica, mas foi o melhor embate público de ideias que o YouTube Brasil produziu nos últimos anos.',
+            likes: 430,
+            publishedAt: 'há 10 horas',
+            favoredSpeaker: 'Neutro',
+            sentiment: 'neutral'
+          },
+          {
+            id: 'ytc_15',
+            author: '@danilo_wealth',
+            text: 'Regra de ouro: se você quer aprender sobre tração e marketing agressivo, estude o Tallis. Se quer proteger seu patrimônio financeiro e evitar a quebra, estude o Brigadeiro.',
+            likes: 410,
+            publishedAt: 'há 8 horas',
+            favoredSpeaker: 'Paulo Brigadeiro',
+            sentiment: 'positive'
+          }
+        ]
+      },
       debateScore: {
         scores: {
-          'Tallis Gomes': 118,
-          'Paulo Brigadeiro': 126
+          'Tallis Gomes': 128,
+          'Paulo Brigadeiro': 146
         },
         winner: 'Paulo Brigadeiro',
-        difference: 8,
+        difference: 18,
         isDraw: false,
         breakdown: {
           'Tallis Gomes': {
@@ -173,7 +339,8 @@ export const MOCK_DEBATES: DebateJob[] = [
             qaPoints: 22,
             tonePoints: 25,
             speakingEfficiency: 28,
-            totalPoints: 118
+            audiencePoints: 10,
+            totalPoints: 128
           },
           'Paulo Brigadeiro': {
             evidencePoints: 32,
@@ -181,7 +348,8 @@ export const MOCK_DEBATES: DebateJob[] = [
             qaPoints: 26,
             tonePoints: 28,
             speakingEfficiency: 29,
-            totalPoints: 126
+            audiencePoints: 20,
+            totalPoints: 146
           }
         }
       }

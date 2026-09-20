@@ -3,12 +3,71 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo-512.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Primário -->
     <title>Argumeta — Inteligência e Análise Imparcial de Debates</title>
-    <meta name="description" content="Plataforma de inteligência artificial, verificação de fatos e análise retórica imparcial de debates." />
-    <!-- Prevenção contra injeções de conteúdo malicioso e Clickjacking -->
+    <meta name="description" content="Plataforma de inteligência artificial, verificação de fatos (fact-checking) e análise retórica imparcial de debates políticos e temáticos." />
+    <meta name="keywords" content="Argumeta, análise de debates, fact-checking, checagem de fatos, falácias lógicas, retórica, inteligência artificial, política, ranking de debatedores, transparência" />
+    <meta name="author" content="Argumeta" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://argumeta.com.br/" />
+    <meta name="theme-color" content="#090C0E" />
+
+    <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Argumeta" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Argumeta — Inteligência e Análise Imparcial de Debates" />
+    <meta property="og:description" content="Plataforma de inteligência artificial, verificação de fatos e análise retórica imparcial de debates políticos e temáticos." />
+    <meta property="og:url" content="https://argumeta.com.br/" />
+    <meta property="og:image" content="https://argumeta.com.br/logo-512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="Logo Argumeta" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Argumeta — Inteligência e Análise Imparcial de Debates" />
+    <meta name="twitter:description" content="Plataforma de inteligência artificial, verificação de fatos e análise retórica imparcial de debates políticos e temáticos." />
+    <meta name="twitter:image" content="https://argumeta.com.br/logo-512.png" />
+
+    <!-- Feed RSS / Atom para descoberta imediata de debates -->
+    <link rel="alternate" type="application/rss+xml" title="Argumeta — Feed de Novos Debates" href="/feed.xml" />
+
+    <!-- Prevenção de Segurança -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Schema.org JSON-LD Inicial: Organização & WebSite -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://argumeta.com.br/#website",
+            "url": "https://argumeta.com.br/",
+            "name": "Argumeta",
+            "description": "Plataforma de inteligência artificial, verificação de fatos e análise retórica imparcial de debates.",
+            "inLanguage": "pt-BR",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://argumeta.com.br/?search={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://argumeta.com.br/#organization",
+            "name": "Argumeta",
+            "url": "https://argumeta.com.br/",
+            "logo": "https://argumeta.com.br/logo-512.png"
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="bg-[#090C0E] text-[#ECFDF5] antialiased selection:bg-emerald-500/30 selection:text-emerald-400">
     <div id="root"></div>

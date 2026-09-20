@@ -1,6 +1,7 @@
 import { supabase, isSupabaseConfigured } from '@/app/supabase/client';
 import type { DebateJob } from '../types/debate.types';
-import { sanitizeSearchQuery } from '@/features/security/utils/sanitize';
+import { sanitizeSearchQuery, sanitizeId } from '@/features/security/utils/sanitize';
+import { MOCK_DEBATES } from '@/features/mock/mockPortalData';
 
 export interface DebatesQueryFilters {
   searchQuery?: string;
@@ -12,7 +13,29 @@ export const fetchDebatesList = async (
   filters?: DebatesQueryFilters
 ): Promise<DebateJob[]> => {
   if (!isSupabaseConfigured) {
-    return [];
+    let list = [...MOCK_DEBATES];
+    if (filters?.searchQuery) {
+      const q = filters.searchQuery.toLowerCase().trim();
+      list = list.filter(
+        (job) =>
+          (job.title && job.title.toLowerCase().includes(q)) ||
+          (job.description && job.description.toLowerCase().includes(q)) ||
+          job.speakers.some((s) => s.name.toLowerCase().includes(q))
+      );
+    }
+    if (filters?.category && filters.category !== 'Todos') {
+      list = list.filter((job) => job.category === filters.category);
+    }
+    if (filters?.debaterId) {
+      list = list.filter((job) =>
+        job.speakers.some(
+          (s) =>
+            s.debaterId === filters.debaterId ||
+            s.name.toLowerCase().includes(filters.debaterId!.toLowerCase())
+        )
+      );
+    }
+    return list;
   }
 
   try {
@@ -120,8 +143,13 @@ export const fetchDebatesList = async (
 export const fetchDebateById = async (
   id: string
 ): Promise<DebateJob | null> => {
-  const sanitizedId = sanitizeSearchQuery(id);
-  if (!sanitizedId || !isSupabaseConfigured) return null;
+  const sanitizedId = sanitizeId(id);
+  if (!sanitizedId) return null;
+
+  if (!isSupabaseConfigured) {
+    const mock = MOCK_DEBATES.find((d) => d.id === sanitizedId);
+    return mock || null;
+  }
 
   try {
     const { data, error } = await supabase

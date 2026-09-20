@@ -5,6 +5,7 @@ import { DebaterDetailModal } from './DebaterDetailModal';
 import { SearchInput } from '@/components/SearchInput/SearchInput';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { Users, FilterX, Award, ShieldCheck } from 'lucide-react';
+import { SeoHead } from '@/features/seo';
 
 export const DebatersListView: FC = () => {
   const {
@@ -17,8 +18,17 @@ export const DebatersListView: FC = () => {
     handleSearchChange
   } = useDebatersList();
 
+  const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://argumeta.com.br';
+
   return (
     <div className="space-y-6 pb-12">
+      <SeoHead
+        title="Debatedores & Histórico de Debates"
+        description="Explore o catálogo completo de debatedores registrados no Argumeta. Estatísticas de consistência retórica, índice de fatos comprovados e penalidades de falácias."
+        keywords={['debatedores', 'políticos', 'oratória', 'precisão factual', 'falácias', 'Argumeta', 'histórico de debates']}
+        canonicalUrl={`${siteUrl}/debaters`}
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
         <div>

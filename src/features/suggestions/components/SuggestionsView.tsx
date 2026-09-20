@@ -8,6 +8,7 @@ import { SuggestionCard } from './SuggestionCard';
 import { SuggestionFormModal } from './SuggestionFormModal';
 import { SuggestionVideoModal } from './SuggestionVideoModal';
 import type { DebateSuggestion } from '../types/suggestion.types';
+import { SeoHead } from '@/features/seo';
 
 export const SuggestionsView: FC = () => {
   const {
@@ -23,9 +24,17 @@ export const SuggestionsView: FC = () => {
 
   const [isSuggestModalOpen, setIsSuggestModalOpen] = useState(false);
   const [selectedVideoSuggestion, setSelectedVideoSuggestion] = useState<DebateSuggestion | null>(null);
+  const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://argumeta.com.br';
 
   return (
     <div className="space-y-8 pb-16 max-w-7xl mx-auto">
+      <SeoHead
+        title="Sugestões da Comunidade & Novos Debates"
+        description="Sugira novos debates do YouTube para análise algorítmica de retórica e fact-checking no Argumeta. Vote nas melhores propostas da comunidade."
+        keywords={['sugestões de debates', 'novos debates', 'comunidade', 'pedir análise de debate', 'Argumeta']}
+        canonicalUrl={`${siteUrl}/sugestoes`}
+      />
+
       {/* Hero Header */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-surface-elevated via-surface to-surface-elevated border border-border p-6 sm:p-10 shadow-lg">
         <div className="relative z-10 max-w-2xl space-y-3">

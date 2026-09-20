@@ -8,6 +8,7 @@ import { DebaterDetailModal } from '@/features/debaters/components/DebaterDetail
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import type { DebaterAggregateStats } from '@/features/debaters/types/debater.types';
 import type { RankingSortField } from '../types/ranking.types';
+import { SeoHead } from '@/features/seo';
 
 export const RankingView: FC = () => {
   const {
@@ -23,6 +24,7 @@ export const RankingView: FC = () => {
   } = useRankingLeaderboard();
 
   const [selectedDebater, setSelectedDebater] = useState<DebaterAggregateStats | null>(null);
+  const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://argumeta.com.br';
 
   const sortOptions: { id: RankingSortField; label: string }[] = [
     { id: 'avgScore', label: 'Score Geral' },
@@ -36,6 +38,13 @@ export const RankingView: FC = () => {
 
   return (
     <div className="space-y-6 pb-12">
+      <SeoHead
+        title="Ranking Geral de Debatedores"
+        description="Classificação técnica e imparcial dos melhores debatedores segundo métricas de argumentação, precisão factual, controle emocional e menor taxa de falácias."
+        keywords={['ranking debatedores', 'melhores debatedores', 'pontuação de debates', 'precisão factual', 'falácias lógicas', 'Argumeta']}
+        canonicalUrl={`${siteUrl}/ranking`}
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
         <div>

@@ -1,10 +1,11 @@
 import { supabase, isSupabaseConfigured } from '@/app/supabase/client';
 import type { Debater, DebaterAggregateStats, DebaterDebateHistoryItem } from '../types/debater.types';
 import { fetchDebatesList } from '@/features/debates/api/debatesApi';
+import { MOCK_DEBATERS } from '@/features/mock/mockPortalData';
 
 export const fetchDebatersList = async (): Promise<Debater[]> => {
   if (!isSupabaseConfigured) {
-    return [];
+    return MOCK_DEBATERS;
   }
 
   try {

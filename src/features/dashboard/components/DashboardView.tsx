@@ -8,6 +8,7 @@ import { TopDebatersPanel } from './TopDebatersPanel';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { Film, FilterX, Database, UserCheck } from 'lucide-react';
 import { Button } from '@/components/Button/Button';
+import { SeoHead } from '@/features/seo';
 
 export const DashboardView: FC = () => {
   const {
@@ -28,6 +29,21 @@ export const DashboardView: FC = () => {
 
   return (
     <div className="space-y-6 pb-8">
+      <SeoHead
+        title="Argumeta — Inteligência e Análise Imparcial de Debates"
+        description="Assista a debates políticos e temáticos com análise retórica instantânea, checagem de fatos independente e identificação de falácias lógicas por inteligência artificial."
+        keywords={[
+          'análise de debates',
+          'debates eleitorais',
+          'fact-checking brasil',
+          'checagem de fatos',
+          'falácias lógicas',
+          'inteligência artificial',
+          'oradores políticos'
+        ]}
+        canonicalUrl={typeof window !== 'undefined' ? `${window.location.origin}/` : undefined}
+      />
+
       {/* 1. Banner de Imparcialidade e Análise Algorítmica */}
       <DisclaimerBanner />
 

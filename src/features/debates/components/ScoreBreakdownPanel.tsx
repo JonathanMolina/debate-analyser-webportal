@@ -133,6 +133,19 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
                   </td>
                 ))}
               </tr>
+              {speakerNames.some((spk) => score.breakdown[spk].audiencePoints !== undefined) && (
+                <tr className="bg-amber-500/5">
+                  <td className="p-3.5 text-text-main font-semibold flex items-center gap-1.5">
+                    <span className="text-amber-400 font-bold">★</span>
+                    <span>Avaliação Popular (Comentários YouTube - até +30 pts)</span>
+                  </td>
+                  {speakerNames.map((spk) => (
+                    <td key={spk} className="p-3.5 text-right font-bold text-amber-400">
+                      +{score.breakdown[spk].audiencePoints ?? 0} pts
+                    </td>
+                  ))}
+                </tr>
+              )}
               <tr className="bg-surface-elevated/80 font-bold">
                 <td className="p-3.5 text-text-main">Total Consolidado</td>
                 {speakerNames.map((spk) => (
