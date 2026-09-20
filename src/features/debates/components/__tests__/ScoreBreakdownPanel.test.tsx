@@ -48,6 +48,9 @@ describe('ScoreBreakdownPanel Component', () => {
       screen.getByText('Opinião do Público (Comentários YouTube)')
     ).toBeInTheDocument();
     expect(screen.getByText('(até +100 pts distrib.)')).toBeInTheDocument();
+    expect(
+      screen.getByText('Evidências & Fatos Verificados (+5 V, +2 D, -5 F)')
+    ).toBeInTheDocument();
     expect(screen.getByText('+65 pts')).toBeInTheDocument();
     expect(screen.getByText('+35 pts')).toBeInTheDocument();
   });

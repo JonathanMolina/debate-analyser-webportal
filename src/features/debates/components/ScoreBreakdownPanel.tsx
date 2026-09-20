@@ -95,7 +95,7 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
             </thead>
             <tbody className="divide-y divide-border/60">
               <tr>
-                <td className="p-3.5 text-text-muted">Evidências & Fatos Verificados (+15 V, -15 F)</td>
+                <td className="p-3.5 text-text-muted">Evidências & Fatos Verificados (+5 V, +2 D, -5 F)</td>
                 {speakerNames.map((spk) => (
                   <td key={spk} className="p-3.5 text-right font-semibold text-emerald-400">
                     +{score.breakdown[spk].evidencePoints} pts
