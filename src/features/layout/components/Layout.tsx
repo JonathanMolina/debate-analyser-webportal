@@ -34,7 +34,7 @@ export const Layout: FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-canvas text-text-main flex flex-col selection:bg-primary/25 selection:text-primary relative">
+    <div className="min-h-screen bg-canvas text-text-main flex flex-col selection:bg-primary/25 selection:text-primary relative overflow-x-hidden">
       {/* Honeypot invisível para desarmar scrapers e bots desatentos */}
       <HoneypotField value={honeypotValue} onChange={setHoneypotValue} />
 
@@ -70,7 +70,7 @@ export const Layout: FC = () => {
         onOpenNewsletter={() => setIsNewsletterOpen(true)}
       />
 
-      {/* Painel Flutuante de Apoio Comunitário / Pix (expansível / colapsável) */}
+      {/* Painel Flutuante de Apoio Comunitário (Mercado Pago / Pix / Cartão) */}
       <SupportFloatingPanel />
 
       {/* Vercel Web Analytics */}
