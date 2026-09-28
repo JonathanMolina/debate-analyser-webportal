@@ -70,7 +70,7 @@ const INITIAL_MOCK_SUGGESTIONS: DebateSuggestion[] = [
     submittedBy: 'Carlos Mendes',
     likesCount: 24,
     dislikesCount: 2,
-    commentsCount: 3,
+    commentsCount: 1,
     status: 'voting',
     createdAt: new Date(Date.now() - 3600 * 1000 * 5).toISOString()
   },
@@ -89,6 +89,27 @@ const INITIAL_MOCK_SUGGESTIONS: DebateSuggestion[] = [
     createdAt: new Date(Date.now() - 3600 * 1000 * 24).toISOString()
   }
 ];
+
+const INITIAL_MOCK_COMMENTS: Record<string, SuggestionComment[]> = {
+  'mock-sugg-1': [
+    {
+      id: 'mock-comm-mock-sugg-1-1',
+      suggestionId: 'mock-sugg-1',
+      authorName: 'Debatedor Curioso',
+      content: 'Excelente indicação! Esse debate teve momentos chave de refutação retórica.',
+      createdAt: new Date(Date.now() - 3600 * 1000 * 2).toISOString()
+    }
+  ],
+  'mock-sugg-2': [
+    {
+      id: 'mock-comm-mock-sugg-2-1',
+      suggestionId: 'mock-sugg-2',
+      authorName: 'Debatedor Curioso',
+      content: 'Debate de alto nível técnico sobre a reforma tributária.',
+      createdAt: new Date(Date.now() - 3600 * 1000 * 3).toISOString()
+    }
+  ]
+};
 
 export const fetchSuggestions = async (options: {
   sort?: SuggestionSortOption;
@@ -280,15 +301,7 @@ export const fetchComments = async (
   suggestionId: string
 ): Promise<SuggestionComment[]> => {
   if (!isSupabaseConfigured) {
-    return [
-      {
-        id: `mock-comm-${suggestionId}-1`,
-        suggestionId,
-        authorName: 'Debatedor Curioso',
-        content: 'Excelente indicação! Esse debate teve momentos chave de refutação retórica.',
-        createdAt: new Date(Date.now() - 3600 * 1000 * 2).toISOString()
-      }
-    ];
+    return INITIAL_MOCK_COMMENTS[suggestionId] || [];
   }
 
   try {
@@ -339,6 +352,16 @@ export const addComment = async (
       content: sanitizedContent,
       createdAt: new Date().toISOString()
     };
+    if (!INITIAL_MOCK_COMMENTS[input.suggestionId]) {
+      INITIAL_MOCK_COMMENTS[input.suggestionId] = [];
+    }
+    INITIAL_MOCK_COMMENTS[input.suggestionId].push(newMockComment);
+
+    const targetSug = INITIAL_MOCK_SUGGESTIONS.find((s) => s.id === input.suggestionId);
+    if (targetSug) {
+      targetSug.commentsCount = (targetSug.commentsCount || 0) + 1;
+    }
+
     return { success: true, data: newMockComment };
   }
 

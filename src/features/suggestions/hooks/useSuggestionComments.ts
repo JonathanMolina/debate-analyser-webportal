@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchComments, addComment } from '../api/suggestionsApi';
-import type { SuggestionComment } from '../types/suggestion.types';
+import type { SuggestionComment, DebateSuggestion } from '../types/suggestion.types';
 
 export const useSuggestionComments = (suggestionId: string) => {
   const queryClient = useQueryClient();
@@ -25,9 +25,24 @@ export const useSuggestionComments = (suggestionId: string) => {
   const mutation = useMutation({
     mutationFn: addComment,
     onSuccess: (result) => {
-      if (result.success) {
+      if (result.success && result.data) {
         setContent('');
         setErrorMessage(null);
+        queryClient.setQueryData<SuggestionComment[]>(queryKey, (old = []) => [
+          ...old.filter((c) => c.id !== result.data!.id),
+          result.data!
+        ]);
+        queryClient.setQueriesData<DebateSuggestion[]>(
+          { queryKey: ['debate-suggestions'] },
+          (old) => {
+            if (!old) return old;
+            return old.map((sug) =>
+              sug.id === suggestionId
+                ? { ...sug, commentsCount: (sug.commentsCount || 0) + 1 }
+                : sug
+            );
+          }
+        );
         queryClient.invalidateQueries({ queryKey });
         queryClient.invalidateQueries({ queryKey: ['debate-suggestions'] });
       } else {

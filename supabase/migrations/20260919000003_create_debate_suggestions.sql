@@ -38,6 +38,8 @@ CREATE INDEX IF NOT EXISTS idx_suggestion_comments_suggestion ON public.suggesti
 CREATE OR REPLACE FUNCTION public.sync_suggestion_comments_count()
 RETURNS TRIGGER
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
 AS $$
 BEGIN
     IF (TG_OP = 'INSERT') THEN

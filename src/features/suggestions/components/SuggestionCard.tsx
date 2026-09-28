@@ -171,6 +171,8 @@ export const SuggestionCard: FC<SuggestionCardProps> = ({
                 ? 'bg-primary/15 border-primary/40 text-primary'
                 : 'bg-surface-elevated border-border text-text-muted hover:text-text-main hover:bg-surface-hover'
             }`}
+            aria-label={`Ver comentários (${suggestion.commentsCount || 0})`}
+            title={`Comentários: ${suggestion.commentsCount || 0}`}
           >
             <MessageSquare size={14} />
             <span>{suggestion.commentsCount || 0}</span>

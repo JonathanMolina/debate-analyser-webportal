@@ -73,4 +73,19 @@ describe('SuggestionCard Component', () => {
     // Otimista: deve incrementar de 15 para 16
     expect(screen.getByText('16')).toBeInTheDocument();
   });
+
+  it('deve exibir a contagem de comentários no botão de comentário e abrir seção ao clicar', () => {
+    const handleWatch = vi.fn();
+    renderWithQueryClient(
+      <SuggestionCard suggestion={mockSuggestion} onWatchVideo={handleWatch} />
+    );
+
+    const commentBtn = screen.getByLabelText('Ver comentários (4)');
+    expect(commentBtn).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
+
+    fireEvent.click(commentBtn);
+
+    expect(screen.getByPlaceholderText(/O que você achou dessa sugestão/i)).toBeInTheDocument();
+  });
 });
