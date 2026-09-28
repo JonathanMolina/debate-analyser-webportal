@@ -1,6 +1,8 @@
 import { FC } from 'react';
-import { Trophy, Scale, HelpCircle } from 'lucide-react';
+import { Trophy, Scale } from 'lucide-react';
 import type { DebateScore, SpeakerInput } from '../types/debate.types';
+import { InfoTooltip } from '@/components/InfoTooltip';
+import { METRIC_EXPLANATIONS } from '../utils/metricExplanations';
 
 export interface ScoreBreakdownPanelProps {
   score?: DebateScore;
@@ -95,82 +97,127 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
             </thead>
             <tbody className="divide-y divide-border/60">
               <tr>
-                <td className="p-3.5 text-text-muted">Evidências & Fatos Verificados (+5 V, +2 D, -5 F)</td>
+                <td className="p-3.5 text-text-muted">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span>Evidências & Fatos Verificados (+5 Verdadeiro, +2 Discutível, -5 Falso)</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.evidencePoints.title}
+                      content={METRIC_EXPLANATIONS.evidencePoints.shortHint}
+                      triggerAriaLabel="Informações sobre pontuação de evidências"
+                    />
+                  </div>
+                </td>
                 {speakerNames.map((spk) => (
                   <td key={spk} className="p-3.5 text-right font-semibold text-emerald-400">
-                    +{score.breakdown[spk].evidencePoints} pts
+                    +{score.breakdown[spk].evidencePoints} pontos
                   </td>
                 ))}
               </tr>
               <tr>
-                <td className="p-3.5 text-text-muted">Penalidades por Falácias Retóricas</td>
+                <td className="p-3.5 text-text-muted">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span>Penalidades por Falácias Retóricas</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.fallacyPenalties.title}
+                      content={METRIC_EXPLANATIONS.fallacyPenalties.shortHint}
+                      triggerAriaLabel="Informações sobre penalidades por falácias"
+                    />
+                  </div>
+                </td>
                 {speakerNames.map((spk) => (
                   <td key={spk} className="p-3.5 text-right font-semibold text-rose-400">
-                    {score.breakdown[spk].fallacyPenalties} pts
+                    {score.breakdown[spk].fallacyPenalties} pontos
                   </td>
                 ))}
               </tr>
               <tr>
-                <td className="p-3.5 text-text-muted">Eficiência em Respostas Diretas</td>
+                <td className="p-3.5 text-text-muted">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span>Eficiência em Respostas Diretas</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.qaPoints.title}
+                      content={METRIC_EXPLANATIONS.qaPoints.shortHint}
+                      triggerAriaLabel="Informações sobre respostas diretas"
+                    />
+                  </div>
+                </td>
                 {speakerNames.map((spk) => (
                   <td key={spk} className="p-3.5 text-right font-semibold text-text-main">
-                    +{score.breakdown[spk].qaPoints} pts
+                    +{score.breakdown[spk].qaPoints} pontos
                   </td>
                 ))}
               </tr>
               <tr>
-                <td className="p-3.5 text-text-muted">Controle Tonal & Compostura Sob Pressão</td>
+                <td className="p-3.5 text-text-muted">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span>Controle Tonal & Compostura Sob Pressão</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.tonePoints.title}
+                      content={METRIC_EXPLANATIONS.tonePoints.shortHint}
+                      triggerAriaLabel="Informações sobre controle tonal e compostura"
+                    />
+                  </div>
+                </td>
                 {speakerNames.map((spk) => (
                   <td key={spk} className="p-3.5 text-right font-semibold text-text-main">
-                    +{score.breakdown[spk].tonePoints} pts
+                    +{score.breakdown[spk].tonePoints} pontos
                   </td>
                 ))}
               </tr>
               <tr>
-                <td className="p-3.5 text-text-muted">Eficiência Temporal & Ritmo de Fala</td>
+                <td className="p-3.5 text-text-muted">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span>Eficiência Temporal & Ritmo de Fala</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.speakingEfficiency.title}
+                      content={METRIC_EXPLANATIONS.speakingEfficiency.shortHint}
+                      triggerAriaLabel="Informações sobre ritmo e tempo de fala"
+                    />
+                  </div>
+                </td>
                 {speakerNames.map((spk) => (
                   <td key={spk} className="p-3.5 text-right font-semibold text-text-main">
-                    +{score.breakdown[spk].speakingEfficiency} pts
+                    +{score.breakdown[spk].speakingEfficiency} pontos
                   </td>
                 ))}
               </tr>
               {speakerNames.some((spk) => score.breakdown[spk].audiencePoints !== undefined) && (
                 <tr className="bg-amber-500/5">
                   <td className="p-3.5 text-text-main font-semibold">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-amber-400 font-bold">★</span>
                       <span>Opinião do Público (Comentários YouTube)</span>
                       <span className="text-[10px] text-text-muted font-normal font-mono">
-                        (até +{maxAudiencePoints} pts distrib.)
+                        (até +{maxAudiencePoints} pontos distrib.)
                       </span>
-                      <div
-                        className="relative group cursor-help inline-flex items-center"
-                        title={`Avaliação semântica via IA com auditoria de ironias nos comentários do YouTube. Distribui até 50 pontos por debatedor (${maxAudiencePoints} pontos totais para ${speakerNames.length} debatedores).`}
-                      >
-                        <HelpCircle size={13} className="text-amber-400/80" />
-                        <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex flex-col w-72 p-3 bg-surface-elevated text-xs font-sans text-text-main rounded-xl shadow-xl border border-border z-50 pointer-events-none leading-snug">
-                          <strong className="text-amber-400 font-semibold mb-1 flex items-center gap-1">
-                            <span>Veredito Popular & IA</span>
-                          </strong>
-                          <span className="text-[11px] text-text-muted font-normal">
-                            Baseada nos comentários mais curtidos do YouTube com detecção de ironias e citações cruzadas na transcrição. São até 50 pontos máximos distribuídos por debatedor (ex: 100 pts em debates de 2 debatedores, 250 pts em debates de 5 debatedores).
-                          </span>
-                        </div>
-                      </div>
+                      <InfoTooltip
+                        title={METRIC_EXPLANATIONS.audiencePoints.title}
+                        content={METRIC_EXPLANATIONS.audiencePoints.shortHint}
+                        triggerAriaLabel="Informações sobre a opinião do público"
+                      />
                     </div>
                   </td>
                   {speakerNames.map((spk) => (
                     <td key={spk} className="p-3.5 text-right font-bold text-amber-400">
-                      +{score.breakdown[spk].audiencePoints ?? 0} pts
+                      +{score.breakdown[spk].audiencePoints ?? 0} pontos
                     </td>
                   ))}
                 </tr>
               )}
               <tr className="bg-surface-elevated/80 font-bold">
-                <td className="p-3.5 text-text-main">Total Consolidado</td>
+                <td className="p-3.5 text-text-main">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span>Total Consolidado</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.totalScore.title}
+                      content={METRIC_EXPLANATIONS.totalScore.shortHint}
+                      triggerAriaLabel="Informações sobre o total consolidado"
+                    />
+                  </div>
+                </td>
                 {speakerNames.map((spk) => (
                   <td key={spk} className="p-3.5 text-right text-sm text-primary">
-                    {score.breakdown[spk].totalPoints} pts
+                    {score.breakdown[spk].totalPoints} pontos
                   </td>
                 ))}
               </tr>

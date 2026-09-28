@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { ArrowUpDown, ArrowUp, ArrowDown, Users } from 'lucide-react';
 import type { DebaterAggregateStats } from '@/features/debaters/types/debater.types';
 import { DebaterAvatar } from '@/components/DebaterAvatar';
+import { InfoTooltip } from '@/components/InfoTooltip';
+import { METRIC_EXPLANATIONS } from '@/features/debates/utils/metricExplanations';
 import type { RankingSortField } from '../types/ranking.types';
 
 export interface RankingTableProps {
@@ -59,7 +61,11 @@ export const RankingTable: FC<RankingTableProps> = ({
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right"
               >
                 <div className="flex items-center justify-end gap-1.5">
-                  <span>Score Geral</span>
+                  <span>Pontuação Geral</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.overallScore.title}
+                    content={METRIC_EXPLANATIONS.overallScore.shortHint}
+                  />
                   {renderSortIndicator('avgScore')}
                 </div>
               </th>
@@ -68,7 +74,11 @@ export const RankingTable: FC<RankingTableProps> = ({
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right hidden sm:table-cell"
               >
                 <div className="flex items-center justify-end gap-1.5">
-                  <span>Vitórias %</span>
+                  <span>Taxa de Vitórias</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.winRate.title}
+                    content={METRIC_EXPLANATIONS.winRate.shortHint}
+                  />
                   {renderSortIndicator('winRate')}
                 </div>
               </th>
@@ -77,7 +87,11 @@ export const RankingTable: FC<RankingTableProps> = ({
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right hidden md:table-cell"
               >
                 <div className="flex items-center justify-end gap-1.5">
-                  <span>Densidade Dados</span>
+                  <span>Densidade de Dados</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.dataDensity.title}
+                    content={METRIC_EXPLANATIONS.dataDensity.shortHint}
+                  />
                   {renderSortIndicator('avgDataDensity')}
                 </div>
               </th>
@@ -86,7 +100,11 @@ export const RankingTable: FC<RankingTableProps> = ({
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right hidden lg:table-cell"
               >
                 <div className="flex items-center justify-end gap-1.5">
-                  <span>Resp. Direta</span>
+                  <span>Respostas Diretas</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.directAnswerRate.title}
+                    content={METRIC_EXPLANATIONS.directAnswerRate.shortHint}
+                  />
                   {renderSortIndicator('avgDirectAnswerRate')}
                 </div>
               </th>
@@ -95,7 +113,11 @@ export const RankingTable: FC<RankingTableProps> = ({
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right hidden lg:table-cell"
               >
                 <div className="flex items-center justify-end gap-1.5">
-                  <span>Compostura</span>
+                  <span>Controle Emocional</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.emotionalControl.title}
+                    content={METRIC_EXPLANATIONS.emotionalControl.shortHint}
+                  />
                   {renderSortIndicator('avgEmotionalControl')}
                 </div>
               </th>
@@ -104,7 +126,11 @@ export const RankingTable: FC<RankingTableProps> = ({
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right"
               >
                 <div className="flex items-center justify-end gap-1.5">
-                  <span>Falácias/Deb</span>
+                  <span>Falácias por Debate</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.fallaciesPerDebate.title}
+                    content={METRIC_EXPLANATIONS.fallaciesPerDebate.shortHint}
+                  />
                   {renderSortIndicator('fewestFallacies')}
                 </div>
               </th>
@@ -113,7 +139,11 @@ export const RankingTable: FC<RankingTableProps> = ({
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right hidden md:table-cell"
               >
                 <div className="flex items-center justify-end gap-1.5">
-                  <span>Precisão %</span>
+                  <span>Precisão Factual</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.factCheckAccuracy.title}
+                    content={METRIC_EXPLANATIONS.factCheckAccuracy.shortHint}
+                  />
                   {renderSortIndicator('factCheckAccuracy')}
                 </div>
               </th>
@@ -179,7 +209,7 @@ export const RankingTable: FC<RankingTableProps> = ({
                       {hasDebates ? item.avgScore : '-'}
                     </span>
                     <span className="text-[10px] text-text-muted block">
-                      {hasDebates ? 'pts' : 'pendente'}
+                      {hasDebates ? 'pontos' : 'pendente'}
                     </span>
                   </td>
 
@@ -189,8 +219,13 @@ export const RankingTable: FC<RankingTableProps> = ({
                       {hasDebates ? `${item.winRate}%` : '-'}
                     </span>
                     {hasDebates && (
-                      <span className="text-[10px] text-text-muted block">
-                        {item.wins}V - {item.losses}D
+                      <span className="text-[10px] text-text-muted flex items-center justify-end gap-1 mt-0.5">
+                        <span>{item.wins} vit. • {item.losses} der.</span>
+                        <InfoTooltip
+                          title={METRIC_EXPLANATIONS.matchRecord.title}
+                          content={`${item.wins} ${item.wins === 1 ? 'vitória' : 'vitórias'} e ${item.losses} ${item.losses === 1 ? 'derrota' : 'derrotas'} em debates analisados.`}
+                          triggerAriaLabel={`Histórico de ${item.debaterName}`}
+                        />
                       </span>
                     )}
                   </td>
@@ -222,8 +257,13 @@ export const RankingTable: FC<RankingTableProps> = ({
                       {hasDebates ? item.avgFallaciesPerDebate : '-'}
                     </span>
                     {hasDebates && (
-                      <span className="text-[10px] text-text-muted block">
-                        {item.totalFallacies} tot
+                      <span className="text-[10px] text-text-muted flex items-center justify-end gap-1 mt-0.5">
+                        <span>{item.totalFallacies} no total</span>
+                        <InfoTooltip
+                          title={METRIC_EXPLANATIONS.totalFallacies.title}
+                          content={`Total acumulado de ${item.totalFallacies} ${item.totalFallacies === 1 ? 'falácia' : 'falácias'} identificadas nos debates.`}
+                          triggerAriaLabel={`Total de falácias de ${item.debaterName}`}
+                        />
                       </span>
                     )}
                   </td>

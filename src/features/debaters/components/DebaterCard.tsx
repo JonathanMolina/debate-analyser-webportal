@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { Video, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/Button/Button';
 import { DebaterAvatar } from '@/components/DebaterAvatar';
+import { InfoTooltip } from '@/components/InfoTooltip';
+import { METRIC_EXPLANATIONS } from '@/features/debates/utils/metricExplanations';
 import type { DebaterAggregateStats } from '../types/debater.types';
 
 export interface DebaterCardProps {
@@ -38,12 +40,17 @@ export const DebaterCard: FC<DebaterCardProps> = ({
             {debater.role && (
               <p className="text-xs text-text-muted mt-0.5">{debater.role}</p>
             )}
-            <div className="flex items-center gap-2 mt-1 font-mono text-[11px] text-text-muted">
+            <div className="flex items-center gap-2 mt-1 text-[11px] text-text-muted font-mono">
               <span>{debater.debatesCount} debates</span>
               {hasDebates && (
                 <>
                   <span>•</span>
-                  <span className="text-emerald-400 font-semibold">{debater.winRate}% vitórias</span>
+                  <span className="text-emerald-400 font-semibold">{debater.winRate}% de vitórias</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.winRate.title}
+                    content={METRIC_EXPLANATIONS.winRate.shortHint}
+                    triggerAriaLabel={`Taxa de vitórias de ${debater.debaterName}`}
+                  />
                 </>
               )}
             </div>
@@ -52,7 +59,14 @@ export const DebaterCard: FC<DebaterCardProps> = ({
 
         {/* Big Score Tag */}
         <div className="text-right font-mono shrink-0">
-          <span className="text-[10px] text-text-muted uppercase block">Média Técnica</span>
+          <div className="flex items-center justify-end gap-1">
+            <span className="text-[10px] text-text-muted uppercase">Média Técnica</span>
+            <InfoTooltip
+              title={METRIC_EXPLANATIONS.technicalAverage.title}
+              content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
+              triggerAriaLabel={`Média técnica de ${debater.debaterName}`}
+            />
+          </div>
           <span className="text-xl font-black text-primary block leading-none mt-0.5">
             {hasDebates ? debater.avgScore : '-'}
           </span>
@@ -62,19 +76,37 @@ export const DebaterCard: FC<DebaterCardProps> = ({
         </div>
       </div>
 
-      {/* Metrics Row (4 indicators) */}
+      {/* Metrics Row (3 indicators) */}
       {hasDebates ? (
         <div className="grid grid-cols-3 gap-2 bg-canvas/60 p-3 rounded-xl border border-border/60 text-center font-mono">
           <div>
-            <span className="text-[10px] text-text-muted block">Dados/Fontes</span>
+            <span className="text-[10px] text-text-muted flex items-center justify-center gap-0.5">
+              <span>Dados/Fatos</span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.dataDensity.title}
+                content={METRIC_EXPLANATIONS.dataDensity.shortHint}
+              />
+            </span>
             <span className="text-xs font-bold text-text-main">{debater.avgDataDensity}/100</span>
           </div>
           <div>
-            <span className="text-[10px] text-text-muted block">Compostura</span>
+            <span className="text-[10px] text-text-muted flex items-center justify-center gap-0.5">
+              <span>Compostura</span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.emotionalControl.title}
+                content={METRIC_EXPLANATIONS.emotionalControl.shortHint}
+              />
+            </span>
             <span className="text-xs font-bold text-text-main">{debater.avgEmotionalControl}/100</span>
           </div>
           <div>
-            <span className="text-[10px] text-text-muted block">Falácias/Deb</span>
+            <span className="text-[10px] text-text-muted flex items-center justify-center gap-0.5">
+              <span>Falácias/Deb</span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.fallaciesPerDebate.title}
+                content={METRIC_EXPLANATIONS.fallaciesPerDebate.shortHint}
+              />
+            </span>
             <span className="text-xs font-bold text-rose-400">{debater.avgFallaciesPerDebate}</span>
           </div>
         </div>
@@ -119,11 +151,14 @@ export const DebaterCard: FC<DebaterCardProps> = ({
       <Button
         variant="outline"
         size="sm"
-        className="w-full justify-between group-hover:border-primary/40"
+        className="w-full justify-center gap-1.5 text-xs group/btn"
         onClick={() => onViewDetails(debater)}
       >
-        <span>Ver histórico e perfil</span>
-        <ArrowRight size={14} className="text-primary" />
+        <span>Ver Dossiê Completo</span>
+        <ArrowRight
+          size={14}
+          className="group-hover/btn:translate-x-0.5 transition-transform"
+        />
       </Button>
     </div>
   );

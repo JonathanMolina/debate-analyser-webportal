@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Brain, Mic, MessageSquare, Activity } from 'lucide-react';
 import type { DebateMetrics, SpeakerInput } from '../types/debate.types';
 import { DebaterAvatar } from '@/components/DebaterAvatar';
+import { InfoTooltip } from '@/components/InfoTooltip';
+import { METRIC_EXPLANATIONS } from '../utils/metricExplanations';
 
 export interface LinguisticMetricsPanelProps {
   metrics?: DebateMetrics;
@@ -57,8 +58,15 @@ export const LinguisticMetricsPanel: FC<LinguisticMetricsPanelProps> = ({
             <div className="space-y-3.5 text-xs font-mono">
               {/* Densidade de Dados */}
               <div className="space-y-1">
-                <div className="flex justify-between text-text-muted">
-                  <span>Densidade de Dados / Evidências:</span>
+                <div className="flex justify-between items-center text-text-muted">
+                  <span className="flex items-center gap-1">
+                    <span>Densidade de Dados / Evidências:</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.dataDensity.title}
+                      content={METRIC_EXPLANATIONS.dataDensity.shortHint}
+                      triggerAriaLabel={`Densidade de dados de ${spk}`}
+                    />
+                  </span>
                   <strong className="text-primary">{ling?.dataDensity ?? 65}/100</strong>
                 </div>
                 <div className="w-full bg-canvas h-1.5 rounded-full overflow-hidden">
@@ -71,8 +79,15 @@ export const LinguisticMetricsPanel: FC<LinguisticMetricsPanelProps> = ({
 
               {/* Riqueza Vocabular */}
               <div className="space-y-1">
-                <div className="flex justify-between text-text-muted">
-                  <span>Riqueza Vocabular (TTR):</span>
+                <div className="flex justify-between items-center text-text-muted">
+                  <span className="flex items-center gap-1">
+                    <span>Riqueza de Vocabulário:</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.vocabularyRichness.title}
+                      content={METRIC_EXPLANATIONS.vocabularyRichness.shortHint}
+                      triggerAriaLabel={`Riqueza de vocabulário de ${spk}`}
+                    />
+                  </span>
                   <strong className="text-primary">{ling?.vocabularyRichness ?? 75}/100</strong>
                 </div>
                 <div className="w-full bg-canvas h-1.5 rounded-full overflow-hidden">
@@ -85,8 +100,15 @@ export const LinguisticMetricsPanel: FC<LinguisticMetricsPanelProps> = ({
 
               {/* Compostura Sob Pressão */}
               <div className="space-y-1">
-                <div className="flex justify-between text-text-muted">
-                  <span>Controle Emocional & Compostura:</span>
+                <div className="flex justify-between items-center text-text-muted">
+                  <span className="flex items-center gap-1">
+                    <span>Controle Emocional & Compostura:</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.emotionalControl.title}
+                      content={METRIC_EXPLANATIONS.emotionalControl.shortHint}
+                      triggerAriaLabel={`Controle emocional de ${spk}`}
+                    />
+                  </span>
                   <strong className="text-primary">{tone?.emotionalControl ?? 78}/100</strong>
                 </div>
                 <div className="w-full bg-canvas h-1.5 rounded-full overflow-hidden">
@@ -99,8 +121,15 @@ export const LinguisticMetricsPanel: FC<LinguisticMetricsPanelProps> = ({
 
               {/* Resposta Direta */}
               <div className="space-y-1">
-                <div className="flex justify-between text-text-muted">
-                  <span>Taxa de Resposta Direta:</span>
+                <div className="flex justify-between items-center text-text-muted">
+                  <span className="flex items-center gap-1">
+                    <span>Taxa de Resposta Direta:</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.directAnswerRate.title}
+                      content={METRIC_EXPLANATIONS.directAnswerRate.shortHint}
+                      triggerAriaLabel={`Taxa de resposta direta de ${spk}`}
+                    />
+                  </span>
                   <strong className="text-primary">{qa?.directAnswerRate ?? 85}%</strong>
                 </div>
                 <div className="w-full bg-canvas h-1.5 rounded-full overflow-hidden">
@@ -113,8 +142,15 @@ export const LinguisticMetricsPanel: FC<LinguisticMetricsPanelProps> = ({
 
               {/* Taxa de Refutação Efetiva */}
               <div className="space-y-1">
-                <div className="flex justify-between text-text-muted">
-                  <span>Taxa de Refutação de Teses:</span>
+                <div className="flex justify-between items-center text-text-muted">
+                  <span className="flex items-center gap-1">
+                    <span>Taxa de Refutação de Teses:</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.rebuttalRate.title}
+                      content={METRIC_EXPLANATIONS.rebuttalRate.shortHint}
+                      triggerAriaLabel={`Taxa de refutação de ${spk}`}
+                    />
+                  </span>
                   <strong className="text-primary">{content?.rebuttalScore ?? 80}/100</strong>
                 </div>
                 <div className="w-full bg-canvas h-1.5 rounded-full overflow-hidden">
@@ -127,9 +163,16 @@ export const LinguisticMetricsPanel: FC<LinguisticMetricsPanelProps> = ({
 
               {/* Palavras Por Minuto */}
               <div className="pt-2 border-t border-border/60 flex items-center justify-between text-text-muted text-[11px]">
-                <span>Ritmo Verbal Médio:</span>
+                <span className="flex items-center gap-1">
+                  <span>Ritmo Verbal Médio:</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.speakingPace.title}
+                    content={METRIC_EXPLANATIONS.speakingPace.shortHint}
+                    triggerAriaLabel={`Ritmo verbal médio de ${spk}`}
+                  />
+                </span>
                 <span className="font-bold text-text-main">
-                  {ling?.wordsPerMinute ?? 140} PPM
+                  {ling?.wordsPerMinute ?? 140} palavras por minuto
                 </span>
               </div>
             </div>

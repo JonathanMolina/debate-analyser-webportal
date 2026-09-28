@@ -15,6 +15,8 @@ import {
 import { Modal } from '@/components/Modal/Modal';
 import { Badge } from '@/components/Badge/Badge';
 import { DebaterAvatar } from '@/components/DebaterAvatar';
+import { InfoTooltip } from '@/components/InfoTooltip';
+import { METRIC_EXPLANATIONS } from '@/features/debates/utils/metricExplanations';
 import type { DebaterAggregateStats } from '../types/debater.types';
 
 export interface DebaterDetailModalProps {
@@ -46,7 +48,7 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
               {debater.debaterName}
             </span>
             {debater.role && (
-              <span className="block text-xs text-text-muted font-normal">
+              <span className="text-xs text-text-muted block">
                 {debater.role}
               </span>
             )}
@@ -60,31 +62,49 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
         {/* Top Highlight Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
           <div className="bg-canvas border border-border p-3.5 rounded-xl space-y-1">
-            <span className="text-[10px] text-text-muted uppercase tracking-wider block">
-              Média Técnica
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-text-muted uppercase tracking-wider">
+                Média Técnica
+              </span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.technicalAverage.title}
+                content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
+              />
+            </div>
             <span className="text-xl font-black text-primary block">
-              {debater.avgScore} pts
+              {debater.avgScore} pontos
             </span>
             <span className="text-[10px] text-text-muted">Pontuação Geral</span>
           </div>
 
           <div className="bg-canvas border border-border p-3.5 rounded-xl space-y-1">
-            <span className="text-[10px] text-text-muted uppercase tracking-wider block">
-              Aproveitamento
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-text-muted uppercase tracking-wider">
+                Aproveitamento
+              </span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.matchRecord.title}
+                content={`${debater.wins} vitórias, ${debater.draws} empates e ${debater.losses} derrotas nos debates analisados.`}
+              />
+            </div>
             <span className="text-xl font-black text-text-main block">
               {debater.winRate}%
             </span>
             <span className="text-[10px] text-text-muted">
-              {debater.wins}V - {debater.draws}E - {debater.losses}D
+              {debater.wins} vit. • {debater.draws} emp. • {debater.losses} der.
             </span>
           </div>
 
           <div className="bg-canvas border border-border p-3.5 rounded-xl space-y-1">
-            <span className="text-[10px] text-text-muted uppercase tracking-wider block">
-              Precisão Factual
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-text-muted uppercase tracking-wider">
+                Precisão Factual
+              </span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.factCheckAccuracy.title}
+                content={METRIC_EXPLANATIONS.factCheckAccuracy.shortHint}
+              />
+            </div>
             <span className="text-xl font-black text-emerald-400 block">
               {debater.factCheckAccuracy}%
             </span>
@@ -94,9 +114,15 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
           </div>
 
           <div className="bg-canvas border border-border p-3.5 rounded-xl space-y-1">
-            <span className="text-[10px] text-text-muted uppercase tracking-wider block">
-              Falácias / Debate
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-text-muted uppercase tracking-wider">
+                Falácias / Debate
+              </span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.fallaciesPerDebate.title}
+                content={METRIC_EXPLANATIONS.fallaciesPerDebate.shortHint}
+              />
+            </div>
             <span className="text-xl font-black text-rose-400 block">
               {debater.avgFallaciesPerDebate}
             </span>
@@ -115,8 +141,14 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
             <div className="bg-canvas/80 border border-border/80 p-3 rounded-xl space-y-1">
-              <div className="flex justify-between text-text-muted font-mono">
-                <span>Densidade de Dados:</span>
+              <div className="flex justify-between items-center text-text-muted font-mono">
+                <span className="flex items-center gap-1">
+                  <span>Densidade de Dados:</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.dataDensity.title}
+                    content={METRIC_EXPLANATIONS.dataDensity.shortHint}
+                  />
+                </span>
                 <strong className="text-primary font-bold">{debater.avgDataDensity}/100</strong>
               </div>
               <div className="w-full bg-surface h-1.5 rounded-full overflow-hidden">
@@ -128,8 +160,14 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
             </div>
 
             <div className="bg-canvas/80 border border-border/80 p-3 rounded-xl space-y-1">
-              <div className="flex justify-between text-text-muted font-mono">
-                <span>Controle Emocional:</span>
+              <div className="flex justify-between items-center text-text-muted font-mono">
+                <span className="flex items-center gap-1">
+                  <span>Controle Emocional:</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.emotionalControl.title}
+                    content={METRIC_EXPLANATIONS.emotionalControl.shortHint}
+                  />
+                </span>
                 <strong className="text-primary font-bold">{debater.avgEmotionalControl}/100</strong>
               </div>
               <div className="w-full bg-surface h-1.5 rounded-full overflow-hidden">
@@ -141,8 +179,14 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
             </div>
 
             <div className="bg-canvas/80 border border-border/80 p-3 rounded-xl space-y-1">
-              <div className="flex justify-between text-text-muted font-mono">
-                <span>Resposta Direta:</span>
+              <div className="flex justify-between items-center text-text-muted font-mono">
+                <span className="flex items-center gap-1">
+                  <span>Resposta Direta:</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.directAnswerRate.title}
+                    content={METRIC_EXPLANATIONS.directAnswerRate.shortHint}
+                  />
+                </span>
                 <strong className="text-primary font-bold">{debater.avgDirectAnswerRate}%</strong>
               </div>
               <div className="w-full bg-surface h-1.5 rounded-full overflow-hidden">
@@ -154,8 +198,14 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
             </div>
 
             <div className="bg-canvas/80 border border-border/80 p-3 rounded-xl space-y-1">
-              <div className="flex justify-between text-text-muted font-mono">
-                <span>Riqueza Vocabular:</span>
+              <div className="flex justify-between items-center text-text-muted font-mono">
+                <span className="flex items-center gap-1">
+                  <span>Riqueza de Vocabulário:</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.vocabularyRichness.title}
+                    content={METRIC_EXPLANATIONS.vocabularyRichness.shortHint}
+                  />
+                </span>
                 <strong className="text-primary font-bold">{debater.avgVocabularyRichness}/100</strong>
               </div>
               <div className="w-full bg-surface h-1.5 rounded-full overflow-hidden">
@@ -167,8 +217,14 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
             </div>
 
             <div className="bg-canvas/80 border border-border/80 p-3 rounded-xl space-y-1">
-              <div className="flex justify-between text-text-muted font-mono">
-                <span>Taxa de Refutação:</span>
+              <div className="flex justify-between items-center text-text-muted font-mono">
+                <span className="flex items-center gap-1">
+                  <span>Taxa de Refutação:</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.rebuttalRate.title}
+                    content={METRIC_EXPLANATIONS.rebuttalRate.shortHint}
+                  />
+                </span>
                 <strong className="text-primary font-bold">{debater.avgRebuttalScore}/100</strong>
               </div>
               <div className="w-full bg-surface h-1.5 rounded-full overflow-hidden">
@@ -180,9 +236,15 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
             </div>
 
             <div className="bg-canvas/80 border border-border/80 p-3 rounded-xl space-y-1">
-              <div className="flex justify-between text-text-muted font-mono">
-                <span>Ritmo de Fala (WPM):</span>
-                <strong className="text-primary font-bold">{debater.avgWordsPerMinute} ppm</strong>
+              <div className="flex justify-between items-center text-text-muted font-mono">
+                <span className="flex items-center gap-1">
+                  <span>Ritmo de Fala:</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.speakingPace.title}
+                    content={METRIC_EXPLANATIONS.speakingPace.shortHint}
+                  />
+                </span>
+                <strong className="text-primary font-bold">{debater.avgWordsPerMinute} palavras/min</strong>
               </div>
               <div className="w-full bg-surface h-1.5 rounded-full overflow-hidden">
                 <div
@@ -233,7 +295,7 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
                     <div className="text-[11px] text-text-muted font-mono flex items-center gap-3">
                       <span>Vs: {item.opponentNames.join(', ')}</span>
                       <span>•</span>
-                      <span>Score: {item.score} pts</span>
+                      <span>Pontuação: {item.score} pontos</span>
                       <span>•</span>
                       <span>{item.fallaciesCount} falácias</span>
                     </div>
@@ -244,15 +306,15 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
                     onClick={onClose}
                     className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary-hover transition-colors shrink-0"
                   >
-                    <span>Ver análise</span>
+                    <span>Ver análise completa</span>
                     <ExternalLink size={12} />
                   </Link>
                 </div>
               ))
             ) : (
-              <div className="text-xs text-text-muted p-4 text-center bg-canvas rounded-xl">
-                Nenhum debate processado registrado para este debatedor no momento.
-              </div>
+              <p className="text-xs text-text-muted italic p-4 bg-canvas rounded-xl border border-border text-center">
+                Nenhum debate recente registrado individualmente para este debatedor.
+              </p>
             )}
           </div>
         </div>

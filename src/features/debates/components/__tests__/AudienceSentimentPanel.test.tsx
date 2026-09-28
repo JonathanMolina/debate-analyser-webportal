@@ -128,8 +128,8 @@ describe('AudienceSentimentPanel Component', () => {
     expect(screen.getByText('@usuario_dois')).toBeInTheDocument();
   });
 
-  it('deve exibir impacto no score proporcional à quantidade de debatedores (50 pts por debatedor)', () => {
-    // 2 debatedores = 100 pts
+  it('deve exibir impacto no score proporcional à quantidade de debatedores (50 pontos por debatedor)', () => {
+    // 2 debatedores = 100 pontos
     const { rerender } = render(
       <AudienceSentimentPanel
         audienceMetrics={mockAudienceMetrics}
@@ -137,10 +137,10 @@ describe('AudienceSentimentPanel Component', () => {
         technicalWinner="Debatedor Alfa"
       />
     );
-    expect(screen.getByText('Até +100 pts no Scorecard')).toBeInTheDocument();
-    expect(screen.getByText('(50 pts máx por debatedor)')).toBeInTheDocument();
+    expect(screen.getByText('Até +100 pontos no Scorecard')).toBeInTheDocument();
+    expect(screen.getByText('(50 pontos máx por debatedor)')).toBeInTheDocument();
 
-    // 5 debatedores = 250 pts
+    // 5 debatedores = 250 pontos
     const fiveSpeakers: SpeakerInput[] = [
       { name: 'Debatedor 1' },
       { name: 'Debatedor 2' },
@@ -155,6 +155,6 @@ describe('AudienceSentimentPanel Component', () => {
         technicalWinner="Debatedor 1"
       />
     );
-    expect(screen.getByText('Até +250 pts no Scorecard')).toBeInTheDocument();
+    expect(screen.getByText('Até +250 pontos no Scorecard')).toBeInTheDocument();
   });
 });

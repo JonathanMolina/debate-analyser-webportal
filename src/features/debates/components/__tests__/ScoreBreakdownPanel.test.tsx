@@ -11,7 +11,7 @@ describe('ScoreBreakdownPanel Component', () => {
     ).toBeInTheDocument();
   });
 
-  it('deve exibir Opinião do Público (Comentários YouTube) com escala de 100 pts para 2 debatedores', () => {
+  it('deve exibir Opinião do Público (Comentários YouTube) com escala de 100 pontos para 2 debatedores', () => {
     const mockScore: DebateScore = {
       winner: 'Debatedor Alfa',
       difference: 20,
@@ -47,15 +47,15 @@ describe('ScoreBreakdownPanel Component', () => {
     expect(
       screen.getByText('Opinião do Público (Comentários YouTube)')
     ).toBeInTheDocument();
-    expect(screen.getByText('(até +100 pts distrib.)')).toBeInTheDocument();
+    expect(screen.getByText('(até +100 pontos distrib.)')).toBeInTheDocument();
     expect(
-      screen.getByText('Evidências & Fatos Verificados (+5 V, +2 D, -5 F)')
+      screen.getByText('Evidências & Fatos Verificados (+5 Verdadeiro, +2 Discutível, -5 Falso)')
     ).toBeInTheDocument();
-    expect(screen.getByText('+65 pts')).toBeInTheDocument();
-    expect(screen.getByText('+35 pts')).toBeInTheDocument();
+    expect(screen.getByText('+65 pontos')).toBeInTheDocument();
+    expect(screen.getByText('+35 pontos')).toBeInTheDocument();
   });
 
-  it('deve exibir escala de 250 pts distribuidos para 5 debatedores', () => {
+  it('deve exibir escala de 250 pontos distribuidos para 5 debatedores', () => {
     const speakers = ['D1', 'D2', 'D3', 'D4', 'D5'];
     const breakdown: Record<string, any> = {};
     const scores: Record<string, number> = {};
@@ -86,6 +86,6 @@ describe('ScoreBreakdownPanel Component', () => {
     expect(
       screen.getByText('Opinião do Público (Comentários YouTube)')
     ).toBeInTheDocument();
-    expect(screen.getByText('(até +250 pts distrib.)')).toBeInTheDocument();
+    expect(screen.getByText('(até +250 pontos distrib.)')).toBeInTheDocument();
   });
 });

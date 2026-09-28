@@ -1,7 +1,10 @@
 import { FC } from 'react';
-import { Trophy, Award } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import type { DebaterAggregateStats } from '@/features/debaters/types/debater.types';
 import { DebaterAvatar } from '@/components/DebaterAvatar';
+import { InfoTooltip } from '@/components/InfoTooltip';
+import { METRIC_EXPLANATIONS } from '@/features/debates/utils/metricExplanations';
+import { formatMatchRecordFull } from '@/features/debates/utils/metricFormatters';
 
 export interface RankingPodiumProps {
   podium: DebaterAggregateStats[];
@@ -64,18 +67,36 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
             <h3 className="font-bold text-sm text-text-main truncate max-w-[200px]">
               {second.debaterName}
             </h3>
-            <div className="text-[11px] text-text-muted font-mono mt-0.5">
-              {second.wins}V - {second.draws}E - {second.losses}D ({second.winRate}%)
+            <div className="text-[11px] text-text-muted mt-1 flex items-center justify-center gap-1 flex-wrap">
+              <span>{formatMatchRecordFull(second.wins, second.draws, second.losses)}</span>
+              <span className="font-semibold text-text-main">({second.winRate}% de vitórias)</span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.matchRecord.title}
+                content={METRIC_EXPLANATIONS.matchRecord.shortHint}
+                triggerAriaLabel="Informações do histórico de resultados"
+              />
             </div>
           </div>
 
           <div className="w-full bg-canvas rounded-xl p-3 border border-border/60 grid grid-cols-2 gap-2 text-xs font-mono">
             <div>
-              <span className="text-[10px] text-text-muted block">Média Técnica</span>
-              <span className="font-black text-primary text-base">{second.avgScore} pts</span>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Média Técnica</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.technicalAverage.title}
+                  content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
+                />
+              </span>
+              <span className="font-black text-primary text-base">{second.avgScore} pontos</span>
             </div>
             <div>
-              <span className="text-[10px] text-text-muted block">Falácias / Deb</span>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Falácias por Debate</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.fallaciesPerDebate.title}
+                  content={METRIC_EXPLANATIONS.fallaciesPerDebate.shortHint}
+                />
+              </span>
               <span className="font-bold text-rose-400 text-base">{second.avgFallaciesPerDebate}</span>
             </div>
           </div>
@@ -109,18 +130,36 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
             <h3 className="font-bold text-base text-text-main truncate max-w-[220px]">
               {first.debaterName}
             </h3>
-            <div className="text-xs text-text-muted font-mono mt-0.5">
-              {first.wins}V - {first.draws}E - {first.losses}D ({first.winRate}% de vitórias)
+            <div className="text-xs text-text-muted mt-1 flex items-center justify-center gap-1 flex-wrap">
+              <span>{formatMatchRecordFull(first.wins, first.draws, first.losses)}</span>
+              <span className="font-semibold text-text-main">({first.winRate}% de vitórias)</span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.matchRecord.title}
+                content={METRIC_EXPLANATIONS.matchRecord.shortHint}
+                triggerAriaLabel="Informações do histórico de resultados"
+              />
             </div>
           </div>
 
           <div className="w-full bg-canvas rounded-xl p-3.5 border border-primary/30 grid grid-cols-2 gap-2 text-xs font-mono shadow-inner">
             <div>
-              <span className="text-[10px] text-text-muted block">Média Técnica</span>
-              <span className="font-black text-primary text-lg">{first.avgScore} pts</span>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Média Técnica</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.technicalAverage.title}
+                  content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
+                />
+              </span>
+              <span className="font-black text-primary text-lg">{first.avgScore} pontos</span>
             </div>
             <div>
-              <span className="text-[10px] text-text-muted block">Precisão Factual</span>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Precisão Factual</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.factCheckAccuracy.title}
+                  content={METRIC_EXPLANATIONS.factCheckAccuracy.shortHint}
+                />
+              </span>
               <span className="font-bold text-emerald-400 text-lg">{first.factCheckAccuracy}%</span>
             </div>
           </div>
@@ -150,18 +189,36 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
             <h3 className="font-bold text-sm text-text-main truncate max-w-[200px]">
               {third.debaterName}
             </h3>
-            <div className="text-[11px] text-text-muted font-mono mt-0.5">
-              {third.wins}V - {third.draws}E - {third.losses}D ({third.winRate}%)
+            <div className="text-[11px] text-text-muted mt-1 flex items-center justify-center gap-1 flex-wrap">
+              <span>{formatMatchRecordFull(third.wins, third.draws, third.losses)}</span>
+              <span className="font-semibold text-text-main">({third.winRate}% de vitórias)</span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.matchRecord.title}
+                content={METRIC_EXPLANATIONS.matchRecord.shortHint}
+                triggerAriaLabel="Informações do histórico de resultados"
+              />
             </div>
           </div>
 
           <div className="w-full bg-canvas rounded-xl p-3 border border-border/60 grid grid-cols-2 gap-2 text-xs font-mono">
             <div>
-              <span className="text-[10px] text-text-muted block">Média Técnica</span>
-              <span className="font-black text-primary text-base">{third.avgScore} pts</span>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Média Técnica</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.technicalAverage.title}
+                  content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
+                />
+              </span>
+              <span className="font-black text-primary text-base">{third.avgScore} pontos</span>
             </div>
             <div>
-              <span className="text-[10px] text-text-muted block">Falácias / Deb</span>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Falácias por Debate</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.fallaciesPerDebate.title}
+                  content={METRIC_EXPLANATIONS.fallaciesPerDebate.shortHint}
+                />
+              </span>
               <span className="font-bold text-rose-400 text-base">{third.avgFallaciesPerDebate}</span>
             </div>
           </div>
