@@ -81,9 +81,9 @@ export const DashboardView: FC = () => {
       />
 
       {/* 4. Grid Principal estilo YouTube + Painel Lateral Top 10 */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-        {/* Feed de Debates (3 colunas em tela grande) */}
-        <div className="lg:col-span-3 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Feed de Debates */}
+        <div className="lg:col-span-7 xl:col-span-8 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold text-text-main flex items-center gap-2">
               <Film size={18} className="text-primary" />
@@ -138,8 +138,8 @@ export const DashboardView: FC = () => {
           )}
         </div>
 
-        {/* Painel Top 10 Debatedores (1 coluna lateral) */}
-        <div className="lg:col-span-1">
+        {/* Painel Top 10 Debatedores */}
+        <div className="lg:col-span-5 xl:col-span-4">
           <TopDebatersPanel
             topDebaters={topDebaters}
             selectedDebater={selectedDebater}

@@ -5,6 +5,7 @@ import type { DebaterAggregateStats } from '@/features/debaters/types/debater.ty
 import { DebaterAvatar } from '@/components/DebaterAvatar';
 import { InfoTooltip } from '@/components/InfoTooltip';
 import { METRIC_EXPLANATIONS } from '@/features/debates/utils/metricExplanations';
+import { formatMatchRecordFull } from '@/features/debates/utils/metricFormatters';
 
 export interface TopDebatersPanelProps {
   topDebaters: DebaterAggregateStats[];
@@ -65,11 +66,12 @@ export const TopDebatersPanel: FC<TopDebatersPanelProps> = ({
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {topDebaters.slice(0, 10).map((debater, index) => {
             const isSelected =
               selectedDebater === debater.debaterId ||
               selectedDebater === debater.debaterName;
+            const hasDebates = debater.debatesCount > 0;
 
             return (
               <div
@@ -84,63 +86,79 @@ export const TopDebatersPanel: FC<TopDebatersPanelProps> = ({
                     onSelectDebater(isSelected ? '' : debater.debaterName);
                   }
                 }}
-                className={`w-full flex items-center justify-between p-2.5 rounded-xl transition-all text-left cursor-pointer ${
+                className={`w-full p-3.5 sm:p-4 rounded-2xl transition-all text-left cursor-pointer border flex flex-col gap-2.5 ${
                   isSelected
-                    ? 'bg-primary/15 border border-primary/40 text-primary'
-                    : 'hover:bg-surface-hover border border-transparent text-text-muted hover:text-text-main'
+                    ? 'bg-primary/15 border-primary/50 shadow-md ring-1 ring-primary/30'
+                    : 'bg-canvas/70 hover:bg-surface-hover border-border/80 hover:border-border'
                 }`}
               >
-                <div className="flex items-center gap-3 min-w-0">
-                  {/* Rank Number */}
-                  <div
-                    className={`w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-mono font-bold shrink-0 border ${getRankBadge(
-                      index
-                    )}`}
-                  >
-                    {index + 1}º
+                {/* Linha Superior: Posição, Avatar, Nome e Pontuação */}
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    {/* Rank Badge */}
+                    <div
+                      className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 border ${getRankBadge(
+                        index
+                      )}`}
+                    >
+                      {index + 1}º
+                    </div>
+
+                    {/* Avatar */}
+                    <DebaterAvatar
+                      name={debater.debaterName}
+                      photoUrl={debater.photoUrl}
+                      debaterId={debater.debaterId}
+                      size="md"
+                      className="w-10 h-10 shrink-0"
+                    />
+
+                    {/* Identidade */}
+                    <div className="min-w-0">
+                      <div className="text-sm font-bold text-text-main truncate leading-tight">
+                        {debater.debaterName}
+                      </div>
+                      <div className="text-[11px] text-text-muted mt-0.5 truncate">
+                        {debater.role ? debater.role : `${debater.debatesCount} debates processados`}
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Avatar */}
-                  <DebaterAvatar
-                    name={debater.debaterName}
-                    photoUrl={debater.photoUrl}
-                    debaterId={debater.debaterId}
-                    size="sm"
-                    className="w-8 h-8 shrink-0"
-                  />
-
-                  {/* Info */}
-                  <div className="min-w-0">
-                    <div className="text-xs font-bold text-text-main truncate">
-                      {debater.debaterName}
-                    </div>
-                    <div className="text-[10px] text-text-muted flex items-center gap-1">
-                      {debater.debatesCount > 0 ? (
-                        <>
-                          <span className="truncate">
-                            {debater.wins} vit. • {debater.draws} emp. • {debater.losses} der. ({debater.winRate}% vitórias)
-                          </span>
-                          <InfoTooltip
-                            title={METRIC_EXPLANATIONS.matchRecord.title}
-                            content={`${debater.wins} vitórias, ${debater.draws} empates e ${debater.losses} derrotas. Aproveitamento de ${debater.winRate}%.`}
-                            triggerAriaLabel={`Histórico de ${debater.debaterName}`}
-                          />
-                        </>
-                      ) : (
-                        <span>Aguardando debates</span>
-                      )}
-                    </div>
+                  {/* Score */}
+                  <div className="text-right shrink-0 pl-2 font-mono">
+                    <span className="text-base font-black text-primary block leading-tight">
+                      {hasDebates ? `${debater.avgScore}` : '-'}
+                    </span>
+                    <span className="text-[10px] text-text-muted block">
+                      {hasDebates ? 'pontos' : 'pendente'}
+                    </span>
                   </div>
                 </div>
 
-                {/* Score Metric */}
-                <div className="text-right shrink-0 pl-2 font-mono">
-                  <span className="text-xs font-black text-primary block">
-                    {debater.debatesCount > 0 ? `${debater.avgScore}` : '-'}
-                  </span>
-                  <span className="text-[9px] text-text-muted block">
-                    {debater.debatesCount > 0 ? 'pontos' : 'pendente'}
-                  </span>
+                {/* Linha Inferior: Histórico de Resultados Espaçoso e Tag de Vitórias */}
+                <div className="pt-2 border-t border-border/50 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  {hasDebates ? (
+                    <>
+                      <div className="flex items-center gap-1.5 flex-wrap text-[11px] text-text-muted">
+                        <span className="font-medium text-text-main">
+                          {formatMatchRecordFull(debater.wins, debater.draws, debater.losses)}
+                        </span>
+                        <InfoTooltip
+                          title={METRIC_EXPLANATIONS.matchRecord.title}
+                          content={`${debater.wins} vitórias, ${debater.draws} empates e ${debater.losses} derrotas nos debates analisados.`}
+                          triggerAriaLabel={`Histórico de resultados de ${debater.debaterName}`}
+                        />
+                      </div>
+
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
+                        {debater.winRate}% de vitórias
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-[11px] text-text-muted italic">
+                      Aguardando debates avaliados
+                    </span>
+                  )}
                 </div>
               </div>
             );
