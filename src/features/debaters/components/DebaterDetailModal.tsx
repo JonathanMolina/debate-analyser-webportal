@@ -10,7 +10,8 @@ import {
   ExternalLink,
   ShieldCheck,
   Flame,
-  Award
+  Award,
+  Lightbulb
 } from 'lucide-react';
 import { Modal } from '@/components/Modal/Modal';
 import { Badge } from '@/components/Badge/Badge';
@@ -292,12 +293,23 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
                       </span>
                     </div>
 
-                    <div className="text-[11px] text-text-muted font-mono flex items-center gap-3">
+                    <div className="text-[11px] text-text-muted font-mono flex items-center gap-3 flex-wrap">
                       <span>Vs: {item.opponentNames.join(', ')}</span>
                       <span>•</span>
                       <span>Pontuação: {item.score} pontos</span>
                       <span>•</span>
                       <span>{item.fallaciesCount} falácias</span>
+                      <span>•</span>
+                      <span className="flex items-center gap-1">
+                        <Lightbulb size={11} className="text-amber-400" />
+                        <span>{item.proposalsCount ?? 0} propostas</span>
+                        <InfoTooltip
+                          title={METRIC_EXPLANATIONS.proposalsCount.title}
+                          content={METRIC_EXPLANATIONS.proposalsCount.shortHint}
+                          iconSize={10}
+                          iconClassName="text-amber-400/80 hover:text-amber-300 transition-colors"
+                        />
+                      </span>
                     </div>
                   </div>
 

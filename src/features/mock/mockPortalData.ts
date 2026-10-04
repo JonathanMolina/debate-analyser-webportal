@@ -95,6 +95,10 @@ export const MOCK_DEBATES: DebateJob[] = [
         'Tallis Gomes': 2,
         'Paulo Brigadeiro': 1
       },
+      proposalsCount: {
+        'Tallis Gomes': 1,
+        'Paulo Brigadeiro': 1
+      },
       averageTemperature: 0.42,
       linguisticMetrics: {
         'Tallis Gomes': {
@@ -326,8 +330,8 @@ export const MOCK_DEBATES: DebateJob[] = [
       },
       debateScore: {
         scores: {
-          'Tallis Gomes': 128,
-          'Paulo Brigadeiro': 146
+          'Tallis Gomes': 133,
+          'Paulo Brigadeiro': 151
         },
         winner: 'Paulo Brigadeiro',
         difference: 18,
@@ -336,20 +340,22 @@ export const MOCK_DEBATES: DebateJob[] = [
           'Tallis Gomes': {
             evidencePoints: 24,
             fallacyPenalties: -10,
+            proposalPoints: 5,
             qaPoints: 22,
             tonePoints: 25,
             speakingEfficiency: 28,
             audiencePoints: 10,
-            totalPoints: 128
+            totalPoints: 133
           },
           'Paulo Brigadeiro': {
             evidencePoints: 32,
             fallacyPenalties: -5,
+            proposalPoints: 5,
             qaPoints: 26,
             tonePoints: 28,
             speakingEfficiency: 29,
             audiencePoints: 20,
-            totalPoints: 146
+            totalPoints: 151
           }
         }
       }
@@ -433,6 +439,24 @@ export const MOCK_DEBATES: DebateJob[] = [
         quote: 'Todo modelo que prioriza crescimento em detrimento de EBITDA positivo é fadado à falência.'
       }
     ],
+    proposals: [
+      {
+        id: 'prop_tallis_1',
+        timestamp: 150,
+        speaker: 'Tallis Gomes',
+        topic: 'Captação & Incentivos',
+        quote: 'Precisamos criar linhas de crédito de inovação atreladas à receita futura das startups para evitar diluição excessiva dos fundadores.',
+        context: 'Discussão sobre fontes de financiamento para scale-ups em estágio inicial no mercado brasileiro.'
+      },
+      {
+        id: 'prop_brigadeiro_1',
+        timestamp: 220,
+        speaker: 'Paulo Brigadeiro',
+        topic: 'Governança & Transparência',
+        quote: 'A CVM deveria exigir divulgação padronizada de unit economics e queima líquida de caixa em relatórios trimestrais de empresas com captação aberta.',
+        context: 'Debate sobre proteção a investidores minoritários e transparência contábil de companhias em crescimento.'
+      }
+    ],
     createdAt: Date.now() - 86400000 * 3,
     completedAt: Date.now() - 86400000 * 3 + 3600000
   },
@@ -471,6 +495,10 @@ export const MOCK_DEBATES: DebateJob[] = [
       fallaciesCount: {
         'Ciro Gomes': 1,
         'Tabata Amaral': 0
+      },
+      proposalsCount: {
+        'Ciro Gomes': 1,
+        'Tabata Amaral': 2
       },
       averageTemperature: 0.38,
       linguisticMetrics: {
@@ -537,28 +565,30 @@ export const MOCK_DEBATES: DebateJob[] = [
       },
       debateScore: {
         scores: {
-          'Ciro Gomes': 132,
-          'Tabata Amaral': 136
+          'Ciro Gomes': 137,
+          'Tabata Amaral': 146
         },
         winner: 'Tabata Amaral',
-        difference: 4,
+        difference: 9,
         isDraw: false,
         breakdown: {
           'Ciro Gomes': {
             evidencePoints: 34,
             fallacyPenalties: -4,
+            proposalPoints: 5,
             qaPoints: 28,
             tonePoints: 28,
             speakingEfficiency: 30,
-            totalPoints: 132
+            totalPoints: 137
           },
           'Tabata Amaral': {
             evidencePoints: 38,
             fallacyPenalties: 0,
+            proposalPoints: 10,
             qaPoints: 31,
             tonePoints: 31,
             speakingEfficiency: 29,
-            totalPoints: 136
+            totalPoints: 146
           }
         }
       }
@@ -610,6 +640,32 @@ export const MOCK_DEBATES: DebateJob[] = [
         quote: 'A proposta dos liberais quer simplesmente isentar o capital financeiro e deixar o trabalhador sem proteção previdenciária.'
       }
     ],
+    proposals: [
+      {
+        id: 'prop_ciro_1',
+        timestamp: 65,
+        speaker: 'Ciro Gomes',
+        topic: 'Reforma Tributária',
+        quote: 'Proponho a taxação de lucros e dividendos distribuídos com alíquota progressiva e a redução imediata da alíquota padrão sobre alimentos básicos.',
+        context: 'Proposta para reequilibrar a justiça fiscal e desonerar o consumo das famílias de baixa renda.'
+      },
+      {
+        id: 'prop_tabata_1',
+        timestamp: 110,
+        speaker: 'Tabata Amaral',
+        topic: 'Educação Técnica & Conectividade',
+        quote: 'Devemos expandir a poupança do ensino médio vinculada a cursos técnicos profissionalizantes em tempo integral.',
+        context: 'Medida voltada a reduzir a evasão escolar e aumentar a empregabilidade jovem.'
+      },
+      {
+        id: 'prop_tabata_2',
+        timestamp: 145,
+        speaker: 'Tabata Amaral',
+        topic: 'Tributação & Desoneração',
+        quote: 'A implementação do cashback tributário automático na conta de luz e no gás de cozinha para famílias cadastradas no CadÚnico.',
+        context: 'Solução compensatória contra o impacto inflacionário de tributos sobre bens essenciais.'
+      }
+    ],
     createdAt: Date.now() - 86400000 * 7,
     completedAt: Date.now() - 86400000 * 7 + 4200000
   },
@@ -648,6 +704,10 @@ export const MOCK_DEBATES: DebateJob[] = [
       fallaciesCount: {
         'Guilherme Boulos': 1,
         'Marina Silva': 0
+      },
+      proposalsCount: {
+        'Guilherme Boulos': 1,
+        'Marina Silva': 1
       },
       averageTemperature: 0.35,
       linguisticMetrics: {
@@ -714,8 +774,8 @@ export const MOCK_DEBATES: DebateJob[] = [
       },
       debateScore: {
         scores: {
-          'Guilherme Boulos': 124,
-          'Marina Silva': 130
+          'Guilherme Boulos': 129,
+          'Marina Silva': 135
         },
         winner: 'Marina Silva',
         difference: 6,
@@ -724,18 +784,20 @@ export const MOCK_DEBATES: DebateJob[] = [
           'Guilherme Boulos': {
             evidencePoints: 28,
             fallacyPenalties: -4,
+            proposalPoints: 5,
             qaPoints: 26,
             tonePoints: 27,
             speakingEfficiency: 29,
-            totalPoints: 124
+            totalPoints: 129
           },
           'Marina Silva': {
             evidencePoints: 35,
             fallacyPenalties: 0,
+            proposalPoints: 5,
             qaPoints: 28,
             tonePoints: 32,
             speakingEfficiency: 28,
-            totalPoints: 130
+            totalPoints: 135
           }
         }
       }
@@ -787,6 +849,24 @@ export const MOCK_DEBATES: DebateJob[] = [
         quote: 'Quem coloca a meta fiscal acima da moradia não tem sensibilidade com as mães que criam filhos em palafitas.'
       }
     ],
+    proposals: [
+      {
+        id: 'prop_boulos_1',
+        timestamp: 85,
+        speaker: 'Guilherme Boulos',
+        topic: 'Habitação de Interesse Social',
+        quote: 'Defendo a destinação compulsória de imóveis ociosos da União em centros urbanos para moradia popular sustentável com placas solares.',
+        context: 'Solução para combater o déficit de moradia aproveitando a infraestrutura urbana já existente.'
+      },
+      {
+        id: 'prop_marina_1',
+        timestamp: 160,
+        speaker: 'Marina Silva',
+        topic: 'Transição Energética & Bioeconomia',
+        quote: 'Precisamos criar o Fundo Soberano de Transição Ecológica alimentado por royalties do petróleo para financiar energias renováveis e restauro florestal.',
+        context: 'Estratégia orçamentária para viabilizar metas de neutralidade de carbono.'
+      }
+    ],
     createdAt: Date.now() - 86400000 * 12,
     completedAt: Date.now() - 86400000 * 12 + 3800000
   }
@@ -815,6 +895,8 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
     avgRebuttalScore: 86,
     totalFallacies: 1,
     avgFallaciesPerDebate: 0.25,
+    totalProposals: 4,
+    avgProposalsPerDebate: 1.0,
     totalFactChecks: 8,
     factCheckAccuracy: 95,
     recentDebates: [
@@ -823,11 +905,12 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
         debateTitle: 'Visões de Reforma Tributária e Educação',
         date: Date.now() - 86400000 * 7,
         opponentNames: ['Ciro Gomes'],
-        score: 136,
+        score: 146,
         result: 'win',
-        difference: 4,
+        difference: 9,
         speakingTimeSeconds: 705,
-        fallaciesCount: 0
+        fallaciesCount: 0,
+        proposalsCount: 2
       }
     ]
   },
@@ -853,6 +936,8 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
     avgRebuttalScore: 84,
     totalFallacies: 4,
     avgFallaciesPerDebate: 0.8,
+    totalProposals: 3,
+    avgProposalsPerDebate: 0.6,
     totalFactChecks: 12,
     factCheckAccuracy: 88,
     recentDebates: [
@@ -861,11 +946,12 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
         debateTitle: 'Visões de Reforma Tributária e Educação',
         date: Date.now() - 86400000 * 7,
         opponentNames: ['Tabata Amaral'],
-        score: 132,
+        score: 137,
         result: 'loss',
-        difference: -4,
+        difference: -9,
         speakingTimeSeconds: 720,
-        fallaciesCount: 1
+        fallaciesCount: 1,
+        proposalsCount: 1
       }
     ]
   },
@@ -891,6 +977,8 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
     avgRebuttalScore: 85,
     totalFallacies: 0,
     avgFallaciesPerDebate: 0.0,
+    totalProposals: 3,
+    avgProposalsPerDebate: 1.0,
     totalFactChecks: 7,
     factCheckAccuracy: 94,
     recentDebates: [
@@ -899,11 +987,12 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
         debateTitle: 'Transição Ecológica e Direito à Cidade',
         date: Date.now() - 86400000 * 12,
         opponentNames: ['Guilherme Boulos'],
-        score: 130,
+        score: 135,
         result: 'win',
         difference: 6,
         speakingTimeSeconds: 690,
-        fallaciesCount: 0
+        fallaciesCount: 0,
+        proposalsCount: 1
       }
     ]
   },
@@ -929,6 +1018,8 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
     avgRebuttalScore: 89,
     totalFallacies: 2,
     avgFallaciesPerDebate: 0.67,
+    totalProposals: 2,
+    avgProposalsPerDebate: 0.67,
     totalFactChecks: 6,
     factCheckAccuracy: 88,
     recentDebates: [
@@ -937,11 +1028,12 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
         debateTitle: 'Duelo de Gestão vs Pragmatismo',
         date: Date.now() - 86400000 * 3,
         opponentNames: ['Tallis Gomes'],
-        score: 126,
+        score: 151,
         result: 'win',
-        difference: 8,
+        difference: 18,
         speakingTimeSeconds: 620,
-        fallaciesCount: 1
+        fallaciesCount: 1,
+        proposalsCount: 1
       }
     ]
   },
@@ -967,6 +1059,8 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
     avgRebuttalScore: 81,
     totalFallacies: 3,
     avgFallaciesPerDebate: 0.75,
+    totalProposals: 2,
+    avgProposalsPerDebate: 0.5,
     totalFactChecks: 8,
     factCheckAccuracy: 84,
     recentDebates: [
@@ -975,11 +1069,12 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
         debateTitle: 'Transição Ecológica e Direito à Cidade',
         date: Date.now() - 86400000 * 12,
         opponentNames: ['Marina Silva'],
-        score: 124,
+        score: 129,
         result: 'loss',
         difference: -6,
         speakingTimeSeconds: 680,
-        fallaciesCount: 1
+        fallaciesCount: 1,
+        proposalsCount: 1
       }
     ]
   },
@@ -1005,6 +1100,8 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
     avgRebuttalScore: 78,
     totalFallacies: 4,
     avgFallaciesPerDebate: 1.33,
+    totalProposals: 1,
+    avgProposalsPerDebate: 0.33,
     totalFactChecks: 7,
     factCheckAccuracy: 75,
     recentDebates: [
@@ -1013,11 +1110,12 @@ export const MOCK_AGGREGATE_STATS: DebaterAggregateStats[] = [
         debateTitle: 'Duelo de Gestão vs Pragmatismo',
         date: Date.now() - 86400000 * 3,
         opponentNames: ['Paulo Brigadeiro'],
-        score: 118,
+        score: 133,
         result: 'loss',
-        difference: -8,
+        difference: -18,
         speakingTimeSeconds: 580,
-        fallaciesCount: 2
+        fallaciesCount: 2,
+        proposalsCount: 1
       }
     ]
   }

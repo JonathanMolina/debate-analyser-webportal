@@ -103,7 +103,7 @@ export const fetchDebatesList = async (
       .in('job_id', jobIds);
 
     const resultsMap = new Map(
-      (resultsData || []).map((r: { job_id: string; metrics: unknown; timeline: unknown; fact_checks: unknown; fallacies: unknown }) => [
+      (resultsData || []).map((r: { job_id: string; metrics: unknown; timeline: unknown; fact_checks: unknown; fallacies: unknown; proposals?: unknown }) => [
         r.job_id,
         r
       ])
@@ -125,6 +125,7 @@ export const fetchDebatesList = async (
         timeline?: unknown;
         fact_checks?: unknown;
         fallacies?: unknown;
+        proposals?: unknown;
       } | undefined;
 
       const rawSpeakers = (j.speakers as DebateJob['speakers']) || [];
@@ -148,6 +149,7 @@ export const fetchDebatesList = async (
         timeline: res?.timeline as DebateJob['timeline'],
         factChecks: res?.fact_checks as DebateJob['factChecks'],
         fallacies: res?.fallacies as DebateJob['fallacies'],
+        proposals: (res?.proposals || []) as DebateJob['proposals'],
         createdAt: new Date(j.created_at).getTime(),
         completedAt: j.completed_at ? new Date(j.completed_at).getTime() : undefined
       };
@@ -228,6 +230,7 @@ export const fetchDebateById = async (
       timeline: resData?.timeline as DebateJob['timeline'],
       factChecks: resData?.fact_checks as DebateJob['factChecks'],
       fallacies: resData?.fallacies as DebateJob['fallacies'],
+      proposals: (resData?.proposals || []) as DebateJob['proposals'],
       createdAt: new Date(data.created_at).getTime(),
       completedAt: data.completed_at ? new Date(data.completed_at).getTime() : undefined
     };

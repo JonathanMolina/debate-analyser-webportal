@@ -18,6 +18,15 @@ export interface FallacyItem {
   quote: string;
 }
 
+export interface ProposalItem {
+  id: string;
+  timestamp: number;
+  speaker: string;
+  topic?: string;
+  quote: string;
+  context?: string;
+}
+
 export interface TurnItem {
   speaker: string;
   start: number;
@@ -89,6 +98,7 @@ export interface AudienceMetrics {
 export interface ScoreCategoryBreakdown {
   evidencePoints: number;
   fallacyPenalties: number;
+  proposalPoints?: number; // Pontos conferidos por propostas e soluções apresentadas (+5 pts cada)
   qaPoints: number;
   rebuttalPoints?: number;
   structurePoints?: number;
@@ -112,6 +122,7 @@ export interface DebateMetrics {
   speakingTime: Record<string, number>;
   interruptions: Record<string, number>;
   fallaciesCount: Record<string, number>;
+  proposalsCount?: Record<string, number>;
   averageTemperature: number;
   linguisticMetrics?: Record<string, LinguisticMetrics>;
   toneMetrics?: Record<string, ToneMetrics>;
@@ -147,6 +158,7 @@ export interface DebateJob {
   timeline?: TurnItem[];
   factChecks?: FactCheckItem[];
   fallacies?: FallacyItem[];
+  proposals?: ProposalItem[];
   createdAt: number;
   completedAt?: number;
 }

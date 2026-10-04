@@ -133,6 +133,23 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
               <tr>
                 <td className="p-3.5 text-text-muted">
                   <div className="flex items-center gap-1.5 flex-wrap">
+                    <span>Propostas & Soluções (+5 pontos cada)</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.proposalPoints.title}
+                      content={METRIC_EXPLANATIONS.proposalPoints.shortHint}
+                      triggerAriaLabel="Informações sobre pontuação de propostas e soluções"
+                    />
+                  </div>
+                </td>
+                {speakerNames.map((spk) => (
+                  <td key={spk} className="p-3.5 text-right font-semibold text-amber-400">
+                    +{score.breakdown[spk].proposalPoints ?? 0} pontos
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="p-3.5 text-text-muted">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <span>Eficiência em Respostas Diretas</span>
                     <InfoTooltip
                       title={METRIC_EXPLANATIONS.qaPoints.title}

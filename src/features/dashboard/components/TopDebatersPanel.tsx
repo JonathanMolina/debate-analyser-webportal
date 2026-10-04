@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link } from 'react-router';
-import { Trophy, ChevronRight, Users } from 'lucide-react';
+import { Trophy, ChevronRight, Users, Lightbulb } from 'lucide-react';
 import type { DebaterAggregateStats } from '@/features/debaters/types/debater.types';
 import { DebaterAvatar } from '@/components/DebaterAvatar';
 import { InfoTooltip } from '@/components/InfoTooltip';
@@ -150,9 +150,23 @@ export const TopDebatersPanel: FC<TopDebatersPanelProps> = ({
                         />
                       </div>
 
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
-                        {debater.winRate}% de vitórias
-                      </span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {(debater.totalProposals ?? 0) > 0 && (
+                          <span className="flex items-center gap-1 text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 shrink-0">
+                            <Lightbulb size={10} />
+                            <span>{debater.totalProposals}</span>
+                            <InfoTooltip
+                              title={METRIC_EXPLANATIONS.proposalsCount.title}
+                              content={METRIC_EXPLANATIONS.proposalsCount.shortHint}
+                              iconSize={10}
+                              iconClassName="text-amber-400/80 hover:text-amber-300 transition-colors"
+                            />
+                          </span>
+                        )}
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
+                          {debater.winRate}% de vitórias
+                        </span>
+                      </div>
                     </>
                   ) : (
                     <span className="text-[11px] text-text-muted italic">

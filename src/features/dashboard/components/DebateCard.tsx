@@ -1,9 +1,10 @@
 import { FC } from 'react';
 import { Link } from 'react-router';
-import { Play, CheckCircle, AlertTriangle, Trophy, Clock, Calendar } from 'lucide-react';
+import { Play, CheckCircle, AlertTriangle, Lightbulb, Trophy, Clock, Calendar } from 'lucide-react';
 import type { DebateJob } from '@/features/debates/types/debate.types';
 import { DebaterAvatar } from '@/components/DebaterAvatar';
-
+import { InfoTooltip } from '@/components/InfoTooltip';
+import { METRIC_EXPLANATIONS } from '@/features/debates/utils/metricExplanations';
 import { formatVideoBadgeDuration } from '@/features/debates/utils/duration';
 
 export interface DebateCardProps {
@@ -15,6 +16,11 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
   const isDraw = Boolean(debate.metrics?.debateScore?.isDraw);
   const factChecksCount = debate.factChecks?.length ?? 0;
   const fallaciesCount = debate.fallacies?.length ?? 0;
+  const proposalsCount =
+    debate.proposals?.length ??
+    (debate.metrics?.proposalsCount
+      ? Object.values(debate.metrics.proposalsCount).reduce((a, b) => a + b, 0)
+      : 0);
   const durationBadge = formatVideoBadgeDuration(debate.durationSeconds);
 
   const formatDate = (timestamp: number) => {
@@ -117,6 +123,17 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
             <span className="flex items-center gap-0.5" title="Falácias identificadas">
               <AlertTriangle size={11} className="text-rose-400" />
               {fallaciesCount}
+            </span>
+            <span className="flex items-center gap-0.5" title="Propostas e soluções">
+              <Lightbulb size={11} className="text-amber-400" />
+              <span>{proposalsCount}</span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.proposalsCount.title}
+                content={METRIC_EXPLANATIONS.proposalsCount.shortHint}
+                iconSize={10}
+                iconClassName="text-amber-400/80 hover:text-amber-300 transition-colors"
+                triggerAriaLabel="Informações sobre propostas e soluções"
+              />
             </span>
             <span>•</span>
             <span className="flex items-center gap-0.5">

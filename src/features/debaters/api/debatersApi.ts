@@ -76,6 +76,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
     directAnswerRates: number[];
     rebuttalScores: number[];
     totalFallacies: number;
+    totalProposals: number;
     totalFactChecks: number;
     trueFactChecks: number;
     recentDebates: DebaterDebateHistoryItem[];
@@ -102,6 +103,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
       directAnswerRates: [],
       rebuttalScores: [],
       totalFallacies: 0,
+      totalProposals: 0,
       totalFactChecks: 0,
       trueFactChecks: 0,
       recentDebates: []
@@ -138,6 +140,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
           directAnswerRates: [],
           rebuttalScores: [],
           totalFallacies: 0,
+          totalProposals: 0,
           totalFactChecks: 0,
           trueFactChecks: 0,
           recentDebates: []
@@ -194,6 +197,9 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
       const fallacies = debate.fallacies?.filter((f) => f.speaker === spk.name).length ?? (debate.metrics?.fallaciesCount?.[spk.name] ?? 0);
       current.totalFallacies += fallacies;
 
+      const proposals = debate.proposals?.filter((p) => p.speaker === spk.name).length ?? (debate.metrics?.proposalsCount?.[spk.name] ?? 0);
+      current.totalProposals += proposals;
+
       const facts = debate.factChecks?.filter((fc) => fc.speaker === spk.name) || [];
       current.totalFactChecks += facts.length;
       current.trueFactChecks += facts.filter((fc) => fc.verdict === 'Verdadeiro').length;
@@ -208,7 +214,8 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
         result,
         difference: debate.metrics?.debateScore?.difference || 0,
         speakingTimeSeconds: spkTime,
-        fallaciesCount: fallacies
+        fallaciesCount: fallacies,
+        proposalsCount: proposals
       });
     }
   }
@@ -245,6 +252,8 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
       avgRebuttalScore: average(item.rebuttalScores, 0),
       totalFallacies: item.totalFallacies,
       avgFallaciesPerDebate: item.debatesCount > 0 ? parseFloat((item.totalFallacies / item.debatesCount).toFixed(2)) : 0,
+      totalProposals: item.totalProposals,
+      avgProposalsPerDebate: item.debatesCount > 0 ? parseFloat((item.totalProposals / item.debatesCount).toFixed(2)) : 0,
       totalFactChecks: item.totalFactChecks,
       factCheckAccuracy,
       recentDebates: item.recentDebates.sort((a, b) => b.date - a.date)

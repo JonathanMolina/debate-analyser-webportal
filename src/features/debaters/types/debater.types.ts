@@ -29,6 +29,7 @@ export interface DebaterDebateHistoryItem {
   difference: number;
   speakingTimeSeconds: number;
   fallaciesCount: number;
+  proposalsCount?: number;
 }
 
 export interface DebaterAggregateStats {
@@ -54,6 +55,8 @@ export interface DebaterAggregateStats {
   avgRebuttalScore: number;
   totalFallacies: number;
   avgFallaciesPerDebate: number;
+  totalProposals?: number;
+  avgProposalsPerDebate?: number;
   totalFactChecks: number;
   factCheckAccuracy: number;
   recentDebates: DebaterDebateHistoryItem[];

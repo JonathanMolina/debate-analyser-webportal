@@ -78,26 +78,36 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
             </div>
           </div>
 
-          <div className="w-full bg-canvas rounded-xl p-3 border border-border/60 grid grid-cols-2 gap-2 text-xs font-mono">
+          <div className="w-full bg-canvas rounded-xl p-3 border border-border/60 grid grid-cols-3 gap-1.5 text-xs font-mono">
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
-                <span>Média Técnica</span>
+                <span>Média</span>
                 <InfoTooltip
                   title={METRIC_EXPLANATIONS.technicalAverage.title}
                   content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
                 />
               </span>
-              <span className="font-black text-primary text-base">{second.avgScore} pontos</span>
+              <span className="font-black text-primary text-sm sm:text-base">{second.avgScore} pts</span>
             </div>
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
-                <span>Falácias por Debate</span>
+                <span>Falácias</span>
                 <InfoTooltip
                   title={METRIC_EXPLANATIONS.fallaciesPerDebate.title}
                   content={METRIC_EXPLANATIONS.fallaciesPerDebate.shortHint}
                 />
               </span>
-              <span className="font-bold text-rose-400 text-base">{second.avgFallaciesPerDebate}</span>
+              <span className="font-bold text-rose-400 text-sm sm:text-base">{second.avgFallaciesPerDebate}</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Propostas</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.proposalsPerDebate.title}
+                  content={METRIC_EXPLANATIONS.proposalsPerDebate.shortHint}
+                />
+              </span>
+              <span className="font-bold text-amber-400 text-sm sm:text-base">{second.avgProposalsPerDebate ?? 0}</span>
             </div>
           </div>
         </div>
@@ -141,26 +151,36 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
             </div>
           </div>
 
-          <div className="w-full bg-canvas rounded-xl p-3.5 border border-primary/30 grid grid-cols-2 gap-2 text-xs font-mono shadow-inner">
+          <div className="w-full bg-canvas rounded-xl p-3.5 border border-primary/30 grid grid-cols-3 gap-1.5 text-xs font-mono shadow-inner">
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
-                <span>Média Técnica</span>
+                <span>Média</span>
                 <InfoTooltip
                   title={METRIC_EXPLANATIONS.technicalAverage.title}
                   content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
                 />
               </span>
-              <span className="font-black text-primary text-lg">{first.avgScore} pontos</span>
+              <span className="font-black text-primary text-sm sm:text-lg">{first.avgScore} pts</span>
             </div>
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
-                <span>Precisão Factual</span>
+                <span>Precisão</span>
                 <InfoTooltip
                   title={METRIC_EXPLANATIONS.factCheckAccuracy.title}
                   content={METRIC_EXPLANATIONS.factCheckAccuracy.shortHint}
                 />
               </span>
-              <span className="font-bold text-emerald-400 text-lg">{first.factCheckAccuracy}%</span>
+              <span className="font-bold text-emerald-400 text-sm sm:text-lg">{first.factCheckAccuracy}%</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Propostas</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.proposalsPerDebate.title}
+                  content={METRIC_EXPLANATIONS.proposalsPerDebate.shortHint}
+                />
+              </span>
+              <span className="font-bold text-amber-400 text-sm sm:text-lg">{first.avgProposalsPerDebate ?? 0}</span>
             </div>
           </div>
         </div>
@@ -200,26 +220,36 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
             </div>
           </div>
 
-          <div className="w-full bg-canvas rounded-xl p-3 border border-border/60 grid grid-cols-2 gap-2 text-xs font-mono">
+          <div className="w-full bg-canvas rounded-xl p-3 border border-border/60 grid grid-cols-3 gap-1.5 text-xs font-mono">
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
-                <span>Média Técnica</span>
+                <span>Média</span>
                 <InfoTooltip
                   title={METRIC_EXPLANATIONS.technicalAverage.title}
                   content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
                 />
               </span>
-              <span className="font-black text-primary text-base">{third.avgScore} pontos</span>
+              <span className="font-black text-primary text-sm sm:text-base">{third.avgScore} pts</span>
             </div>
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
-                <span>Falácias por Debate</span>
+                <span>Falácias</span>
                 <InfoTooltip
                   title={METRIC_EXPLANATIONS.fallaciesPerDebate.title}
                   content={METRIC_EXPLANATIONS.fallaciesPerDebate.shortHint}
                 />
               </span>
-              <span className="font-bold text-rose-400 text-base">{third.avgFallaciesPerDebate}</span>
+              <span className="font-bold text-rose-400 text-sm sm:text-base">{third.avgFallaciesPerDebate}</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
+                <span>Propostas</span>
+                <InfoTooltip
+                  title={METRIC_EXPLANATIONS.proposalsPerDebate.title}
+                  content={METRIC_EXPLANATIONS.proposalsPerDebate.shortHint}
+                />
+              </span>
+              <span className="font-bold text-amber-400 text-sm sm:text-base">{third.avgProposalsPerDebate ?? 0}</span>
             </div>
           </div>
         </div>

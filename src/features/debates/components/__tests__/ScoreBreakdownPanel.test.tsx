@@ -88,4 +88,81 @@ describe('ScoreBreakdownPanel Component', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('(até +250 pontos distrib.)')).toBeInTheDocument();
   });
+
+  it('deve exibir linha de Propostas & Soluções com pontuação correta', () => {
+    const mockScore: DebateScore = {
+      winner: 'Debatedor Alfa',
+      difference: 15,
+      isDraw: false,
+      scores: {
+        'Debatedor Alfa': 115,
+        'Debatedor Beta': 100
+      },
+      breakdown: {
+        'Debatedor Alfa': {
+          evidencePoints: 20,
+          fallacyPenalties: 0,
+          proposalPoints: 15, // 3 propostas * 5
+          qaPoints: 10,
+          tonePoints: 5,
+          speakingEfficiency: 5,
+          totalPoints: 115
+        },
+        'Debatedor Beta': {
+          evidencePoints: 20,
+          fallacyPenalties: 0,
+          proposalPoints: 5, // 1 proposta * 5
+          qaPoints: 10,
+          tonePoints: 5,
+          speakingEfficiency: 5,
+          totalPoints: 100
+        }
+      }
+    };
+
+    render(<ScoreBreakdownPanel score={mockScore} />);
+
+    const proposalsRow = screen.getByText('Propostas & Soluções (+5 pontos cada)').closest('tr');
+    expect(proposalsRow).toBeInTheDocument();
+    expect(proposalsRow).toHaveTextContent('+15 pontos');
+    expect(proposalsRow).toHaveTextContent('+5 pontos');
+  });
+
+  it('deve exibir 0 pontos para propostas em debates antigos sem crashar', () => {
+    const mockLegacyScore: DebateScore = {
+      winner: 'Debatedor Alfa',
+      difference: 10,
+      isDraw: false,
+      scores: {
+        'Debatedor Alfa': 100,
+        'Debatedor Beta': 90
+      },
+      breakdown: {
+        'Debatedor Alfa': {
+          evidencePoints: 20,
+          fallacyPenalties: 0,
+          // proposalPoints ausente (debate legado)
+          qaPoints: 10,
+          tonePoints: 5,
+          speakingEfficiency: 5,
+          totalPoints: 100
+        },
+        'Debatedor Beta': {
+          evidencePoints: 10,
+          fallacyPenalties: 0,
+          // proposalPoints ausente
+          qaPoints: 10,
+          tonePoints: 5,
+          speakingEfficiency: 5,
+          totalPoints: 90
+        }
+      }
+    };
+
+    render(<ScoreBreakdownPanel score={mockLegacyScore} />);
+
+    const legacyRow = screen.getByText('Propostas & Soluções (+5 pontos cada)').closest('tr');
+    expect(legacyRow).toBeInTheDocument();
+    expect(legacyRow).toHaveTextContent('+0 pontos');
+  });
 });

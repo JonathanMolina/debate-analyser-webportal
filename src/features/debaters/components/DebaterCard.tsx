@@ -76,9 +76,9 @@ export const DebaterCard: FC<DebaterCardProps> = ({
         </div>
       </div>
 
-      {/* Metrics Row (3 indicators) */}
+      {/* Metrics Row (4 indicators) */}
       {hasDebates ? (
-        <div className="grid grid-cols-3 gap-2 bg-canvas/60 p-3 rounded-xl border border-border/60 text-center font-mono">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-canvas/60 p-3 rounded-xl border border-border/60 text-center font-mono">
           <div>
             <span className="text-[10px] text-text-muted flex items-center justify-center gap-0.5">
               <span>Dados/Fatos</span>
@@ -108,6 +108,16 @@ export const DebaterCard: FC<DebaterCardProps> = ({
               />
             </span>
             <span className="text-xs font-bold text-rose-400">{debater.avgFallaciesPerDebate}</span>
+          </div>
+          <div>
+            <span className="text-[10px] text-text-muted flex items-center justify-center gap-0.5">
+              <span>Propostas/Deb</span>
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.proposalsPerDebate.title}
+                content={METRIC_EXPLANATIONS.proposalsPerDebate.shortHint}
+              />
+            </span>
+            <span className="text-xs font-bold text-amber-400">{debater.avgProposalsPerDebate ?? 0}</span>
           </div>
         </div>
       ) : (

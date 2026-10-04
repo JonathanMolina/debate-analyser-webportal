@@ -105,6 +105,26 @@ export const METRIC_EXPLANATIONS: Record<string, MetricExplanation> = {
     shortHint:
       'Pontuação distribuída conforme a aprovação e o sentimento manifestado pelo público nos comentários do debate.'
   },
+  proposalPoints: {
+    title: 'Propostas e Soluções',
+    shortHint:
+      'Pontuação obtida (+5 pontos cada) quando o participante propõe uma solução ou proposta concreta para um problema levantado.'
+  },
+  proposalsCount: {
+    title: 'Propostas & Soluções Apresentadas',
+    shortHint:
+      'Total de soluções ou propostas concretas para temas do debate citadas pelo participante (+5 pontos cada).'
+  },
+  proposalsPerDebate: {
+    title: 'Propostas por Debate',
+    shortHint:
+      'Média de propostas ou soluções apresentadas pelo participante por debate analisado.'
+  },
+  proposalsTab: {
+    title: 'Aba de Propostas e Soluções',
+    shortHint:
+      'Mapeia trechos em que o debatedor sugere uma proposta ou solução para um problema, sem juízo de valor sobre o mérito ou qualidade.'
+  },
   totalScore: {
     title: 'Total Consolidado',
     shortHint:

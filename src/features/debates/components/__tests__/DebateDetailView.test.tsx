@@ -76,4 +76,41 @@ describe('DebateDetailView - Exibição de Duração do Vídeo', () => {
     expect(screen.getByText('20 min')).toBeInTheDocument();
     expect(screen.queryByText(/min de áudio/i)).not.toBeInTheDocument();
   });
+
+  it('deve exibir a aba Propostas/Soluções com o contador de propostas', () => {
+    mockDebateData.current = {
+      id: 'job_proposals_debate',
+      title: 'Debate com Propostas',
+      youtubeUrl: 'https://www.youtube.com/watch?v=abc',
+      youtubeId: 'abc',
+      speakers: [{ name: 'A' }, { name: 'B' }],
+      status: 'completed',
+      progress: 100,
+      createdAt: 1726700000000,
+      proposals: [
+        {
+          id: 'p1',
+          timestamp: 100,
+          speaker: 'A',
+          quote: 'Proposta 1'
+        },
+        {
+          id: 'p2',
+          timestamp: 200,
+          speaker: 'B',
+          quote: 'Proposta 2'
+        }
+      ]
+    };
+
+    render(
+      <MemoryRouter>
+        <DebateDetailView />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Propostas/Soluções')).toBeInTheDocument();
+    // O contador "2" na aba de propostas
+    expect(screen.getByText('2')).toBeInTheDocument();
+  });
 });

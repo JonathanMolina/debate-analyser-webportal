@@ -6,6 +6,7 @@ import {
   Clock,
   CheckCircle,
   AlertTriangle,
+  Lightbulb,
   Scale,
   MessageSquare,
   Play,
@@ -15,6 +16,7 @@ import { useDebateDetail } from '../hooks/useDebateDetail';
 import { DebateTimeline } from './DebateTimeline';
 import { FactCheckList } from './FactCheckList';
 import { FallaciesList } from './FallaciesList';
+import { ProposalsList } from './ProposalsList';
 import { ScoreBreakdownPanel } from './ScoreBreakdownPanel';
 import { LinguisticMetricsPanel } from './LinguisticMetricsPanel';
 import { AudienceSentimentPanel } from './AudienceSentimentPanel';
@@ -79,7 +81,7 @@ export const DebateDetailView: FC = () => {
   }
 
   interface DebateTabItem {
-    id: 'timeline' | 'facts' | 'fallacies' | 'metrics' | 'audience';
+    id: 'timeline' | 'facts' | 'fallacies' | 'proposals' | 'metrics' | 'audience';
     label: string;
     icon: typeof MessageSquare;
     count?: number;
@@ -105,6 +107,12 @@ export const DebateDetailView: FC = () => {
       label: 'Falácias Retóricas',
       icon: AlertTriangle,
       count: debate.fallacies?.length
+    },
+    {
+      id: 'proposals',
+      label: 'Propostas/Soluções',
+      icon: Lightbulb,
+      count: debate.proposals?.length
     },
     {
       id: 'metrics',
@@ -332,6 +340,13 @@ export const DebateDetailView: FC = () => {
             {activeTab === 'fallacies' && (
               <FallaciesList
                 fallacies={debate.fallacies}
+                onSeek={handleSeek}
+              />
+            )}
+
+            {activeTab === 'proposals' && (
+              <ProposalsList
+                proposals={debate.proposals}
                 onSeek={handleSeek}
               />
             )}

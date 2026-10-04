@@ -6,7 +6,7 @@ import { recordDebateView } from '@/features/newsletter/utils/debateViewTracker'
 
 export const useDebateDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [activeTab, setActiveTab] = useState<'timeline' | 'facts' | 'fallacies' | 'metrics' | 'audience'>(() => {
+  const [activeTab, setActiveTab] = useState<'timeline' | 'facts' | 'fallacies' | 'proposals' | 'metrics' | 'audience'>(() => {
     if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
       return 'facts';
     }
