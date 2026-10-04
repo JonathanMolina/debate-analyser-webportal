@@ -165,4 +165,42 @@ describe('ScoreBreakdownPanel Component', () => {
     expect(legacyRow).toBeInTheDocument();
     expect(legacyRow).toHaveTextContent('+0 pontos');
   });
+
+  it('deve exibir linha de Repercussão Web (Google Trends) com +50 pontos para o líder de buscas', () => {
+    const mockScoreWithTrends: DebateScore = {
+      winner: 'Debatedor Beta',
+      difference: 30,
+      isDraw: false,
+      scores: {
+        'Debatedor Alfa': 100,
+        'Debatedor Beta': 130
+      },
+      breakdown: {
+        'Debatedor Alfa': {
+          evidencePoints: 20,
+          fallacyPenalties: 0,
+          qaPoints: 10,
+          tonePoints: 5,
+          speakingEfficiency: 5,
+          searchImpactPoints: 0,
+          totalPoints: 100
+        },
+        'Debatedor Beta': {
+          evidencePoints: 20,
+          fallacyPenalties: 0,
+          qaPoints: 10,
+          tonePoints: 5,
+          speakingEfficiency: 5,
+          searchImpactPoints: 50,
+          totalPoints: 130
+        }
+      }
+    };
+
+    render(<ScoreBreakdownPanel score={mockScoreWithTrends} />);
+
+    expect(screen.getByText('Repercussão Web (Google Trends)')).toBeInTheDocument();
+    expect(screen.getByText('(+50 pontos para o líder de buscas)')).toBeInTheDocument();
+    expect(screen.getByText('+50 pontos')).toBeInTheDocument();
+  });
 });

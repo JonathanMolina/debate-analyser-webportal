@@ -10,7 +10,8 @@ import {
   Scale,
   MessageSquare,
   Play,
-  Users
+  Users,
+  TrendingUp
 } from 'lucide-react';
 import { useDebateDetail } from '../hooks/useDebateDetail';
 import { DebateTimeline } from './DebateTimeline';
@@ -20,6 +21,7 @@ import { ProposalsList } from './ProposalsList';
 import { ScoreBreakdownPanel } from './ScoreBreakdownPanel';
 import { LinguisticMetricsPanel } from './LinguisticMetricsPanel';
 import { AudienceSentimentPanel } from './AudienceSentimentPanel';
+import { GoogleTrendsChart } from './GoogleTrendsChart';
 import { DisclaimerBanner } from '@/components/DisclaimerBanner/DisclaimerBanner';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { Button } from '@/components/Button/Button';
@@ -81,7 +83,7 @@ export const DebateDetailView: FC = () => {
   }
 
   interface DebateTabItem {
-    id: 'timeline' | 'facts' | 'fallacies' | 'proposals' | 'metrics' | 'audience';
+    id: 'timeline' | 'facts' | 'fallacies' | 'proposals' | 'metrics' | 'audience' | 'trends';
     label: string;
     icon: typeof MessageSquare;
     count?: number;
@@ -124,6 +126,11 @@ export const DebateDetailView: FC = () => {
       label: 'Opinião do Público',
       icon: Users,
       count: debate.metrics?.audienceMetrics?.topComments?.length
+    },
+    {
+      id: 'trends',
+      label: 'Buscas no Google (24h)',
+      icon: TrendingUp
     }
   ];
 
@@ -357,6 +364,10 @@ export const DebateDetailView: FC = () => {
                   score={debate.metrics?.debateScore}
                   speakers={debate.speakers}
                 />
+                <GoogleTrendsChart
+                  trends={debate.metrics?.searchMetrics || debate.search_metrics}
+                  speakers={debate.speakers}
+                />
                 <LinguisticMetricsPanel
                   metrics={debate.metrics}
                   speakers={debate.speakers}
@@ -369,6 +380,13 @@ export const DebateDetailView: FC = () => {
                 audienceMetrics={debate.metrics?.audienceMetrics}
                 speakers={debate.speakers}
                 technicalWinner={debate.metrics?.debateScore?.winner}
+              />
+            )}
+
+            {activeTab === 'trends' && (
+              <GoogleTrendsChart
+                trends={debate.metrics?.searchMetrics || debate.search_metrics}
+                speakers={debate.speakers}
               />
             )}
           </div>

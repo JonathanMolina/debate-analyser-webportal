@@ -125,9 +125,14 @@ export const METRIC_EXPLANATIONS: Record<string, MetricExplanation> = {
     shortHint:
       'Mapeia trechos em que o debatedor sugere uma proposta ou solução para um problema, sem juízo de valor sobre o mérito ou qualidade.'
   },
+  searchImpactPoints: {
+    title: 'Repercussão Web (Google Trends)',
+    shortHint:
+      'Bonificação de +50 pontos conferida ao debatedor que gerou maior volume relativo de pesquisas no Google durante o debate e até 24h após a transmissão.'
+  },
   totalScore: {
     title: 'Total Consolidado',
     shortHint:
-      'Soma de todos os critérios técnicos (fatos, falácias, respostas, tom e tempo) somados à pontuação do público.'
+      'Soma de todos os critérios técnicos (fatos, falácias, respostas, tom e tempo) somados à pontuação do público e repercussão de buscas.'
   }
 };

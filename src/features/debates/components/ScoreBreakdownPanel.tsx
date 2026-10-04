@@ -221,6 +221,29 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
                   ))}
                 </tr>
               )}
+              {speakerNames.some((spk) => (score.breakdown[spk].searchImpactPoints ?? 0) > 0) && (
+                <tr className="bg-sky-500/5">
+                  <td className="p-3.5 text-text-main font-semibold">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sky-400 font-bold">★</span>
+                      <span>Repercussão Web (Google Trends)</span>
+                      <span className="text-[10px] text-text-muted font-normal font-mono">
+                        (+50 pontos para o líder de buscas)
+                      </span>
+                      <InfoTooltip
+                        title={METRIC_EXPLANATIONS.searchImpactPoints.title}
+                        content={METRIC_EXPLANATIONS.searchImpactPoints.shortHint}
+                        triggerAriaLabel="Informações sobre a repercussão de buscas"
+                      />
+                    </div>
+                  </td>
+                  {speakerNames.map((spk) => (
+                    <td key={spk} className="p-3.5 text-right font-bold text-sky-400">
+                      +{score.breakdown[spk].searchImpactPoints ?? 0} pontos
+                    </td>
+                  ))}
+                </tr>
+              )}
               <tr className="bg-surface-elevated/80 font-bold">
                 <td className="p-3.5 text-text-main">
                   <div className="flex items-center gap-1.5 flex-wrap">

@@ -95,6 +95,25 @@ export interface AudienceMetrics {
   topComments: TopCommentItem[]; // Top comentários mais curtidos (até 15)
 }
 
+export interface SearchTrendPoint {
+  timestamp: string;
+  formattedTime?: string;
+  relativeHour: number;
+  values: Record<string, number>;
+}
+
+export interface GoogleTrendsMetrics {
+  windowStart?: string;
+  windowEnd?: string;
+  winner: string;
+  winnerShare: number;
+  isDraw: boolean;
+  shares: Record<string, number>;
+  averages?: Record<string, number>;
+  totalVolume?: Record<string, number>;
+  timeline: SearchTrendPoint[];
+}
+
 export interface ScoreCategoryBreakdown {
   evidencePoints: number;
   fallacyPenalties: number;
@@ -106,7 +125,8 @@ export interface ScoreCategoryBreakdown {
   contentPoints?: number;
   tonePoints: number;
   speakingEfficiency: number;
-  audiencePoints?: number; // Pontos conferidos pela avaliação popular (peso calibrado: até 50 pts por debatedor, ex: 100 pts distribuídos para 2 debatedores, 250 pts para 5)
+  audiencePoints?: number; // Pontos conferidos pela avaliação popular (peso calibrado: até 50 pts por debatedor)
+  searchImpactPoints?: number; // Pontos conferidos por liderança em buscas no Google (+50 pts)
   totalPoints: number;
 }
 
@@ -129,6 +149,7 @@ export interface DebateMetrics {
   qaMetrics?: Record<string, QAMetrics>;
   contentMetrics?: Record<string, ContentMetrics>;
   audienceMetrics?: AudienceMetrics;
+  searchMetrics?: GoogleTrendsMetrics;
   debateScore?: DebateScore;
 }
 
@@ -159,6 +180,7 @@ export interface DebateJob {
   factChecks?: FactCheckItem[];
   fallacies?: FallacyItem[];
   proposals?: ProposalItem[];
+  search_metrics?: GoogleTrendsMetrics;
   createdAt: number;
   completedAt?: number;
 }
