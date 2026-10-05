@@ -27,15 +27,16 @@ const MOCK_TRENDS: GoogleTrendsMetrics = {
 describe('GoogleTrendsChart Component (Webportal)', () => {
   it('renderiza fallback quando não há dados de tendências', () => {
     render(<GoogleTrendsChart trends={undefined} />);
-    expect(screen.getByText('Repercussão Web: Buscas no Google')).toBeInTheDocument();
+    expect(screen.getByText('Dado não avaliado para esse debate.')).toBeInTheDocument();
   });
 
-  it('renderiza líder de buscas, badge de +50 pts e percentuais', () => {
+  it('renderiza líder de buscas, badges de pontos e percentuais', () => {
     render(<GoogleTrendsChart trends={MOCK_TRENDS} />);
     expect(screen.getByText(/Maior Repercussão: Candidato Alfa/i)).toBeInTheDocument();
     expect(screen.getByText('62.5%')).toBeInTheDocument();
     expect(screen.getByText('37.5%')).toBeInTheDocument();
-    expect(screen.getByText('+50 PTS')).toBeInTheDocument();
+    expect(screen.getByText('+63 PTS')).toBeInTheDocument();
+    expect(screen.getByText('+38 PTS')).toBeInTheDocument();
   });
 
   it('renderiza badge de empate técnico quando isDraw é true', () => {

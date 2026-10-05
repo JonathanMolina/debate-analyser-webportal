@@ -228,7 +228,7 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
                       <span className="text-sky-400 font-bold">★</span>
                       <span>Repercussão Web (Google Trends)</span>
                       <span className="text-[10px] text-text-muted font-normal font-mono">
-                        (+50 pontos para o líder de buscas)
+                        (pontos = % de buscas obtida)
                       </span>
                       <InfoTooltip
                         title={METRIC_EXPLANATIONS.searchImpactPoints.title}

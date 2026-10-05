@@ -128,7 +128,7 @@ export const METRIC_EXPLANATIONS: Record<string, MetricExplanation> = {
   searchImpactPoints: {
     title: 'Repercussão Web (Google Trends)',
     shortHint:
-      'Bonificação de +50 pontos conferida ao debatedor que gerou maior volume relativo de pesquisas no Google durante o debate e até 24h após a transmissão.'
+      'Pontuação proporcional ao interesse de buscas no Google durante o debate e até 24h depois: o participante recebe a quantidade de pontos equivalente à porcentagem obtida (ex: 44% = 44 pts).'
   },
   totalScore: {
     title: 'Total Consolidado',

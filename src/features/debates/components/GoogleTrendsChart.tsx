@@ -91,7 +91,7 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
         </div>
         <h3 className="text-sm font-bold text-text-main">Repercussão Web: Buscas no Google</h3>
         <p className="text-xs text-text-muted max-w-md mx-auto">
-          Os dados consolidados de repercussão de buscas no Google durante o debate e até 24h após sua realização são armazenados diretamente no banco de dados.
+          Dado não avaliado para esse debate.
         </p>
       </div>
     );
@@ -117,7 +117,7 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
               </span>
             </div>
             <p className="text-xs text-text-muted">
-              Interesse relativo de pesquisa no Brasil ao vivo e até 24 horas pós-debate.
+              Interesse relativo de pesquisa no Brasil ao vivo e até 24 horas pós-debate (pontos equivalentes à porcentagem obtida).
             </p>
           </div>
         </div>
@@ -127,12 +127,12 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
           {trends.isDraw ? (
             <div className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-canvas border border-border text-text-main flex items-center gap-1.5 shadow-xs">
               <Award size={15} className="text-status-disputed" />
-              <span>Empate em Repercussão (+25 pts cada)</span>
+              <span>Empate em Repercussão</span>
             </div>
           ) : (
             <div className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-sky-500/20 border border-sky-500/40 text-sky-400 flex items-center gap-1.5 shadow-xs">
               <Trophy size={15} />
-              <span>Maior Repercussão: {trends.winner} (+50 pts)</span>
+              <span>Maior Repercussão: {trends.winner}</span>
             </div>
           )}
         </div>
@@ -145,6 +145,7 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
           const share = trends.shares?.[spk] ?? 0;
           const avg = trends.averages?.[spk] ?? 0;
           const isWinner = trends.winner === spk && !trends.isDraw;
+          const pointsEarned = Math.round(share);
 
           return (
             <div
@@ -157,11 +158,9 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
                 <span className="text-xs font-bold text-text-main truncate" title={spk}>
                   {spk}
                 </span>
-                {isWinner && (
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-sky-500/25 text-sky-400">
-                    +50 PTS
-                  </span>
-                )}
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-sky-500/25 text-sky-400">
+                  +{pointsEarned} PTS
+                </span>
               </div>
               <div className="flex items-baseline justify-between mt-1.5">
                 <span className={`text-2xl font-black font-mono ${color.text}`}>

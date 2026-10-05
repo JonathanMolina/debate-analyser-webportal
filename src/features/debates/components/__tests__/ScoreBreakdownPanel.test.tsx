@@ -200,7 +200,7 @@ describe('ScoreBreakdownPanel Component', () => {
     render(<ScoreBreakdownPanel score={mockScoreWithTrends} />);
 
     expect(screen.getByText('Repercussão Web (Google Trends)')).toBeInTheDocument();
-    expect(screen.getByText('(+50 pontos para o líder de buscas)')).toBeInTheDocument();
+    expect(screen.getByText('(pontos = % de buscas obtida)')).toBeInTheDocument();
     expect(screen.getByText('+50 pontos')).toBeInTheDocument();
   });
 });

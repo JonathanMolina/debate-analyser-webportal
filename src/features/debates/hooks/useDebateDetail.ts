@@ -8,7 +8,7 @@ export const useDebateDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'timeline' | 'facts' | 'fallacies' | 'proposals' | 'metrics' | 'audience' | 'trends'>(() => {
     if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
-      return 'facts';
+      return 'metrics';
     }
     return 'timeline';
   });

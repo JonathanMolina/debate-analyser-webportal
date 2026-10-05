@@ -92,6 +92,11 @@ export const DebateDetailView: FC = () => {
 
   const tabs: DebateTabItem[] = [
     {
+      id: 'metrics',
+      label: 'Visão geral',
+      icon: Scale
+    },
+    {
       id: 'timeline',
       label: 'Timeline Retórica',
       icon: MessageSquare,
@@ -115,11 +120,6 @@ export const DebateDetailView: FC = () => {
       label: 'Propostas/Soluções',
       icon: Lightbulb,
       count: debate.proposals?.length
-    },
-    {
-      id: 'metrics',
-      label: 'Pontuação & Indicadores',
-      icon: Scale
     },
     {
       id: 'audience',
