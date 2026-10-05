@@ -337,7 +337,7 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
       <div className="flex items-center gap-2 text-xs text-text-muted font-mono pt-1">
         <Info size={14} className="text-primary shrink-0" />
         <span>
-          O índice varia de 0 a 100 proporcional ao momento de maior busca geral. O participante com maior repercussão no período recebe +50 pontos na pontuação técnica.
+          Pontuação proporcional ao interesse de buscas no Google durante o debate e até 24h depois: o participante recebe a quantidade de pontos equivalente à porcentagem obtida (ex: 44% = 44 pts).
         </span>
       </div>
     </div>
