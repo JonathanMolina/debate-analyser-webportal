@@ -30,6 +30,7 @@ import { NewsletterBanner } from '@/features/newsletter/components/NewsletterBan
 import { DebaterAvatar } from '@/components/DebaterAvatar';
 import { formatVideoHumanDuration } from '../utils/duration';
 import { useLayoutContext } from '@/features/layout/components/Layout';
+import { DebateTabsNav, DebateTabItem } from './DebateTabsNav';
 
 export const DebateDetailView: FC = () => {
   const layoutContext = useLayoutContext();
@@ -80,14 +81,6 @@ export const DebateDetailView: FC = () => {
         </Link>
       </div>
     );
-  }
-
-  interface DebateTabItem {
-    id: 'timeline' | 'facts' | 'fallacies' | 'proposals' | 'metrics' | 'audience' | 'trends';
-    label: string;
-    icon: typeof MessageSquare;
-    count?: number;
-    mobileOnly?: boolean;
   }
 
   const tabs: DebateTabItem[] = [
@@ -291,40 +284,11 @@ export const DebateDetailView: FC = () => {
           </div>
 
           {/* Navigation Tabs (Below Video) */}
-          <div className="flex items-center gap-2 border-b border-border pb-1 overflow-x-auto select-none scrollbar-none">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                    tab.mobileOnly ? 'lg:hidden' : ''
-                  } ${
-                    isActive
-                      ? 'bg-surface-elevated text-primary border border-primary/30 shadow-sm'
-                      : 'text-text-muted hover:text-text-main hover:bg-surface-hover/60 border border-transparent'
-                  }`}
-                >
-                  <Icon size={15} />
-                  <span>{tab.label}</span>
-                  {tab.count !== undefined && (
-                    <span
-                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full ${
-                        isActive
-                          ? 'bg-primary/20 text-primary'
-                          : 'bg-canvas text-text-muted border border-border'
-                      }`}
-                    >
-                      {tab.count}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+          <DebateTabsNav
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
 
           {/* Tab Content Panes (Left Column) */}
           <div className="animate-fadeIn">

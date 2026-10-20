@@ -222,7 +222,7 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
                 Repercussão Web: Buscas no Google (24h)
               </h3>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-sky-500/15 border border-sky-500/30 text-sky-400">
-                SerpApi Google Trends
+                Google Trends
               </span>
             </div>
             <p className="text-[11px] text-text-muted">

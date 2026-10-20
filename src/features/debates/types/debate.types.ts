@@ -1,5 +1,7 @@
 export type FactCheckVerdict = 'Verdadeiro' | 'Falso' | 'Impreciso' | 'Disputado';
 
+export type DebateTabId = 'timeline' | 'facts' | 'fallacies' | 'proposals' | 'metrics' | 'audience' | 'trends';
+
 export interface FactCheckItem {
   id: string;
   timestamp: number;
