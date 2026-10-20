@@ -7,6 +7,7 @@ import type { DebaterAggregateStats } from '../types/debater.types';
 export const useDebatersList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
+  const roleFilter = (searchParams.get('role') as 'all' | 'debaters' | 'interviewers') || 'all';
 
   const [selectedDebater, setSelectedDebater] = useState<DebaterAggregateStats | null>(null);
 
@@ -21,14 +22,22 @@ export const useDebatersList = () => {
   });
 
   const filteredDebaters = useMemo(() => {
-    if (!searchQuery.trim()) return debaters;
+    let list = [...debaters];
+
+    if (roleFilter === 'interviewers') {
+      list = list.filter((d) => d.isInterviewer);
+    } else if (roleFilter === 'debaters') {
+      list = list.filter((d) => !d.isInterviewer);
+    }
+
+    if (!searchQuery.trim()) return list;
     const q = searchQuery.toLowerCase().trim();
-    return debaters.filter(
+    return list.filter(
       (d) =>
         d.debaterName.toLowerCase().includes(q) ||
         (d.role && d.role.toLowerCase().includes(q))
     );
-  }, [debaters, searchQuery]);
+  }, [debaters, roleFilter, searchQuery]);
 
   const handleSearchChange = (val: string) => {
     setSearchParams((prev) => {
@@ -42,15 +51,29 @@ export const useDebatersList = () => {
     });
   };
 
+  const handleRoleFilterChange = (filter: 'all' | 'debaters' | 'interviewers') => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (filter && filter !== 'all') {
+        next.set('role', filter);
+      } else {
+        next.delete('role');
+      }
+      return next;
+    });
+  };
+
   return {
     debaters: filteredDebaters,
-    totalCount: debaters.length,
+    totalCount: filteredDebaters.length,
     searchQuery,
+    roleFilter,
     isLoading,
     isError,
     refetch,
     selectedDebater,
     setSelectedDebater,
-    handleSearchChange
+    handleSearchChange,
+    handleRoleFilterChange
   };
 };

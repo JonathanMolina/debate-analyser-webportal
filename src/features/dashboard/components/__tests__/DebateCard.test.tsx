@@ -118,4 +118,40 @@ describe('DebateCard', () => {
     expect(proposalsElement).toBeInTheDocument();
     expect(proposalsElement).toHaveTextContent('0');
   });
+
+  it('deve exibir badge de sabatina, tag de entrevistador e não exibir troféu de vencedor', () => {
+    const sabatinaDebate: DebateJob = {
+      ...baseMockDebate,
+      debateType: 'sabatina',
+      title: 'Sabatina: Candidato X',
+      speakers: [
+        { name: 'Candidato X', isInterviewer: false },
+        { name: 'Entrevistador Y', isInterviewer: true }
+      ],
+      metrics: {
+        speakingTime: { 'Candidato X': 2000, 'Entrevistador Y': 800 },
+        interruptions: {},
+        fallaciesCount: {},
+        averageTemperature: 0.3,
+        debateScore: {
+          winner: '',
+          difference: 0,
+          isDraw: false,
+          scores: { 'Candidato X': 150, 'Entrevistador Y': 80 },
+          breakdown: {} as any
+        }
+      }
+    };
+
+    render(
+      <MemoryRouter>
+        <DebateCard debate={sabatinaDebate} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Sabatina')).toBeInTheDocument();
+    expect(screen.getByText('(Entrev.)')).toBeInTheDocument();
+    expect(screen.getByText('Avaliação Técnica')).toBeInTheDocument();
+    expect(screen.queryByText('Empate')).not.toBeInTheDocument();
+  });
 });

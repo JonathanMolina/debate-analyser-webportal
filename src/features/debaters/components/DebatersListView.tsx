@@ -12,10 +12,12 @@ export const DebatersListView: FC = () => {
     debaters,
     totalCount,
     searchQuery,
+    roleFilter,
     isLoading,
     selectedDebater,
     setSelectedDebater,
-    handleSearchChange
+    handleSearchChange,
+    handleRoleFilterChange
   } = useDebatersList();
 
   const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://argumeta.com.br';
@@ -50,14 +52,52 @@ export const DebatersListView: FC = () => {
         </div>
       </div>
 
-      {/* Search Bar */}
-      <div className="max-w-md">
-        <SearchInput
-          value={searchQuery}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          onClear={() => handleSearchChange('')}
-          placeholder="Buscar debatedor por nome ou cargo..."
-        />
+      {/* Search Bar & Role Filters */}
+      <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div className="w-full sm:max-w-md">
+          <SearchInput
+            value={searchQuery}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            onClear={() => handleSearchChange('')}
+            placeholder="Buscar por nome ou cargo..."
+          />
+        </div>
+
+        <div className="flex items-center gap-1.5 p-1 bg-surface border border-border rounded-xl text-xs font-medium self-start sm:self-auto font-mono">
+          <button
+            type="button"
+            onClick={() => handleRoleFilterChange('all')}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+              roleFilter === 'all'
+                ? 'bg-primary text-black font-semibold'
+                : 'text-text-muted hover:text-text-main'
+            }`}
+          >
+            Todos
+          </button>
+          <button
+            type="button"
+            onClick={() => handleRoleFilterChange('debaters')}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+              roleFilter === 'debaters'
+                ? 'bg-primary text-black font-semibold'
+                : 'text-text-muted hover:text-text-main'
+            }`}
+          >
+            Debatedores
+          </button>
+          <button
+            type="button"
+            onClick={() => handleRoleFilterChange('interviewers')}
+            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+              roleFilter === 'interviewers'
+                ? 'bg-primary text-black font-semibold'
+                : 'text-text-muted hover:text-text-main'
+            }`}
+          >
+            🎙️ Entrevistadores
+          </button>
+        </div>
       </div>
 
       {/* List Grid */}

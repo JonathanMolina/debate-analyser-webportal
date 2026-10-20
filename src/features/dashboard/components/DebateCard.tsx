@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link } from 'react-router';
-import { Play, CheckCircle, AlertTriangle, Lightbulb, Trophy, Clock, Calendar } from 'lucide-react';
+import { Play, CheckCircle, AlertTriangle, Lightbulb, Trophy, Clock, Calendar, Radio } from 'lucide-react';
 import type { DebateJob } from '@/features/debates/types/debate.types';
 import { DebaterAvatar } from '@/components/DebaterAvatar';
 import { InfoTooltip } from '@/components/InfoTooltip';
@@ -12,6 +12,7 @@ export interface DebateCardProps {
 }
 
 export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
+  const isSabatina = debate.debateType === 'sabatina';
   const winner = debate.metrics?.debateScore?.winner;
   const isDraw = Boolean(debate.metrics?.debateScore?.isDraw);
   const factChecksCount = debate.factChecks?.length ?? 0;
@@ -59,12 +60,20 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
           </div>
         )}
 
-        {/* Category Pill */}
-        {debate.category && (
-          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-surface/85 backdrop-blur-md text-[10px] font-mono font-medium text-text-muted border border-border">
-            {debate.category}
-          </div>
-        )}
+        {/* Category & Sabatina Pill */}
+        <div className="absolute top-2 left-2 flex items-center gap-1.5">
+          {isSabatina && (
+            <div className="px-2 py-0.5 rounded-full bg-primary text-[10px] font-mono font-bold text-black shadow-md flex items-center gap-1">
+              <Radio size={10} />
+              <span>Sabatina</span>
+            </div>
+          )}
+          {debate.category && (
+            <div className="px-2 py-0.5 rounded-full bg-surface/85 backdrop-blur-md text-[10px] font-mono font-medium text-text-muted border border-border">
+              {debate.category}
+            </div>
+          )}
+        </div>
 
         {/* Play Overlay */}
         <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -87,7 +96,11 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
             {debate.speakers.map((speaker) => (
               <div
                 key={speaker.name}
-                className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-surface-elevated text-[11px] text-text-muted border border-border/80"
+                className={`flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[11px] border ${
+                  speaker.isInterviewer
+                    ? 'bg-canvas text-text-muted border-border/60'
+                    : 'bg-surface-elevated text-text-muted border-border/80'
+                }`}
               >
                 <DebaterAvatar
                   name={speaker.name}
@@ -97,6 +110,9 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
                   border={false}
                 />
                 <span className="font-medium text-text-main">{speaker.name}</span>
+                {speaker.isInterviewer && (
+                  <span className="text-[9px] font-mono text-primary font-semibold">(Entrev.)</span>
+                )}
               </div>
             ))}
           </div>
@@ -105,7 +121,12 @@ export const DebateCard: FC<DebateCardProps> = ({ debate }) => {
         {/* Card Footer: Metrics preview and winner badge */}
         <div className="pt-2 border-t border-border/60 flex items-center justify-between text-xs font-mono">
           <div className="flex items-center gap-2">
-            {winner && !isDraw ? (
+            {isSabatina ? (
+              <span className="flex items-center gap-1 text-[11px] text-primary font-bold">
+                <Radio size={11} />
+                <span>Avaliação Técnica</span>
+              </span>
+            ) : winner && !isDraw ? (
               <span className="flex items-center gap-1 text-[11px] text-primary font-bold">
                 <Trophy size={12} />
                 <span className="truncate max-w-[120px]">{winner}</span>

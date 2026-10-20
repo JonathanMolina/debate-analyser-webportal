@@ -9,11 +9,13 @@ export interface DebaterReferenceAudio {
 export interface Debater {
   id: string;
   name: string;
+  nicknames?: string[];
   photoUrl?: string;
   photoStoragePath?: string;
   bio?: string;
   party?: string;
   role?: string;
+  isInterviewer?: boolean;
   referenceAudio?: DebaterReferenceAudio;
   createdAt: number;
   updatedAt: number;
@@ -22,6 +24,7 @@ export interface Debater {
 export interface DebaterDebateHistoryItem {
   jobId: string;
   debateTitle?: string;
+  debateType?: 'debate' | 'sabatina';
   date: number;
   opponentNames: string[];
   score: number;
@@ -38,12 +41,15 @@ export interface DebaterAggregateStats {
   photoUrl?: string;
   role?: string;
   party?: string;
+  isInterviewer?: boolean;
   debatesCount: number;
+  sabatinasCount?: number;
   wins: number;
   draws: number;
   losses: number;
   winRate: number; // 0 a 100
   avgScore: number;
+  avgSabatinaScore?: number;
   avgSpeakingTimeSeconds: number;
   avgWordsPerMinute: number;
   avgVocabularyRichness: number;

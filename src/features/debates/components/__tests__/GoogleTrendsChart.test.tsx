@@ -48,4 +48,36 @@ describe('GoogleTrendsChart Component (Webportal)', () => {
     render(<GoogleTrendsChart trends={drawTrends} />);
     expect(screen.getByText(/Empate em Repercussão/i)).toBeInTheDocument();
   });
+
+  it('renderiza apelidos consolidados do debatedor em um único card e gráfico', () => {
+    const trendsWithTerms: GoogleTrendsMetrics = {
+      ...MOCK_TRENDS,
+      speakerTerms: {
+        'Candidato Alfa': ['Candidato Alfa', 'Alfa', 'Alfinha'],
+        'Candidato Beta': ['Candidato Beta']
+      }
+    };
+    render(<GoogleTrendsChart trends={trendsWithTerms} />);
+    expect(screen.getByText('+Alfa, Alfinha')).toBeInTheDocument();
+    expect(screen.getByText('Candidato Alfa')).toBeInTheDocument();
+    expect(screen.getByText('Candidato Beta')).toBeInTheDocument();
+  });
+
+  it('adapta a escala do eixo Y ao valor máximo capturado sem limitar a 100', () => {
+    const highTrends: GoogleTrendsMetrics = {
+      ...MOCK_TRENDS,
+      timeline: [
+        { timestamp: '1728000000', formattedTime: '20:00', relativeHour: 0, values: { 'Candidato Alfa': 50, 'Candidato Beta': 25 } },
+        { timestamp: '1728003600', formattedTime: '21:00', relativeHour: 1, values: { 'Candidato Alfa': 180, 'Candidato Beta': 90 } },
+        { timestamp: '1728007200', formattedTime: '22:00', relativeHour: 2, values: { 'Candidato Alfa': 120, 'Candidato Beta': 40 } }
+      ]
+    };
+    const { container } = render(<GoogleTrendsChart trends={highTrends} />);
+
+    // Deve exibir o marcador de 180 no eixo Y do SVG
+    const svgTexts = Array.from(container.querySelectorAll('svg text')).map((el) => el.textContent);
+    expect(svgTexts).toContain('180');
+    expect(svgTexts).toContain('90');
+    expect(svgTexts).toContain('0');
+  });
 });

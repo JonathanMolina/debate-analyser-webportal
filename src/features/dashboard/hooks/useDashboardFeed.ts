@@ -10,9 +10,10 @@ export const useDashboardFeed = () => {
   const searchQuery = searchParams.get('q') || '';
   const selectedCategory = searchParams.get('category') || 'Todos';
   const selectedDebater = searchParams.get('debater') || '';
+  const selectedType = (searchParams.get('type') as 'all' | 'debate' | 'sabatina') || 'all';
 
   const {
-    data: debates = [],
+    data: rawDebates = [],
     isLoading: isLoadingDebates,
     isError: isErrorDebates,
     refetch: refetchDebates
@@ -34,9 +35,21 @@ export const useDashboardFeed = () => {
     queryFn: fetchDebaterStats
   });
 
-  // Top 10 debaters sorted by avgScore
+  // Filtrar debates por tipo (Debates tradicionais vs Sabatinas)
+  const debates = useMemo(() => {
+    if (selectedType === 'debate') {
+      return rawDebates.filter((d) => d.debateType !== 'sabatina');
+    }
+    if (selectedType === 'sabatina') {
+      return rawDebates.filter((d) => d.debateType === 'sabatina');
+    }
+    return rawDebates;
+  }, [rawDebates, selectedType]);
+
+  // Top 10 debaters sorted by avgScore (excluindo entrevistadores)
   const topDebaters = useMemo(() => {
     return [...debaterStats]
+      .filter((s) => !s.isInterviewer && s.debatesCount > 0)
       .sort((a, b) => b.avgScore - a.avgScore)
       .slice(0, 10);
   }, [debaterStats]);
@@ -59,6 +72,18 @@ export const useDashboardFeed = () => {
         next.set('q', val);
       } else {
         next.delete('q');
+      }
+      return next;
+    });
+  };
+
+  const handleTypeChange = (type: 'all' | 'debate' | 'sabatina') => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (type && type !== 'all') {
+        next.set('type', type);
+      } else {
+        next.delete('type');
       }
       return next;
     });
@@ -99,10 +124,12 @@ export const useDashboardFeed = () => {
     searchQuery,
     selectedCategory,
     selectedDebater,
+    selectedType,
     isLoading: isLoadingDebates || isLoadingStats,
     isError: isErrorDebates,
     refetchDebates,
     handleSearchChange,
+    handleTypeChange,
     handleCategoryChange,
     handleDebaterFilter,
     handleClearFilters

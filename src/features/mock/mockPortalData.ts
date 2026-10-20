@@ -55,10 +55,194 @@ export const MOCK_DEBATERS: Debater[] = [
     photoUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80',
     createdAt: Date.now() - 86400000 * 15,
     updatedAt: Date.now()
+  },
+  {
+    id: 'deb_william_bonner',
+    name: 'William Bonner',
+    bio: 'Jornalista, apresentador e editor-chefe. Atua na condução de sabatinas e entrevistas com figuras públicas.',
+    role: 'Jornalista & Entrevistador',
+    isInterviewer: true,
+    photoUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&auto=format&fit=crop&q=80',
+    createdAt: Date.now() - 86400000 * 10,
+    updatedAt: Date.now()
   }
 ];
 
 export const MOCK_DEBATES: DebateJob[] = [
+  {
+    id: 'job_sabatina_tabata_2026',
+    title: 'Sabatina Presidencial: Tabata Amaral com William Bonner',
+    description: 'Sabatina individual com foco em metas fiscais, reforma educacional e governabilidade no Congresso.',
+    youtubeUrl: 'https://www.youtube.com/watch?v=sabatina_mock_tabata',
+    youtubeId: 'mock_sabatina_1',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&auto=format&fit=crop&q=80',
+    durationSeconds: 3600,
+    category: 'Eleições & Democracia',
+    debateType: 'sabatina',
+    speakers: [
+      {
+        name: 'Tabata Amaral',
+        debaterId: 'deb_tabata_amaral',
+        previewUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+        isInterviewer: false
+      },
+      {
+        name: 'William Bonner',
+        debaterId: 'deb_william_bonner',
+        previewUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&auto=format&fit=crop&q=80',
+        isInterviewer: true
+      }
+    ],
+    status: 'completed',
+    progress: 100,
+    metrics: {
+      speakingTime: {
+        'Tabata Amaral': 2400,
+        'William Bonner': 1200
+      },
+      interruptions: {
+        'Tabata Amaral': 1,
+        'William Bonner': 3
+      },
+      fallaciesCount: {
+        'Tabata Amaral': 0,
+        'William Bonner': 0
+      },
+      proposalsCount: {
+        'Tabata Amaral': 4,
+        'William Bonner': 0
+      },
+      averageTemperature: 0.35,
+      linguisticMetrics: {
+        'Tabata Amaral': {
+          wordsPerMinute: 142.0,
+          vocabularyRichness: 84.0,
+          formality: 85.0,
+          dataDensity: 82.0,
+          totalWords: 5680
+        },
+        'William Bonner': {
+          wordsPerMinute: 130.0,
+          vocabularyRichness: 80.0,
+          formality: 90.0,
+          dataDensity: 65.0,
+          totalWords: 2600
+        }
+      },
+      toneMetrics: {
+        'Tabata Amaral': {
+          averageTemperature: 0.32,
+          emotionalControl: 88,
+          assertiveness: 80,
+          vocalStability: 85
+        },
+        'William Bonner': {
+          averageTemperature: 0.38,
+          emotionalControl: 90,
+          assertiveness: 85,
+          vocalStability: 88
+        }
+      },
+      qaMetrics: {
+        'Tabata Amaral': {
+          questionsAsked: 0,
+          questionsAnswered: 12,
+          directAnswerRate: 92
+        },
+        'William Bonner': {
+          questionsAsked: 12,
+          questionsAnswered: 0,
+          directAnswerRate: 0
+        }
+      },
+      contentMetrics: {
+        'Tabata Amaral': {
+          rebuttalScore: 82.0,
+          argumentStructureDensity: 90.0,
+          topicAdherence: 95.0,
+          framingIndex: 80.0,
+          netFactuality: 94.0,
+          fallacyDensity: 0.0
+        },
+        'William Bonner': {
+          rebuttalScore: 0,
+          argumentStructureDensity: 75.0,
+          topicAdherence: 90.0,
+          framingIndex: 85.0,
+          netFactuality: 90.0,
+          fallacyDensity: 0.0
+        }
+      },
+      debateScore: {
+        scores: {
+          'Tabata Amaral': 162,
+          'William Bonner': 85
+        },
+        winner: '',
+        difference: 0,
+        isDraw: false,
+        breakdown: {
+          'Tabata Amaral': {
+            evidencePoints: 42,
+            fallacyPenalties: 0,
+            proposalPoints: 20,
+            qaPoints: 35,
+            tonePoints: 32,
+            speakingEfficiency: 33,
+            totalPoints: 162
+          },
+          'William Bonner': {
+            evidencePoints: 20,
+            fallacyPenalties: 0,
+            proposalPoints: 0,
+            qaPoints: 0,
+            tonePoints: 35,
+            speakingEfficiency: 30,
+            totalPoints: 85
+          }
+        }
+      }
+    },
+    timeline: [
+      {
+        speaker: 'William Bonner',
+        start: 0,
+        end: 45,
+        text: 'Boa noite. Damos início à sabatina com a candidata sobre o plano econômico para o país.',
+        temperature: 0.25
+      },
+      {
+        speaker: 'Tabata Amaral',
+        start: 45,
+        end: 180,
+        text: 'Boa noite William. Nossa proposta prioritária é focar em responsabilidade fiscal atrelada à ampliação da educação técnica de tempo integral.',
+        temperature: 0.3
+      }
+    ],
+    factChecks: [
+      {
+        id: 'fc_sab_1',
+        timestamp: 90,
+        speaker: 'Tabata Amaral',
+        claim: 'A evasão escolar no ensino médio brasileiro atinge taxas alarmantes segundo o Censo Escolar.',
+        verdict: 'Verdadeiro',
+        evidence: 'Dados oficiais do Inep/MEC confirmam taxas de evasão acima de 12% no primeiro ano do ensino médio.',
+        sources: ['Inep/MEC', 'Censo Escolar']
+      }
+    ],
+    fallacies: [],
+    proposals: [
+      {
+        id: 'prop_sab_1',
+        timestamp: 120,
+        speaker: 'Tabata Amaral',
+        quote: 'Ampliação da educação técnica de tempo integral com bolsa permanência.',
+        context: 'Educação Profissionalizante'
+      }
+    ],
+    createdAt: Date.now() - 86400000 * 5,
+    completedAt: Date.now() - 86400000 * 5 + 3600000
+  },
   {
     id: 'job_tallis_vs_brigadeiro_2026',
     title: 'Duelo de Gestão vs Pragmatismo: Tallis Gomes vs Paulo Brigadeiro',

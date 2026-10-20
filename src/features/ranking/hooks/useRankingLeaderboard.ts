@@ -8,6 +8,7 @@ import type { DebaterAggregateStats } from '@/features/debaters/types/debater.ty
 export const useRankingLeaderboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const mode = (searchParams.get('mode') as 'debate' | 'sabatina') || 'debate';
   const sortField = (searchParams.get('sort') as RankingSortField) || 'avgScore';
   const sortDirection = (searchParams.get('dir') as 'asc' | 'desc') || 'desc';
   const searchQuery = searchParams.get('q') || '';
@@ -23,7 +24,15 @@ export const useRankingLeaderboard = () => {
   });
 
   const sortedRanking = useMemo(() => {
-    let list = [...debaterStats];
+    // Excluir entrevistadores de rankings competitivos
+    let list = debaterStats.filter((s) => !s.isInterviewer);
+
+    // Filtrar participantes por modalidade
+    if (mode === 'sabatina') {
+      list = list.filter((s) => (s.sabatinasCount ?? 0) > 0);
+    } else {
+      list = list.filter((s) => s.debatesCount > 0);
+    }
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -36,16 +45,16 @@ export const useRankingLeaderboard = () => {
 
       switch (sortField) {
         case 'avgScore':
-          valA = a.avgScore;
-          valB = b.avgScore;
+          valA = mode === 'sabatina' ? (a.avgSabatinaScore ?? a.avgScore) : a.avgScore;
+          valB = mode === 'sabatina' ? (b.avgSabatinaScore ?? b.avgScore) : b.avgScore;
           break;
         case 'winRate':
           valA = a.winRate;
           valB = b.winRate;
           break;
         case 'debatesCount':
-          valA = a.debatesCount;
-          valB = b.debatesCount;
+          valA = mode === 'sabatina' ? (a.sabatinasCount ?? 0) : a.debatesCount;
+          valB = mode === 'sabatina' ? (b.sabatinasCount ?? 0) : b.debatesCount;
           break;
         case 'avgDataDensity':
           valA = a.avgDataDensity;
@@ -74,11 +83,13 @@ export const useRankingLeaderboard = () => {
         return sortDirection === 'desc' ? valB - valA : valA - valB;
       }
       // Desempate por Score Geral
-      return b.avgScore - a.avgScore;
+      const scoreA = mode === 'sabatina' ? (a.avgSabatinaScore ?? a.avgScore) : a.avgScore;
+      const scoreB = mode === 'sabatina' ? (b.avgSabatinaScore ?? b.avgScore) : b.avgScore;
+      return scoreB - scoreA;
     });
 
     return list;
-  }, [debaterStats, searchQuery, sortField, sortDirection]);
+  }, [debaterStats, mode, searchQuery, sortField, sortDirection]);
 
   // Pódio dos Top 3 (baseado na ordenação atual)
   const podium = useMemo(() => {
@@ -93,6 +104,21 @@ export const useRankingLeaderboard = () => {
       } else {
         next.set('sort', field);
         next.set('dir', 'desc');
+      }
+      return next;
+    });
+  };
+
+  const handleModeChange = (newMode: 'debate' | 'sabatina') => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (newMode === 'sabatina') {
+        next.set('mode', 'sabatina');
+        if (sortField === 'winRate') {
+          next.set('sort', 'avgScore');
+        }
+      } else {
+        next.delete('mode');
       }
       return next;
     });
@@ -113,14 +139,16 @@ export const useRankingLeaderboard = () => {
   return {
     rankingList: sortedRanking,
     podium,
+    mode,
     sortField,
     sortDirection,
     searchQuery,
     isLoading,
     isError,
     refetch,
-    totalDebaters: debaterStats.length,
+    totalDebaters: sortedRanking.length,
     toggleSort,
+    handleModeChange,
     handleSearchChange
   };
 };

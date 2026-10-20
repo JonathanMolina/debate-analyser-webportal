@@ -111,6 +111,7 @@ export interface GoogleTrendsMetrics {
   shares: Record<string, number>;
   averages?: Record<string, number>;
   totalVolume?: Record<string, number>;
+  speakerTerms?: Record<string, string[]>;
   timeline: SearchTrendPoint[];
 }
 
@@ -155,10 +156,12 @@ export interface DebateMetrics {
 
 export interface SpeakerInput {
   name: string;
+  nicknames?: string[];
   imagePath?: string;
   previewUrl?: string;
   debaterId?: string;
   party?: string;
+  isInterviewer?: boolean;
 }
 
 export interface DebateJob {
@@ -170,6 +173,7 @@ export interface DebateJob {
   thumbnailUrl?: string;
   durationSeconds?: number;
   category?: string;
+  debateType?: 'debate' | 'sabatina';
   speakers: SpeakerInput[];
   status: 'idle' | 'downloading' | 'recognizing_faces' | 'transcribing' | 'analyzing' | 'completed' | 'failed';
   progress: number;

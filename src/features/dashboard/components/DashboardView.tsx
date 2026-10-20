@@ -18,14 +18,16 @@ export const DashboardView: FC = () => {
     searchQuery,
     selectedCategory,
     selectedDebater,
+    selectedType,
     isLoading,
     handleSearchChange,
+    handleTypeChange,
     handleCategoryChange,
     handleDebaterFilter,
     handleClearFilters
   } = useDashboardFeed();
 
-  const isFiltered = Boolean(searchQuery.trim() || selectedCategory !== 'Todos' || selectedDebater);
+  const isFiltered = Boolean(searchQuery.trim() || selectedCategory !== 'Todos' || selectedDebater || selectedType !== 'all');
 
   return (
     <div className="space-y-6 pb-8">
@@ -84,14 +86,51 @@ export const DashboardView: FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Feed de Debates */}
         <div className="lg:col-span-7 xl:col-span-8 space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <h2 className="text-base font-bold text-text-main flex items-center gap-2">
               <Film size={18} className="text-primary" />
-              <span>Debates Processados</span>
+              <span>{selectedType === 'sabatina' ? 'Sabatinas Processadas' : selectedType === 'debate' ? 'Debates Processados' : 'Vídeos Processados'}</span>
               <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-surface-elevated text-text-muted border border-border">
                 {debates.length}
               </span>
             </h2>
+
+            {/* Type Filter Buttons */}
+            <div className="flex items-center gap-1 p-1 bg-surface border border-border rounded-xl text-xs font-medium self-start sm:self-auto font-mono">
+              <button
+                type="button"
+                onClick={() => handleTypeChange('all')}
+                className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
+                  selectedType === 'all'
+                    ? 'bg-primary text-black font-semibold'
+                    : 'text-text-muted hover:text-text-main'
+                }`}
+              >
+                Todos
+              </button>
+              <button
+                type="button"
+                onClick={() => handleTypeChange('debate')}
+                className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
+                  selectedType === 'debate'
+                    ? 'bg-primary text-black font-semibold'
+                    : 'text-text-muted hover:text-text-main'
+                }`}
+              >
+                ⚔️ Debates
+              </button>
+              <button
+                type="button"
+                onClick={() => handleTypeChange('sabatina')}
+                className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
+                  selectedType === 'sabatina'
+                    ? 'bg-primary text-black font-semibold'
+                    : 'text-text-muted hover:text-text-main'
+                }`}
+              >
+                🎙️ Sabatinas
+              </button>
+            </div>
           </div>
 
           {isLoading ? (

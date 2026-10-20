@@ -1,5 +1,5 @@
 import { FC, useState, useMemo, useRef, MouseEvent } from 'react';
-import { TrendingUp, Trophy, Award, Search, Info } from 'lucide-react';
+import { TrendingUp, Trophy, Award, Search } from 'lucide-react';
 import type { GoogleTrendsMetrics, SpeakerInput } from '../types/debate.types';
 
 export interface GoogleTrendsChartProps {
@@ -19,18 +19,108 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
-  const timeline = useMemo(() => trends?.timeline || [], [trends]);
+  // Mapeamento de termos associados a cada debatedor (nome principal + apelidos)
+  const debaterTermsMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    if (trends?.speakerTerms) {
+      return trends.speakerTerms;
+    }
+    speakers.forEach((s) => {
+      if (s.name) {
+        const nicks = s.nicknames || [];
+        map[s.name] = [s.name, ...nicks];
+      }
+    });
+    return map;
+  }, [trends?.speakerTerms, speakers]);
 
-  const speakerNames = useMemo(() => {
-    if (!trends) return [];
-    if (trends.shares && Object.keys(trends.shares).length > 0) {
-      return Object.keys(trends.shares);
+  // Consolidação por debatedor: soma buscas do nome principal e apelidos em um único valor por debatedor
+  const { consolidatedTimeline, consolidatedShares, consolidatedAverages, speakerNames } = useMemo(() => {
+    if (!trends) {
+      return {
+        consolidatedTimeline: [],
+        consolidatedShares: {},
+        consolidatedAverages: {},
+        speakerNames: speakers.map((s) => s.name)
+      };
     }
-    if (timeline.length > 0) {
-      return Object.keys(timeline[0].values);
+
+    const rawTimeline = trends.timeline || [];
+    const rawShares = trends.shares || {};
+    const rawAverages = trends.averages || {};
+
+    const debaterList = speakers.length > 0
+      ? speakers.map((s) => s.name)
+      : Object.keys(rawShares);
+
+    const needsConsolidation = Object.keys(debaterTermsMap).some((debaterName) => {
+      const terms = debaterTermsMap[debaterName] || [];
+      return terms.some(
+        (t) =>
+          t.toLowerCase() !== debaterName.toLowerCase() &&
+          (t in rawShares || (rawTimeline[0]?.values && t in rawTimeline[0].values))
+      );
+    });
+
+    if (!needsConsolidation) {
+      const names = debaterList.length > 0 ? debaterList : Object.keys(rawShares);
+      return {
+        consolidatedTimeline: rawTimeline,
+        consolidatedShares: rawShares,
+        consolidatedAverages: rawAverages,
+        speakerNames: names
+      };
     }
-    return speakers.map((s) => s.name);
-  }, [trends, timeline, speakers]);
+
+    const termToDebater: Record<string, string> = {};
+    Object.entries(debaterTermsMap).forEach(([debaterName, terms]) => {
+      terms.forEach((t) => {
+        termToDebater[t.toLowerCase()] = debaterName;
+      });
+    });
+
+    const consolidatedTimeline = rawTimeline.map((pt) => {
+      const values: Record<string, number> = {};
+      debaterList.forEach((name) => {
+        values[name] = 0;
+      });
+
+      Object.entries(pt.values).forEach(([term, val]) => {
+        const debater = termToDebater[term.toLowerCase()] || term;
+        values[debater] = (values[debater] || 0) + val;
+      });
+
+      return {
+        ...pt,
+        values
+      };
+    });
+
+    const consolidatedShares: Record<string, number> = {};
+    debaterList.forEach((name) => {
+      consolidatedShares[name] = 0;
+    });
+    Object.entries(rawShares).forEach(([term, share]) => {
+      const debater = termToDebater[term.toLowerCase()] || term;
+      consolidatedShares[debater] = (consolidatedShares[debater] || 0) + share;
+    });
+
+    const consolidatedAverages: Record<string, number> = {};
+    debaterList.forEach((name) => {
+      consolidatedAverages[name] = 0;
+    });
+    Object.entries(rawAverages).forEach(([term, avg]) => {
+      const debater = termToDebater[term.toLowerCase()] || term;
+      consolidatedAverages[debater] = (consolidatedAverages[debater] || 0) + avg;
+    });
+
+    return {
+      consolidatedTimeline,
+      consolidatedShares,
+      consolidatedAverages,
+      speakerNames: debaterList
+    };
+  }, [trends, speakers, debaterTermsMap]);
 
   // Dimensões SVG
   const width = 800;
@@ -39,16 +129,35 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
   const chartW = width - padding.left - padding.right;
   const chartH = height - padding.top - padding.bottom;
 
+  // Valor máximo capturado para a escala do eixo Y (garante que picos e valores consolidados não fiquem limitados a 100)
+  const maxY = useMemo(() => {
+    let max = 0;
+    consolidatedTimeline.forEach((pt) => {
+      speakerNames.forEach((spk) => {
+        const val = pt.values[spk] ?? 0;
+        if (val > max) {
+          max = val;
+        }
+      });
+    });
+    return max > 0 ? max : 100;
+  }, [consolidatedTimeline, speakerNames]);
+
+  // Marcadores do eixo Y dinâmicos baseados no valor máximo capturado
+  const yTicks = useMemo(() => {
+    return [0, 0.25, 0.5, 0.75, 1].map((pct) => Math.round(maxY * pct));
+  }, [maxY]);
+
   // Coordenadas das séries temporais
   const seriesData = useMemo(() => {
-    if (timeline.length < 2) return [];
+    if (consolidatedTimeline.length < 2) return [];
 
     return speakerNames.map((spk, spkIdx) => {
       const color = SPEAKER_COLORS[spkIdx % SPEAKER_COLORS.length];
-      const points = timeline.map((pt, i) => {
-        const x = padding.left + (i / (timeline.length - 1)) * chartW;
+      const points = consolidatedTimeline.map((pt, i) => {
+        const x = padding.left + (i / (consolidatedTimeline.length - 1)) * chartW;
         const val = pt.values[spk] ?? 0;
-        const y = padding.top + chartH - (Math.min(100, Math.max(0, val)) / 100) * chartH;
+        const y = padding.top + chartH - (Math.min(maxY, Math.max(0, val)) / maxY) * chartH;
         return { x, y, val, time: pt.formattedTime || pt.timestamp };
       });
 
@@ -66,16 +175,16 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
         areaD
       };
     });
-  }, [timeline, speakerNames, chartW, chartH, padding]);
+  }, [consolidatedTimeline, speakerNames, chartW, chartH, padding, maxY]);
 
   const handleMouseMove = (e: MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || timeline.length === 0) return;
+    if (!svgRef.current || consolidatedTimeline.length === 0) return;
     const rect = svgRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const svgX = (mouseX / rect.width) * width;
     const relativeX = svgX - padding.left;
     const ratio = Math.max(0, Math.min(1, relativeX / chartW));
-    const index = Math.round(ratio * (timeline.length - 1));
+    const index = Math.round(ratio * (consolidatedTimeline.length - 1));
     setHoverIndex(index);
   };
 
@@ -83,11 +192,11 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
     setHoverIndex(null);
   };
 
-  if (!trends || timeline.length === 0) {
+  if (!trends || consolidatedTimeline.length === 0) {
     return (
-      <div className="bg-surface border border-border rounded-2xl p-8 text-center space-y-3">
-        <div className="w-12 h-12 mx-auto rounded-full bg-sky-500/10 text-sky-400 flex items-center justify-center">
-          <Search size={22} />
+      <div className="bg-surface border border-border rounded-2xl p-6 text-center space-y-3">
+        <div className="w-10 h-10 mx-auto rounded-full bg-sky-500/10 text-sky-400 flex items-center justify-center">
+          <Search size={20} />
         </div>
         <h3 className="text-sm font-bold text-text-main">Repercussão Web: Buscas no Google</h3>
         <p className="text-xs text-text-muted max-w-md mx-auto">
@@ -97,27 +206,27 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
     );
   }
 
-  const hoveredPoint = hoverIndex !== null ? timeline[hoverIndex] : null;
+  const hoveredPoint = hoverIndex !== null ? consolidatedTimeline[hoverIndex] : null;
 
   return (
-    <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm space-y-5">
+    <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm space-y-4">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/70 pb-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-sky-500/15 text-sky-400">
-            <TrendingUp size={22} />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/70 pb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-sky-500/15 text-sky-400">
+            <TrendingUp size={20} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-bold text-text-main">
-                Repercussão de Buscas no Google (24h)
+              <h3 className="text-sm font-bold text-text-main">
+                Repercussão Web: Buscas no Google (24h)
               </h3>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-sky-500/15 border border-sky-500/30 text-sky-400">
-                Google Trends via SerpApi
+                SerpApi Google Trends
               </span>
             </div>
-            <p className="text-xs text-text-muted">
-              Interesse relativo de pesquisa no Brasil ao vivo e até 24 horas pós-debate (pontos equivalentes à porcentagem obtida).
+            <p className="text-[11px] text-text-muted">
+              Volume relativo consolidado de interesse de pesquisa no Brasil durante o debate e nas 24h seguintes (pontos equivalentes à porcentagem obtida).
             </p>
           </div>
         </div>
@@ -125,13 +234,13 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
         {/* Winner Badge */}
         <div className="flex items-center gap-2 self-start sm:self-center">
           {trends.isDraw ? (
-            <div className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-canvas border border-border text-text-main flex items-center gap-1.5 shadow-xs">
-              <Award size={15} className="text-status-disputed" />
+            <div className="px-3 py-1 rounded-full text-xs font-semibold bg-canvas border border-border text-text-main flex items-center gap-1.5 shadow-xs">
+              <Award size={14} className="text-status-disputed" />
               <span>Empate em Repercussão</span>
             </div>
           ) : (
-            <div className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-sky-500/20 border border-sky-500/40 text-sky-400 flex items-center gap-1.5 shadow-xs">
-              <Trophy size={15} />
+            <div className="px-3 py-1 rounded-full text-xs font-bold bg-sky-500/20 border border-sky-500/40 text-sky-400 flex items-center gap-1.5 shadow-xs">
+              <Trophy size={14} />
               <span>Maior Repercussão: {trends.winner}</span>
             </div>
           )}
@@ -139,38 +248,50 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
       </div>
 
       {/* Debater Share Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {speakerNames.map((spk, idx) => {
           const color = SPEAKER_COLORS[idx % SPEAKER_COLORS.length];
-          const share = trends.shares?.[spk] ?? 0;
-          const avg = trends.averages?.[spk] ?? 0;
+          const share = consolidatedShares[spk] ?? 0;
+          const avg = consolidatedAverages[spk] ?? 0;
           const isWinner = trends.winner === spk && !trends.isDraw;
           const pointsEarned = Math.round(share);
+          const terms = debaterTermsMap[spk] || [];
+          const activeNicknames = terms.filter((t) => t.toLowerCase() !== spk.toLowerCase());
 
           return (
             <div
               key={spk}
-              className={`p-3.5 rounded-xl border transition-all ${color.bg} ${color.border} ${
+              className={`p-3 rounded-xl border transition-all ${color.bg} ${color.border} ${
                 isWinner ? 'ring-1 ring-sky-400/40 shadow-xs' : ''
               }`}
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-text-main truncate" title={spk}>
-                  {spk}
-                </span>
-                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-sky-500/25 text-sky-400">
+              <div className="flex items-start justify-between gap-1">
+                <div className="min-w-0 pr-1">
+                  <span className="text-[11px] font-bold text-text-main truncate block" title={spk}>
+                    {spk}
+                  </span>
+                  {activeNicknames.length > 0 && (
+                    <span
+                      className="text-[9px] text-text-muted font-mono truncate block"
+                      title={`Buscas somadas: ${spk}, ${activeNicknames.join(', ')}`}
+                    >
+                      +{activeNicknames.join(', ')}
+                    </span>
+                  )}
+                </div>
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400 shrink-0">
                   +{pointsEarned} PTS
                 </span>
               </div>
               <div className="flex items-baseline justify-between mt-1.5">
-                <span className={`text-2xl font-black font-mono ${color.text}`}>
+                <span className={`text-xl font-black font-mono ${color.text}`}>
                   {share}%
                 </span>
                 <span className="text-[10px] text-text-muted font-mono">
                   Média: {avg}
                 </span>
               </div>
-              <div className="w-full bg-canvas/60 rounded-full h-1.5 mt-2.5 overflow-hidden">
+              <div className="w-full bg-canvas/60 rounded-full h-1.5 mt-2 overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, share)}%`, backgroundColor: color.stroke }}
@@ -185,11 +306,11 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
       <div className="relative bg-canvas/60 border border-border/80 rounded-xl p-3 overflow-hidden">
         {/* Subtle Debate Window Label */}
         <div className="flex items-center justify-between text-[10px] text-text-muted font-mono px-2 pb-1 border-b border-border/40">
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-primary" />
             Transmissão do Debate (Início)
           </span>
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1">
             Período Pós-Debate (+24 Horas) &rarr;
           </span>
         </div>
@@ -211,10 +332,10 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
           </defs>
 
           {/* Grid lines */}
-          {[0, 25, 50, 75, 100].map((val) => {
-            const y = padding.top + chartH - (val / 100) * chartH;
+          {yTicks.map((val, idx) => {
+            const y = padding.top + chartH - (val / maxY) * chartH;
             return (
-              <g key={val}>
+              <g key={`y-grid-${idx}-${val}`}>
                 <line
                   x1={padding.left}
                   y1={y}
@@ -259,13 +380,13 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
             />
           ))}
 
-          {/* Hover indicator line & points */}
-          {hoverIndex !== null && (
+          {/* Hover indicator vertical bar & dots */}
+          {hoveredPoint && hoverIndex !== null && (
             <g>
               <line
-                x1={padding.left + (hoverIndex / (timeline.length - 1)) * chartW}
+                x1={padding.left + (hoverIndex / (consolidatedTimeline.length - 1)) * chartW}
                 y1={padding.top}
-                x2={padding.left + (hoverIndex / (timeline.length - 1)) * chartW}
+                x2={padding.left + (hoverIndex / (consolidatedTimeline.length - 1)) * chartW}
                 y2={padding.top + chartH}
                 stroke="rgba(255, 255, 255, 0.4)"
                 strokeWidth="1.5"
@@ -290,10 +411,10 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
           )}
 
           {/* X Axis time markers */}
-          {Array.from(new Set([0, Math.floor(timeline.length / 4), Math.floor(timeline.length / 2), Math.floor((timeline.length * 3) / 4), timeline.length - 1])).map((idx) => {
-            const pt = timeline[idx];
+          {Array.from(new Set([0, Math.floor(consolidatedTimeline.length / 4), Math.floor(consolidatedTimeline.length / 2), Math.floor((consolidatedTimeline.length * 3) / 4), consolidatedTimeline.length - 1])).map((idx) => {
+            const pt = consolidatedTimeline[idx];
             if (!pt) return null;
-            const x = padding.left + (idx / (timeline.length - 1)) * chartW;
+            const x = padding.left + (idx / (consolidatedTimeline.length - 1)) * chartW;
             return (
               <text
                 key={`time-marker-${idx}-${pt.timestamp || pt.formattedTime || idx}`}
@@ -331,14 +452,6 @@ export const GoogleTrendsChart: FC<GoogleTrendsChartProps> = ({ trends, speakers
             })}
           </div>
         )}
-      </div>
-
-      {/* Footer Info */}
-      <div className="flex items-center gap-2 text-xs text-text-muted font-mono pt-1">
-        <Info size={14} className="text-primary shrink-0" />
-        <span>
-          Pontuação proporcional ao interesse de buscas no Google durante o debate e até 24h depois: o participante recebe a quantidade de pontos equivalente à porcentagem obtida (ex: 44% = 44 pts).
-        </span>
       </div>
     </div>
   );

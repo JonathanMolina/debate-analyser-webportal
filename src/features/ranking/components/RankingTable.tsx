@@ -8,6 +8,7 @@ import type { RankingSortField } from '../types/ranking.types';
 
 export interface RankingTableProps {
   rankingList: DebaterAggregateStats[];
+  mode?: 'debate' | 'sabatina';
   sortField: RankingSortField;
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: RankingSortField) => void;
@@ -16,11 +17,14 @@ export interface RankingTableProps {
 
 export const RankingTable: FC<RankingTableProps> = ({
   rankingList,
+  mode = 'debate',
   sortField,
   sortDirection,
   onToggleSort,
   onSelectDebater
 }) => {
+  const isSabatina = mode === 'sabatina';
+
   const renderSortIndicator = (field: RankingSortField) => {
     if (sortField !== field) {
       return <ArrowUpDown size={12} className="opacity-40" />;
@@ -39,10 +43,12 @@ export const RankingTable: FC<RankingTableProps> = ({
           <Users size={22} className="text-primary" />
         </div>
         <h3 className="font-bold text-base text-text-main">
-          Nenhum debatedor no ranking
+          {isSabatina ? 'Nenhum sabatinado no ranking' : 'Nenhum debatedor no ranking'}
         </h3>
         <p className="text-xs text-text-muted max-w-sm mx-auto">
-          Não há debatedores registrados no momento.
+          {isSabatina
+            ? 'Não há participantes com sabatinas avaliadas no momento.'
+            : 'Não há debatedores registrados no momento.'}
         </p>
       </div>
     );
@@ -55,7 +61,7 @@ export const RankingTable: FC<RankingTableProps> = ({
           <thead>
             <tr className="border-b border-border bg-surface-elevated/60 text-text-muted font-mono uppercase tracking-wider select-none">
               <th className="p-4 w-14 text-center">#</th>
-              <th className="p-4">Debatedor</th>
+              <th className="p-4">{isSabatina ? 'Sabatinado' : 'Debatedor'}</th>
               <th
                 onClick={() => onToggleSort('avgScore')}
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right"
@@ -69,19 +75,21 @@ export const RankingTable: FC<RankingTableProps> = ({
                   {renderSortIndicator('avgScore')}
                 </div>
               </th>
-              <th
-                onClick={() => onToggleSort('winRate')}
-                className="p-4 cursor-pointer hover:text-text-main transition-colors text-right hidden sm:table-cell"
-              >
-                <div className="flex items-center justify-end gap-1.5">
-                  <span>Taxa de Vitórias</span>
-                  <InfoTooltip
-                    title={METRIC_EXPLANATIONS.winRate.title}
-                    content={METRIC_EXPLANATIONS.winRate.shortHint}
-                  />
-                  {renderSortIndicator('winRate')}
-                </div>
-              </th>
+              {!isSabatina && (
+                <th
+                  onClick={() => onToggleSort('winRate')}
+                  className="p-4 cursor-pointer hover:text-text-main transition-colors text-right hidden sm:table-cell"
+                >
+                  <div className="flex items-center justify-end gap-1.5">
+                    <span>Taxa de Vitórias</span>
+                    <InfoTooltip
+                      title={METRIC_EXPLANATIONS.winRate.title}
+                      content={METRIC_EXPLANATIONS.winRate.shortHint}
+                    />
+                    {renderSortIndicator('winRate')}
+                  </div>
+                </th>
+              )}
               <th
                 onClick={() => onToggleSort('avgDataDensity')}
                 className="p-4 cursor-pointer hover:text-text-main transition-colors text-right hidden md:table-cell"
@@ -152,7 +160,14 @@ export const RankingTable: FC<RankingTableProps> = ({
 
           <tbody className="divide-y divide-border/60">
             {rankingList.map((item, index) => {
-              const hasDebates = item.debatesCount > 0;
+              const hasDebates = isSabatina ? (item.sabatinasCount ?? 0) > 0 : item.debatesCount > 0;
+              const countText = isSabatina
+                ? `${item.sabatinasCount ?? 0} sabatinas processadas`
+                : `${item.debatesCount} debates processados`;
+              const scoreDisplay = hasDebates
+                ? (isSabatina ? (item.avgSabatinaScore ?? item.avgScore) : item.avgScore)
+                : '-';
+
               return (
                 <tr
                   key={item.debaterId}
@@ -196,7 +211,7 @@ export const RankingTable: FC<RankingTableProps> = ({
                           </div>
                         ) : (
                           <div className="text-[10px] text-text-muted font-mono">
-                            {item.debatesCount} debates processados
+                            {countText}
                           </div>
                         )}
                       </div>
@@ -206,7 +221,7 @@ export const RankingTable: FC<RankingTableProps> = ({
                   {/* Overall Score */}
                   <td className="p-4 text-right font-mono">
                     <span className="font-black text-sm text-primary">
-                      {hasDebates ? item.avgScore : '-'}
+                      {scoreDisplay}
                     </span>
                     <span className="text-[10px] text-text-muted block">
                       {hasDebates ? 'pontos' : 'pendente'}
@@ -214,21 +229,23 @@ export const RankingTable: FC<RankingTableProps> = ({
                   </td>
 
                   {/* Win Rate */}
-                  <td className="p-4 text-right font-mono hidden sm:table-cell">
-                    <span className="font-semibold text-text-main">
-                      {hasDebates ? `${item.winRate}%` : '-'}
-                    </span>
-                    {hasDebates && (
-                      <span className="text-[10px] text-text-muted flex items-center justify-end gap-1 mt-0.5">
-                        <span>{item.wins} vit. • {item.losses} der.</span>
-                        <InfoTooltip
-                          title={METRIC_EXPLANATIONS.matchRecord.title}
-                          content={`${item.wins} ${item.wins === 1 ? 'vitória' : 'vitórias'} e ${item.losses} ${item.losses === 1 ? 'derrota' : 'derrotas'} em debates analisados.`}
-                          triggerAriaLabel={`Histórico de ${item.debaterName}`}
-                        />
+                  {!isSabatina && (
+                    <td className="p-4 text-right font-mono hidden sm:table-cell">
+                      <span className="font-semibold text-text-main">
+                        {hasDebates ? `${item.winRate}%` : '-'}
                       </span>
-                    )}
-                  </td>
+                      {hasDebates && (
+                        <span className="text-[10px] text-text-muted flex items-center justify-end gap-1 mt-0.5">
+                          <span>{item.wins} vit. • {item.losses} der.</span>
+                          <InfoTooltip
+                            title={METRIC_EXPLANATIONS.matchRecord.title}
+                            content={`${item.wins} ${item.wins === 1 ? 'vitória' : 'vitórias'} e ${item.losses} ${item.losses === 1 ? 'derrota' : 'derrotas'} em debates analisados.`}
+                            triggerAriaLabel={`Histórico de ${item.debaterName}`}
+                          />
+                        </span>
+                      )}
+                    </td>
+                  )}
 
                   {/* Data Density */}
                   <td className="p-4 text-right font-mono hidden md:table-cell">

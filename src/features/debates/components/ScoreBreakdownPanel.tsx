@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Trophy, Scale } from 'lucide-react';
+import { Trophy, Scale, Radio } from 'lucide-react';
 import type { DebateScore, SpeakerInput } from '../types/debate.types';
 import { InfoTooltip } from '@/components/InfoTooltip';
 import { METRIC_EXPLANATIONS } from '../utils/metricExplanations';
@@ -7,11 +7,13 @@ import { METRIC_EXPLANATIONS } from '../utils/metricExplanations';
 export interface ScoreBreakdownPanelProps {
   score?: DebateScore;
   speakers?: SpeakerInput[];
+  debateType?: 'debate' | 'sabatina';
 }
 
 export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
   score,
-  speakers = []
+  speakers = [],
+  debateType = 'debate'
 }) => {
   if (!score || !score.breakdown) {
     return (
@@ -21,29 +23,37 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
     );
   }
 
+  const isSabatina = debateType === 'sabatina';
   const speakerNames = Object.keys(score.breakdown);
   const maxAudiencePoints = speakerNames.length * 50;
 
   return (
     <div className="space-y-6">
-      {/* Top Banner with Winner & Difference */}
+      {/* Top Banner with Winner & Difference or Sabatina Evaluation */}
       <div className="bg-surface border border-border p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
-            <Trophy size={24} />
+            {isSabatina ? <Radio size={24} /> : <Trophy size={24} />}
           </div>
           <div>
             <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider block">
-              Resultado Algorítmico do Debate
+              {isSabatina ? 'Avaliação Técnica da Sabatina' : 'Resultado Algorítmico do Debate'}
             </span>
             <h3 className="text-lg font-extrabold text-text-main">
-              {score.isDraw
+              {isSabatina
+                ? 'Desempenho Técnico Individual'
+                : score.isDraw
                 ? 'Empate Técnico'
                 : `Vencedor por Métricas: ${score.winner}`}
             </h3>
-            {!score.isDraw && (
+            {!isSabatina && !score.isDraw && (
               <span className="text-xs text-primary font-mono font-semibold">
                 Diferença técnica: +{score.difference} pontos
+              </span>
+            )}
+            {isSabatina && (
+              <span className="text-xs text-text-muted font-mono">
+                Em sabatinas a pontuação reflete o aproveitamento técnico frente à bancada examinadora.
               </span>
             )}
           </div>
@@ -51,12 +61,12 @@ export const ScoreBreakdownPanel: FC<ScoreBreakdownPanelProps> = ({
 
         <div className="flex items-center gap-4">
           {speakerNames.map((spk) => {
-            const isWinner = score.winner === spk && !score.isDraw;
+            const isWinner = !isSabatina && score.winner === spk && !score.isDraw;
             return (
               <div
                 key={spk}
                 className={`p-3 rounded-xl border text-center font-mono min-w-[110px] ${
-                  isWinner
+                  isWinner || isSabatina
                     ? 'bg-primary/15 border-primary text-primary'
                     : 'bg-canvas border-border text-text-muted'
                 }`}

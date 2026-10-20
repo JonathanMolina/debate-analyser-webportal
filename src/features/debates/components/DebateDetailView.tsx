@@ -180,11 +180,18 @@ export const DebateDetailView: FC = () => {
           <span>Voltar ao feed de debates</span>
         </Link>
 
-        {debate.category && (
-          <span className="px-3 py-1 rounded-full bg-surface border border-border text-xs font-mono text-primary">
-            {debate.category}
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {debate.debateType === 'sabatina' && (
+            <span className="px-3 py-1 rounded-full bg-primary/20 border border-primary/40 text-xs font-mono font-bold text-primary">
+              🎙️ Sabatina
+            </span>
+          )}
+          {debate.category && (
+            <span className="px-3 py-1 rounded-full bg-surface border border-border text-xs font-mono text-primary">
+              {debate.category}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Main 2-Column Grid: Left (Video & Analysis Tabs), Right (Timeline & Rhetoric) */}
@@ -235,7 +242,11 @@ export const DebateDetailView: FC = () => {
                   {debate.speakers.map((spk) => (
                     <div
                       key={spk.name}
-                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-surface-elevated border border-border text-xs text-text-main font-semibold"
+                      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-xs font-semibold ${
+                        spk.isInterviewer
+                          ? 'bg-canvas text-text-muted border-border/60'
+                          : 'bg-surface-elevated text-text-main border-border'
+                      }`}
                     >
                       <DebaterAvatar
                         name={spk.name}
@@ -245,6 +256,9 @@ export const DebateDetailView: FC = () => {
                         border={false}
                       />
                       <span>{spk.name}</span>
+                      {spk.isInterviewer && (
+                        <span className="text-[10px] font-mono text-primary font-bold">(Entrevistador)</span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -363,6 +377,7 @@ export const DebateDetailView: FC = () => {
                 <ScoreBreakdownPanel
                   score={debate.metrics?.debateScore}
                   speakers={debate.speakers}
+                  debateType={debate.debateType}
                 />
                 <GoogleTrendsChart
                   trends={debate.metrics?.searchMetrics || debate.search_metrics}

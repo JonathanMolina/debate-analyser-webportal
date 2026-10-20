@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Trophy, Users, Award, ShieldCheck, ArrowUpDown } from 'lucide-react';
+import { Trophy, Users, Award, ShieldCheck, ArrowUpDown, Radio } from 'lucide-react';
 import { useRankingLeaderboard } from '../hooks/useRankingLeaderboard';
 import { RankingPodium } from './RankingPodium';
 import { RankingTable } from './RankingTable';
@@ -14,12 +14,14 @@ export const RankingView: FC = () => {
   const {
     rankingList,
     podium,
+    mode,
     sortField,
     sortDirection,
     searchQuery,
     isLoading,
     totalDebaters,
     toggleSort,
+    handleModeChange,
     handleSearchChange
   } = useRankingLeaderboard();
 
@@ -28,7 +30,7 @@ export const RankingView: FC = () => {
 
   const sortOptions: { id: RankingSortField; label: string }[] = [
     { id: 'avgScore', label: 'Score Geral' },
-    { id: 'winRate', label: 'Taxa de Vitórias' },
+    ...(mode === 'debate' ? [{ id: 'winRate' as const, label: 'Taxa de Vitórias' }] : []),
     { id: 'fewestFallacies', label: 'Menor Incidência de Falácias' },
     { id: 'avgDataDensity', label: 'Densidade de Dados' },
     { id: 'avgDirectAnswerRate', label: 'Respostas Diretas' },
@@ -39,9 +41,9 @@ export const RankingView: FC = () => {
   return (
     <div className="space-y-6 pb-12">
       <SeoHead
-        title="Ranking Geral de Debatedores"
+        title={mode === 'sabatina' ? 'Ranking Geral de Sabatinas' : 'Ranking Geral de Debatedores'}
         description="Classificação técnica e imparcial dos melhores debatedores segundo métricas de argumentação, precisão factual, controle emocional e menor taxa de falácias."
-        keywords={['ranking debatedores', 'melhores debatedores', 'pontuação de debates', 'precisão factual', 'falácias lógicas', 'Argumeta']}
+        keywords={['ranking debatedores', 'ranking sabatinas', 'melhores debatedores', 'pontuação de debates', 'precisão factual', 'falácias lógicas', 'Argumeta']}
         canonicalUrl={`${siteUrl}/ranking`}
       />
 
@@ -50,22 +52,50 @@ export const RankingView: FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight text-text-main flex items-center gap-2.5">
-              <Trophy size={24} className="text-primary" />
-              <span>Ranking Geral de Debatedores</span>
+              {mode === 'sabatina' ? <Radio size={24} className="text-primary" /> : <Trophy size={24} className="text-primary" />}
+              <span>{mode === 'sabatina' ? 'Ranking de Sabatinas' : 'Ranking Geral de Debatedores'}</span>
             </h1>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
               Critérios Algorítmicos
             </span>
           </div>
           <p className="text-xs text-text-muted mt-1 max-w-2xl">
-            Classificação técnica consolidada a partir dos debates analisados. O score geral pondera alegações embasadas, ausência de falácias, controle tonal e taxa de resposta direta.
+            {mode === 'sabatina'
+              ? 'Classificação técnica individual em sabatinas e entrevistas. Mede a consistência retórica e argumentativa do candidato frente a entrevistadores.'
+              : 'Classificação técnica consolidada a partir dos debates analisados. O score geral pondera alegações embasadas, ausência de falácias, controle tonal e taxa de resposta direta.'}
           </p>
         </div>
 
-        <div className="flex items-center gap-3 self-start sm:self-center font-mono">
+        <div className="flex items-center gap-3 self-start sm:self-center font-mono flex-wrap">
+          <div className="flex items-center gap-1.5 p-1 bg-surface border border-border rounded-xl text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => handleModeChange('debate')}
+              className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
+                mode === 'debate'
+                  ? 'bg-primary text-black font-semibold shadow-xs'
+                  : 'text-text-muted hover:text-text-main'
+              }`}
+            >
+              <span>⚔️ Debates</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModeChange('sabatina')}
+              className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
+                mode === 'sabatina'
+                  ? 'bg-primary text-black font-semibold shadow-xs'
+                  : 'text-text-muted hover:text-text-main'
+              }`}
+            >
+              <Radio size={12} />
+              <span>🎙️ Sabatinas</span>
+            </button>
+          </div>
+
           <div className="bg-surface border border-border px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-2">
             <Users size={14} className="text-primary" />
-            <span className="text-text-muted">Debatedores:</span>
+            <span className="text-text-muted">{mode === 'sabatina' ? 'Sabatinados:' : 'Debatedores:'}</span>
             <span className="font-bold text-text-main">{totalDebaters}</span>
           </div>
         </div>
@@ -81,6 +111,7 @@ export const RankingView: FC = () => {
       ) : (
         <RankingPodium
           podium={podium}
+          mode={mode}
           onSelectDebater={setSelectedDebater}
         />
       )}
@@ -93,7 +124,7 @@ export const RankingView: FC = () => {
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               onClear={() => handleSearchChange('')}
-              placeholder="Buscar no ranking..."
+              placeholder={mode === 'sabatina' ? 'Buscar sabatinado pelo nome...' : 'Buscar no ranking...'}
             />
           </div>
 
@@ -128,6 +159,7 @@ export const RankingView: FC = () => {
       ) : (
         <RankingTable
           rankingList={rankingList}
+          mode={mode}
           sortField={sortField}
           sortDirection={sortDirection}
           onToggleSort={toggleSort}

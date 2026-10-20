@@ -15,7 +15,10 @@ export const DebaterCard: FC<DebaterCardProps> = ({
   debater,
   onViewDetails
 }) => {
-  const hasDebates = debater.debatesCount > 0;
+  const isInterviewer = Boolean(debater.isInterviewer);
+  const hasTraditionalDebates = debater.debatesCount > 0;
+  const hasSabatinas = (debater.sabatinasCount ?? 0) > 0;
+  const hasDebates = hasTraditionalDebates || hasSabatinas;
 
   return (
     <div className="bg-surface border border-border rounded-2xl p-5 flex flex-col justify-between gap-5 hover:border-border/90 hover:bg-surface-hover/50 transition-all shadow-sm">
@@ -40,17 +43,31 @@ export const DebaterCard: FC<DebaterCardProps> = ({
             {debater.role && (
               <p className="text-xs text-text-muted mt-0.5">{debater.role}</p>
             )}
-            <div className="flex items-center gap-2 mt-1 text-[11px] text-text-muted font-mono">
-              <span>{debater.debatesCount} debates</span>
-              {hasDebates && (
+            <div className="flex items-center gap-2 mt-1 text-[11px] text-text-muted font-mono flex-wrap">
+              {isInterviewer ? (
+                <span className="px-2 py-0.5 rounded-md bg-primary/20 text-primary border border-primary/30 font-semibold text-[10px]">
+                  🎙️ Entrevistador
+                </span>
+              ) : (
                 <>
-                  <span>•</span>
-                  <span className="text-emerald-400 font-semibold">{debater.winRate}% de vitórias</span>
-                  <InfoTooltip
-                    title={METRIC_EXPLANATIONS.winRate.title}
-                    content={METRIC_EXPLANATIONS.winRate.shortHint}
-                    triggerAriaLabel={`Taxa de vitórias de ${debater.debaterName}`}
-                  />
+                  <span>{debater.debatesCount} debates</span>
+                  {hasSabatinas && (
+                    <>
+                      <span>•</span>
+                      <span>{debater.sabatinasCount} sabatinas</span>
+                    </>
+                  )}
+                  {hasTraditionalDebates && (
+                    <>
+                      <span>•</span>
+                      <span className="text-emerald-400 font-semibold">{debater.winRate}% de vitórias</span>
+                      <InfoTooltip
+                        title={METRIC_EXPLANATIONS.winRate.title}
+                        content={METRIC_EXPLANATIONS.winRate.shortHint}
+                        triggerAriaLabel={`Taxa de vitórias de ${debater.debaterName}`}
+                      />
+                    </>
+                  )}
                 </>
               )}
             </div>
@@ -60,18 +77,32 @@ export const DebaterCard: FC<DebaterCardProps> = ({
         {/* Big Score Tag */}
         <div className="text-right font-mono shrink-0">
           <div className="flex items-center justify-end gap-1">
-            <span className="text-[10px] text-text-muted uppercase">Média Técnica</span>
-            <InfoTooltip
-              title={METRIC_EXPLANATIONS.technicalAverage.title}
-              content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
-              triggerAriaLabel={`Média técnica de ${debater.debaterName}`}
-            />
+            <span className="text-[10px] text-text-muted uppercase">
+              {isInterviewer ? 'Perfil' : hasTraditionalDebates ? 'Média Técnica' : 'Média Sabatina'}
+            </span>
+            {!isInterviewer && (
+              <InfoTooltip
+                title={METRIC_EXPLANATIONS.technicalAverage.title}
+                content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
+                triggerAriaLabel={`Média técnica de ${debater.debaterName}`}
+              />
+            )}
           </div>
           <span className="text-xl font-black text-primary block leading-none mt-0.5">
-            {hasDebates ? debater.avgScore : '-'}
+            {isInterviewer
+              ? '🎙️'
+              : hasTraditionalDebates
+              ? debater.avgScore
+              : hasSabatinas
+              ? debater.avgSabatinaScore
+              : '-'}
           </span>
           <span className="text-[9px] text-text-muted block">
-            {hasDebates ? 'pontos' : 'sem debates'}
+            {isInterviewer
+              ? 'Entrevistador'
+              : hasDebates
+              ? 'pontos'
+              : 'sem debates'}
           </span>
         </div>
       </div>

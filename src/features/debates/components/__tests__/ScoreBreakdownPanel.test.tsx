@@ -57,7 +57,7 @@ describe('ScoreBreakdownPanel Component', () => {
 
   it('deve exibir escala de 250 pontos distribuidos para 5 debatedores', () => {
     const speakers = ['D1', 'D2', 'D3', 'D4', 'D5'];
-    const breakdown: Record<string, any> = {};
+    const breakdown: DebateScore['breakdown'] = {};
     const scores: Record<string, number> = {};
 
     speakers.forEach((s) => {
@@ -202,5 +202,35 @@ describe('ScoreBreakdownPanel Component', () => {
     expect(screen.getByText('Repercussão Web (Google Trends)')).toBeInTheDocument();
     expect(screen.getByText('(pontos = % de buscas obtida)')).toBeInTheDocument();
     expect(screen.getByText('+50 pontos')).toBeInTheDocument();
+  });
+
+  it('deve exibir cabeçalho de sabatina sem declarar vencedor quando debateType for sabatina', () => {
+    const mockSabatinaScore: DebateScore = {
+      winner: '',
+      difference: 0,
+      isDraw: false,
+      scores: {
+        'Candidato Sabatinado': 160
+      },
+      breakdown: {
+        'Candidato Sabatinado': {
+          evidencePoints: 40,
+          fallacyPenalties: 0,
+          qaPoints: 30,
+          tonePoints: 30,
+          speakingEfficiency: 30,
+          proposalPoints: 30,
+          totalPoints: 160
+        }
+      }
+    };
+
+    render(<ScoreBreakdownPanel score={mockSabatinaScore} debateType="sabatina" />);
+
+    expect(screen.getByText('Avaliação Técnica da Sabatina')).toBeInTheDocument();
+    expect(screen.getByText('Desempenho Técnico Individual')).toBeInTheDocument();
+    expect(screen.queryByText(/Vencedor por Métricas/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Diferença técnica/i)).not.toBeInTheDocument();
+    expect(screen.getByText('160')).toBeInTheDocument();
   });
 });

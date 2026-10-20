@@ -273,28 +273,34 @@ export const DebaterDetailModal: FC<DebaterDetailModalProps> = ({
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span
-                        className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
-                          item.result === 'win'
-                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                      {item.debateType === 'sabatina' ? (
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
+                          🎙️ SABATINA
+                        </span>
+                      ) : (
+                        <span
+                          className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                            item.result === 'win'
+                              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                              : item.result === 'loss'
+                              ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                              : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                          }`}
+                        >
+                          {item.result === 'win'
+                            ? 'VITÓRIA'
                             : item.result === 'loss'
-                            ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                            : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
-                        }`}
-                      >
-                        {item.result === 'win'
-                          ? 'VITÓRIA'
-                          : item.result === 'loss'
-                          ? 'DERROTA'
-                          : 'EMPATE'}
-                      </span>
+                            ? 'DERROTA'
+                            : 'EMPATE'}
+                        </span>
+                      )}
                       <span className="text-xs font-bold text-text-main">
-                        {item.debateTitle || `Debate vs ${item.opponentNames.join(', ')}`}
+                        {item.debateTitle || (item.debateType === 'sabatina' ? `Sabatina com ${item.opponentNames.join(', ')}` : `Debate vs ${item.opponentNames.join(', ')}`)}
                       </span>
                     </div>
 
                     <div className="text-[11px] text-text-muted font-mono flex items-center gap-3 flex-wrap">
-                      <span>Vs: {item.opponentNames.join(', ')}</span>
+                      <span>{item.debateType === 'sabatina' ? 'Entrevistador(es): ' : 'Vs: '}{item.opponentNames.join(', ')}</span>
                       <span>•</span>
                       <span>Pontuação: {item.score} pontos</span>
                       <span>•</span>

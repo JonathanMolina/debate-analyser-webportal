@@ -8,15 +8,20 @@ import { formatMatchRecordFull } from '@/features/debates/utils/metricFormatters
 
 export interface RankingPodiumProps {
   podium: DebaterAggregateStats[];
+  mode?: 'debate' | 'sabatina';
   onSelectDebater: (debater: DebaterAggregateStats) => void;
 }
 
 export const RankingPodium: FC<RankingPodiumProps> = ({
   podium,
+  mode = 'debate',
   onSelectDebater
 }) => {
-  // Se não houver debatedores ou nenhum deles tiver debates concluídos ainda
-  const hasDebatesInPodium = podium.some((d) => d.debatesCount > 0);
+  const isSabatina = mode === 'sabatina';
+  // Se não houver participantes ou nenhum deles tiver debates/sabatinas concluídos ainda
+  const hasDebatesInPodium = podium.some((d) =>
+    isSabatina ? (d.sabatinasCount ?? 0) > 0 : d.debatesCount > 0
+  );
 
   if (!hasDebatesInPodium || podium.length < 2) {
     return (
@@ -30,7 +35,9 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
               Pódio Técnico em Espera
             </h3>
             <p className="text-xs text-text-muted mt-0.5 max-w-xl leading-relaxed">
-              O pódio oficial com medalhas de ouro, prata e bronze será formado automaticamente assim que os primeiros debates forem concluídos e processados pela plataforma.
+              {isSabatina
+                ? 'O pódio oficial será formado automaticamente assim que as primeiras sabatinas forem concluídas e processadas pela plataforma.'
+                : 'O pódio oficial com medalhas de ouro, prata e bronze será formado automaticamente assim que os primeiros debates forem concluídos e processados pela plataforma.'}
             </p>
           </div>
         </div>
@@ -68,13 +75,21 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
               {second.debaterName}
             </h3>
             <div className="text-[11px] text-text-muted mt-1 flex items-center justify-center gap-1 flex-wrap">
-              <span>{formatMatchRecordFull(second.wins, second.draws, second.losses)}</span>
-              <span className="font-semibold text-text-main">({second.winRate}% de vitórias)</span>
-              <InfoTooltip
-                title={METRIC_EXPLANATIONS.matchRecord.title}
-                content={METRIC_EXPLANATIONS.matchRecord.shortHint}
-                triggerAriaLabel="Informações do histórico de resultados"
-              />
+              {isSabatina ? (
+                <span className="font-semibold text-text-main">
+                  {second.sabatinasCount ?? 1} {(second.sabatinasCount ?? 1) === 1 ? 'sabatina avaliada' : 'sabatinas avaliadas'}
+                </span>
+              ) : (
+                <>
+                  <span>{formatMatchRecordFull(second.wins, second.draws, second.losses)}</span>
+                  <span className="font-semibold text-text-main">({second.winRate}% de vitórias)</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.matchRecord.title}
+                    content={METRIC_EXPLANATIONS.matchRecord.shortHint}
+                    triggerAriaLabel="Informações do histórico de resultados"
+                  />
+                </>
+              )}
             </div>
           </div>
 
@@ -87,7 +102,9 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
                   content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
                 />
               </span>
-              <span className="font-black text-primary text-sm sm:text-base">{second.avgScore} pts</span>
+              <span className="font-black text-primary text-sm sm:text-base">
+                {isSabatina ? (second.avgSabatinaScore ?? second.avgScore) : second.avgScore} pts
+              </span>
             </div>
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
@@ -120,7 +137,7 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
           className="bg-primary/10 border-2 border-primary/60 hover:border-primary rounded-2xl p-6 flex flex-col items-center text-center gap-3 cursor-pointer transition-all hover:scale-[1.02] shadow-xl order-1 md:order-2 relative"
         >
           <div className="absolute -top-3.5 px-3 py-0.5 rounded-full bg-amber-400 text-black font-black text-[10px] uppercase tracking-wider flex items-center gap-1 shadow-md">
-            <Trophy size={11} className="fill-black" /> Líder do Ranking
+            <Trophy size={11} className="fill-black" /> {isSabatina ? 'Melhor Sabatina' : 'Líder do Ranking'}
           </div>
 
           <div className="relative mt-2">
@@ -141,13 +158,21 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
               {first.debaterName}
             </h3>
             <div className="text-xs text-text-muted mt-1 flex items-center justify-center gap-1 flex-wrap">
-              <span>{formatMatchRecordFull(first.wins, first.draws, first.losses)}</span>
-              <span className="font-semibold text-text-main">({first.winRate}% de vitórias)</span>
-              <InfoTooltip
-                title={METRIC_EXPLANATIONS.matchRecord.title}
-                content={METRIC_EXPLANATIONS.matchRecord.shortHint}
-                triggerAriaLabel="Informações do histórico de resultados"
-              />
+              {isSabatina ? (
+                <span className="font-semibold text-text-main">
+                  {first.sabatinasCount ?? 1} {(first.sabatinasCount ?? 1) === 1 ? 'sabatina avaliada' : 'sabatinas avaliadas'}
+                </span>
+              ) : (
+                <>
+                  <span>{formatMatchRecordFull(first.wins, first.draws, first.losses)}</span>
+                  <span className="font-semibold text-text-main">({first.winRate}% de vitórias)</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.matchRecord.title}
+                    content={METRIC_EXPLANATIONS.matchRecord.shortHint}
+                    triggerAriaLabel="Informações do histórico de resultados"
+                  />
+                </>
+              )}
             </div>
           </div>
 
@@ -160,7 +185,9 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
                   content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
                 />
               </span>
-              <span className="font-black text-primary text-sm sm:text-lg">{first.avgScore} pts</span>
+              <span className="font-black text-primary text-sm sm:text-lg">
+                {isSabatina ? (first.avgSabatinaScore ?? first.avgScore) : first.avgScore} pts
+              </span>
             </div>
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">
@@ -210,13 +237,21 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
               {third.debaterName}
             </h3>
             <div className="text-[11px] text-text-muted mt-1 flex items-center justify-center gap-1 flex-wrap">
-              <span>{formatMatchRecordFull(third.wins, third.draws, third.losses)}</span>
-              <span className="font-semibold text-text-main">({third.winRate}% de vitórias)</span>
-              <InfoTooltip
-                title={METRIC_EXPLANATIONS.matchRecord.title}
-                content={METRIC_EXPLANATIONS.matchRecord.shortHint}
-                triggerAriaLabel="Informações do histórico de resultados"
-              />
+              {isSabatina ? (
+                <span className="font-semibold text-text-main">
+                  {third.sabatinasCount ?? 1} {(third.sabatinasCount ?? 1) === 1 ? 'sabatina avaliada' : 'sabatinas avaliadas'}
+                </span>
+              ) : (
+                <>
+                  <span>{formatMatchRecordFull(third.wins, third.draws, third.losses)}</span>
+                  <span className="font-semibold text-text-main">({third.winRate}% de vitórias)</span>
+                  <InfoTooltip
+                    title={METRIC_EXPLANATIONS.matchRecord.title}
+                    content={METRIC_EXPLANATIONS.matchRecord.shortHint}
+                    triggerAriaLabel="Informações do histórico de resultados"
+                  />
+                </>
+              )}
             </div>
           </div>
 
@@ -229,7 +264,9 @@ export const RankingPodium: FC<RankingPodiumProps> = ({
                   content={METRIC_EXPLANATIONS.technicalAverage.shortHint}
                 />
               </span>
-              <span className="font-black text-primary text-sm sm:text-base">{third.avgScore} pts</span>
+              <span className="font-black text-primary text-sm sm:text-base">
+                {isSabatina ? (third.avgSabatinaScore ?? third.avgScore) : third.avgScore} pts
+              </span>
             </div>
             <div>
               <span className="text-[10px] text-text-muted flex items-center justify-center gap-1">

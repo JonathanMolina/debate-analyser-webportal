@@ -23,16 +23,20 @@ export const fetchDebatersList = async (): Promise<Debater[]> => {
     const mapped = data.map((d: {
       id: string;
       name: string;
+      nicknames?: string[];
       photo_url?: string;
       photo_storage_path?: string;
+      is_interviewer?: boolean;
       reference_audio?: unknown;
       created_at: string;
       updated_at: string;
     }) => ({
       id: d.id,
       name: d.name,
+      nicknames: Array.isArray(d.nicknames) ? d.nicknames : [],
       photoUrl: resolveDebaterPhotoUrl(d.photo_url || d.photo_storage_path, d.name, d.id),
       photoStoragePath: d.photo_storage_path,
+      isInterviewer: Boolean(d.is_interviewer),
       createdAt: new Date(d.created_at).getTime(),
       updatedAt: new Date(d.updated_at).getTime()
     }));
@@ -61,11 +65,14 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
     photoUrl?: string;
     role?: string;
     party?: string;
+    isInterviewer?: boolean;
     debatesCount: number;
+    sabatinasCount: number;
     wins: number;
     draws: number;
     losses: number;
     scores: number[];
+    sabatinaScores: number[];
     speakingTimes: number[];
     wpms: number[];
     vocabularies: number[];
@@ -88,11 +95,16 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
       debaterId: deb.id,
       debaterName: deb.name,
       photoUrl: resolveDebaterPhotoUrl(deb.photoUrl, deb.name, deb.id),
+      role: deb.role,
+      party: deb.party,
+      isInterviewer: Boolean(deb.isInterviewer),
       debatesCount: 0,
+      sabatinasCount: 0,
       wins: 0,
       draws: 0,
       losses: 0,
       scores: [],
+      sabatinaScores: [],
       speakingTimes: [],
       wpms: [],
       vocabularies: [],
@@ -112,6 +124,7 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
 
   // Iterar pelos debates reais
   for (const debate of debates) {
+    const isSabatina = debate.debateType === 'sabatina';
     const scores = debate.metrics?.debateScore?.scores || {};
     const winner = debate.metrics?.debateScore?.winner;
     const isDraw = Boolean(debate.metrics?.debateScore?.isDraw);
@@ -125,11 +138,14 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
           debaterId: spk.debaterId || `deb_${key.replace(/\s+/g, '_')}`,
           debaterName: spk.name,
           photoUrl: resolveDebaterPhotoUrl(spk.previewUrl, spk.name, spk.debaterId),
+          isInterviewer: Boolean(spk.isInterviewer),
           debatesCount: 0,
+          sabatinasCount: 0,
           wins: 0,
           draws: 0,
           losses: 0,
           scores: [],
+          sabatinaScores: [],
           speakingTimes: [],
           wpms: [],
           vocabularies: [],
@@ -150,21 +166,33 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
         current.photoUrl = resolveDebaterPhotoUrl(spk.previewUrl, spk.name, spk.debaterId);
       }
 
-      current.debatesCount += 1;
-      const spkScore = scores[spk.name] ?? 100;
-      current.scores.push(spkScore);
+      if (spk.isInterviewer) {
+        current.isInterviewer = true;
+      }
 
+      const spkScore = scores[spk.name] ?? 100;
       let result: 'win' | 'loss' | 'draw' = 'draw';
-      if (isDraw) {
-        current.draws += 1;
-      } else if (winner === spk.name) {
-        current.wins += 1;
-        result = 'win';
-      } else if (winner) {
-        current.losses += 1;
-        result = 'loss';
+
+      if (isSabatina) {
+        if (!current.isInterviewer && !spk.isInterviewer) {
+          current.sabatinasCount += 1;
+          current.sabatinaScores.push(spkScore);
+        }
       } else {
-        current.draws += 1;
+        current.debatesCount += 1;
+        current.scores.push(spkScore);
+
+        if (isDraw) {
+          current.draws += 1;
+        } else if (winner === spk.name) {
+          current.wins += 1;
+          result = 'win';
+        } else if (winner) {
+          current.losses += 1;
+          result = 'loss';
+        } else {
+          current.draws += 1;
+        }
       }
 
       const spkTime = debate.metrics?.speakingTime?.[spk.name] ?? 0;
@@ -208,11 +236,12 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
       current.recentDebates.push({
         jobId: debate.id,
         debateTitle: debate.title,
+        debateType: debate.debateType || 'debate',
         date: debate.createdAt,
         opponentNames: opponents,
         score: spkScore,
-        result,
-        difference: debate.metrics?.debateScore?.difference || 0,
+        result: isSabatina ? 'draw' : result,
+        difference: isSabatina ? 0 : (debate.metrics?.debateScore?.difference || 0),
         speakingTimeSeconds: spkTime,
         fallaciesCount: fallacies,
         proposalsCount: proposals
@@ -235,12 +264,15 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
       photoUrl: item.photoUrl,
       role: item.role,
       party: item.party,
+      isInterviewer: item.isInterviewer,
       debatesCount: item.debatesCount,
+      sabatinasCount: item.sabatinasCount,
       wins: item.wins,
       draws: item.draws,
       losses: item.losses,
       winRate,
       avgScore: average(item.scores, 0),
+      avgSabatinaScore: average(item.sabatinaScores, 0),
       avgSpeakingTimeSeconds: average(item.speakingTimes, 0),
       avgWordsPerMinute: average(item.wpms, 0),
       avgVocabularyRichness: average(item.vocabularies, 0),
@@ -251,9 +283,13 @@ export const fetchDebaterStats = async (): Promise<DebaterAggregateStats[]> => {
       avgDirectAnswerRate: average(item.directAnswerRates, 0),
       avgRebuttalScore: average(item.rebuttalScores, 0),
       totalFallacies: item.totalFallacies,
-      avgFallaciesPerDebate: item.debatesCount > 0 ? parseFloat((item.totalFallacies / item.debatesCount).toFixed(2)) : 0,
+      avgFallaciesPerDebate: (item.debatesCount + item.sabatinasCount) > 0
+        ? parseFloat((item.totalFallacies / (item.debatesCount + item.sabatinasCount)).toFixed(2))
+        : 0,
       totalProposals: item.totalProposals,
-      avgProposalsPerDebate: item.debatesCount > 0 ? parseFloat((item.totalProposals / item.debatesCount).toFixed(2)) : 0,
+      avgProposalsPerDebate: (item.debatesCount + item.sabatinasCount) > 0
+        ? parseFloat((item.totalProposals / (item.debatesCount + item.sabatinasCount)).toFixed(2))
+        : 0,
       totalFactChecks: item.totalFactChecks,
       factCheckAccuracy,
       recentDebates: item.recentDebates.sort((a, b) => b.date - a.date)
